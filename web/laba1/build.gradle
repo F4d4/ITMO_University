@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = "webserver"
+version = ''
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.json:json:20210307'
+    implementation files('libs/fastcgi.jar')
+}
+
+application {
+    mainClass = 'com.f4d4.server.App' // Указываем правильный главный класс
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': application.mainClass.get() // Это нужно для исполняемого JAR
+        )
+    }
+}
+
+task fatJar(type: Jar) {
+    archiveBaseName = "${project.name}-fat"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes(
+                'Main-Class': application.mainClass.get() // Исправляем путь до главного класса
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+test {
+    useJUnitPlatform()
+}
