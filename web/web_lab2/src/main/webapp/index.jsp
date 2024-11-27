@@ -1,11 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="com.f4d4.server.PointResult"%>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="jakarta.servlet.ServletContext" %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Лабораторная работа</title>
     <link rel="stylesheet" href="static/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/superagent/superagent.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -20,13 +26,14 @@
 
 
     <section class="form-section">
-        <form id="pointForm" method="get" onsubmit="return validateForm()">
+        <form id="pointForm" >
             <div class="form-group">
                 <fieldset>
                     <legend>Изменение X</legend>
-                    <c:forEach var="value" items="${['-2', '-1.5', '-1', '-0.5', '0', '0.5', '1', '1.5', '2']}">
+                    <c:forEach var="value" items="${['-2', '-1.5', '-1', '-0.5', '0', '0.5', '1', '1.5', '2']}" varStatus="status">
                         <label>
-                            <input type="checkbox"  id="xValue" name="x" value="${value}">${value}
+                            <input type="checkbox"  name="x" value="${value}" onclick="handleCheckboxSelection(this)">
+                                ${value}
                         </label>
                     </c:forEach>
                 </fieldset>
@@ -61,13 +68,23 @@
                 <th>X</th>
                 <th>Y</th>
                 <th>R</th>
-                <th>Время запроса</th>
-                <th>Время выполнения</th>
+                <th>Время запроса </th>
+                <th>Время выполнения micsec</th>
             </tr>
             </thead>
             <tbody>
-            <!-- Результаты будут добавляться сюда -->
+            <c:forEach var="result" items="${applicationScope.results}">
+                <tr>
+                    <td>${result.res ? 'Попадание' : 'Промах'}</td>
+                    <td>${result.x}</td>
+                    <td>${result.y}</td>
+                    <td>${result.r}</td>
+                    <td>${result.dateOfRequest}</td>
+                    <td>${result.executionTime}</td>
+                </tr>
+            </c:forEach>
             </tbody>
+
         </table>
     </section>
     <div id="error-message" style="display: none; background-color: #f44336; color: white; padding: 20px; position: fixed; top: 40px; right: 10px; border-radius: 50px;">
@@ -75,7 +92,9 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/superagent/superagent.min.js"></script>
 <script src="static/script.js"></script>
+<script src="static/graph.js"></script>
 </body>
 </html>
 
