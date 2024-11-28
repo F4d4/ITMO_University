@@ -5,6 +5,7 @@ selectElement.addEventListener('change', (event) =>{
 })
 
 function drawGraph(r) {
+    r = parseFloat(r.trim())
     const canvas = document.getElementById('graphCanvas');
     const ctx = canvas.getContext('2d');
 
@@ -85,15 +86,19 @@ function drawGraph(r) {
         const hit = rowResult[0].textContent.trim();
         const x = parseFloat(rowResult[1].textContent.trim());
         const y = parseFloat(rowResult[2].textContent.trim());
-
-        ctx.fillStyle = 'red';
-        if(hit==='Попадание'){
-            ctx.fillStyle = 'green'
+        const rMama = parseFloat(rowResult[3].textContent.trim());
+        console.log(r);
+        console.log(rMama);
+        if(parseFloat(r) === rMama) {
+            console.log("равны")
+            ctx.fillStyle = 'red';
+            if (hit === 'Попадание') {
+                ctx.fillStyle = 'green'
+            }
+            ctx.beginPath();
+            ctx.arc(centerX + x * scale, centerY - y * scale, 3, 0, Math.PI * 2); // Точка
+            ctx.fill();
         }
-        ctx.beginPath();
-        ctx.arc(centerX + x * scale, centerY - y * scale, 3, 0, Math.PI * 2); // Точка
-        ctx.fill();
-
     })
 
 
