@@ -31,7 +31,7 @@ document.getElementById('pointForm').addEventListener('submit', function(event) 
 
 function sendPostRequest(data) {
     superagent
-        .post('/web_lab2/controller')
+        .post(`${window.location.origin}${pageContextPath}/controller`)
         .type('form')
         .send({
             x: data.x,

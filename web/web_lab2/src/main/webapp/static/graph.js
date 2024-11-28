@@ -25,13 +25,13 @@ function drawGraph(r) {
     ctx.closePath(); // Замыкаем фигуру
     ctx.fill();
 
-// Рисуем прямоугольник
+
     ctx.beginPath();
     ctx.rect(centerX, centerY-scale*r/2, r*scale, scale*r/2)
     ctx.closePath();
     ctx.fill();
 
-// Рисуем треугольник
+
     ctx.beginPath();
     ctx.moveTo(centerX, centerY-r*scale/2); // Начинаем из центра
     ctx.lineTo(centerX, centerY ); // Вниз (по оси Y)
@@ -100,6 +100,4 @@ function drawGraph(r) {
             ctx.fill();
         }
     })
-
-
 }
