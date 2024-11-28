@@ -95,6 +95,7 @@
 <script src="https://cdn.jsdelivr.net/npm/superagent/superagent.min.js"></script>
 <script src="static/script.js"></script>
 <script src="static/graph.js"></script>
+<script src="static/point.js"></script>
 </body>
 </html>
 

@@ -27,52 +27,7 @@ document.getElementById('pointForm').addEventListener('submit', function(event) 
 });
 
 
-// function sendPostRequest(data) {
-//     const formData = new URLSearchParams();
-//     formData.append('x', data.x);
-//     formData.append('y', data.y);
-//     formData.append('r', data.r);
-//
-//     fetch('/web_lab2/controller', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/x-www-form-urlencoded'
-//         },
-//         body: formData.toString()
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Ошибка HTTP: ' + response.status);
-//             }
-//             // После успешного выполнения запроса, загружаем обновлённый HTML
-//             return fetch('/web_lab2/index.jsp'); // Загружаем всю страницу заново
-//         })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Ошибка при загрузке страницы: ' + response.status);
-//             }
-//             document.open();
-//             document.write(response.text);
-//             document.close();
-//             // return response.text(); // Получаем HTML всей страницы
-//         })
-//         // .then(html => {
-//         //     // Парсим HTML и извлекаем новую секцию result-section
-//         //     const parser = new DOMParser();
-//         //     const doc = parser.parseFromString(html, 'text/html');
-//         //     const newResultSection = doc.querySelector('#result-section');
-//         //
-//         //     // Заменяем содержимое текущей секции на новое
-//         //     const currentResultSection = document.querySelector('#result-section');
-//         //     if (currentResultSection && newResultSection) {
-//         //         currentResultSection.innerHTML = newResultSection.innerHTML;
-//         //     }
-//         // })
-//         .catch(error => {
-//             console.error('Ошибка:', error);
-//             showError('Не удалось обновить результаты. Попробуйте снова.');
-//         });
-// }
+
 
 function sendPostRequest(data) {
     superagent
