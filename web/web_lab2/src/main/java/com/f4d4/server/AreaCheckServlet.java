@@ -57,22 +57,21 @@ public class AreaCheckServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Некорректный формат чисел.");
         } catch (Exception e) {
-            e.printStackTrace(); // Лучше заменить на запись в лог
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
     private static class Validate {
         public static boolean validateX(double x) {
-            return x >= -2 && x <= 2;
+            return x >= -5 && x <= 5;
         }
 
         public static boolean validateY(double y) {
-            return y >= -3 && y <= 5;
+            return y >= -5 && y <= 5;
         }
 
         public static boolean validateR(double r) {
-            return r > 0 && r <= 3; // Изменено на r > 0
+            return r >0 && r <= 5;
         }
     }
 
