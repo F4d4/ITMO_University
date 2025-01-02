@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AreaCheckServlet extends HttpServlet {
 
-    private final List<PointResult> results = new CopyOnWriteArrayList<>();
+    private final List<PointResult> results = new ArrayList<>();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

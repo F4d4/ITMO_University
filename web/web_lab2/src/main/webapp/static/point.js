@@ -1,14 +1,14 @@
 const canvas = document.getElementById('graphCanvas');
 
 
-// Константы для преобразования координат
-const scale = 40; // Масштаб: 1 единица на графике = 40 пикселей
-const centerX = canvas.width / 2; // Центр графика по X
-const centerY = canvas.height / 2; // Центр графика по Y
 
-// Функция для обработки клика
+const scale = 40;
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+
+
 canvas.addEventListener('click', (event) => {
-    // Получаем координаты клика относительно canvas
+
     const rect = canvas.getBoundingClientRect();
     const pixelX = event.clientX - rect.left;
     const pixelY = event.clientY - rect.top;
@@ -17,7 +17,7 @@ canvas.addEventListener('click', (event) => {
     const graphX = (pixelX - centerX) / scale;
     const graphY = (centerY - pixelY) / scale;
 
-    // Сохраняем или отправляем координаты
+
 
 
     const rValue = parseFloat(document.getElementById('rValue').value);
@@ -45,7 +45,7 @@ function sendPointPostRequest(data) {
             if (!response.ok) {
                 throw new Error('Ошибка HTTP: ' + response.status);
             }
-            // Открываем новую вкладку и пишем туда содержимое
+
             document.open()
             document.write(response.text);
             document.close();

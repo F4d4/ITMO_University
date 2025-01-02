@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      >
+<h:head>
+    <meta charset="UTF-8"/>
+    <title>Лабораторная работа</title>
+    <h:outputStylesheet name="styles/styles.css" />
+</h:head>
+<h:body>
+    <div class = "container">
+        <header>
+            <h1>Вердиев Фада Ильхам оглы</h1>
+            <h2>Группа: P3217</h2>
+            <h2>Вариант: 51399</h2>
+        </header>
+        <h3>График области</h3>
+        <canvas id="graphCanvas" width="400" height="400" style="border: 1px solid black;" ></canvas>
+
+        <section class="form-section">
+            <h:form id="pointForm">
+                <!-- Изменение X -->
+                <div class="form-group">
+                    <label>Изменение X:</label>
+                    <h:panelGroup>
+                        <h:commandLink value="-5" action="#{pointBean.setXValue(-5)}" styleClass="x-value-link" />
+                        <h:commandLink value="-4" action="#{pointBean.setXValue(-4)}" styleClass="x-value-link" />
+                        <h:commandLink value="-3" action="#{pointBean.setXValue(-3)}" styleClass="x-value-link" />
+                        <h:commandLink value="-2" action="#{pointBean.setXValue(-2)}" styleClass="x-value-link" />
+                        <h:commandLink value="-1" action="#{pointBean.setXValue(-1)}" styleClass="x-value-link" />
+                        <h:commandLink value="0" action="#{pointBean.setXValue(0)}" styleClass="x-value-link" />
+                        <h:commandLink value="1" action="#{pointBean.setXValue(1)}" styleClass="x-value-link" />
+                        <h:commandLink value="2" action="#{pointBean.setXValue(2)}" styleClass="x-value-link" />
+                        <h:commandLink value="3" action="#{pointBean.setXValue(3)}" styleClass="x-value-link" />
+                    </h:panelGroup>
+
+                </div>
+                <!-- Изменение Y -->
+                <div class="form-group">
+                    <label for="yValue">Изменение Y:</label>
+                    <h:inputText id="yValue" value="#{pointBean.yValue}" placeholder="(-3 ... 3)" />
+                </div>
+
+                <!-- Изменение R -->
+                <div class="form-group">
+                    <label>Изменение R:</label>
+                    <h:selectOneRadio id="rValue" value="#{pointBean.rValue}">
+                        <f:selectItem itemValue="1" itemLabel="1" />
+                        <f:selectItem itemValue="2" itemLabel="2" />
+                        <f:selectItem itemValue="3" itemLabel="3" />
+                        <f:selectItem itemValue="4" itemLabel="4" />
+                        <f:selectItem itemValue="5" itemLabel="5" />
+                    </h:selectOneRadio>
+                </div>
+
+                <!-- Кнопка отправки -->
+                <h:commandButton value="Проверить" action="#{pointBean.processPoint}" styleClass="custom-button">
+                    <f:ajax execute="@form" render="result-section error-message" />
+                </h:commandButton>
+            </h:form>
+        </section>
+
+
+        <section id="result-section">
+            <h3>Результаты</h3>
+            <table id="resultsTable">
+                <thead>
+                <tr>
+                    <th>Результат</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>R</th>
+                    <th>Время запроса</th>
+                    <th>Время выполнения micsec</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- JSF не изменяет эту секцию, можно заполнять динамически через JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+</h:body>
+</html>

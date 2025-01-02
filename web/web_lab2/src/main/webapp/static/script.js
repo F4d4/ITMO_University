@@ -1,5 +1,5 @@
 document.getElementById('pointForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Останавливаем стандартную отправку формы
+    event.preventDefault();
 
     const selectedCheckbox = document.querySelector('input[name="x"]:checked'); // Найти выбранный чекбокс
     if (!selectedCheckbox) {
@@ -13,7 +13,7 @@ document.getElementById('pointForm').addEventListener('submit', function(event) 
 
     // Валидация
     if (!validateForm()) {
-        return; // Остановить выполнение, если валидация не пройдена
+        return;
     }
 
     const data = {
@@ -42,7 +42,7 @@ function sendPostRequest(data) {
             if (!response.ok) {
                 throw new Error('Ошибка HTTP: ' + response.status);
             }
-            // Открываем новую вкладку и пишем туда содержимое
+
             document.open()
             document.write(response.text);
             document.close();
@@ -64,7 +64,7 @@ function handleCheckboxSelection(selectedCheckbox) {
     // Оставляем выбранным только текущий
     checkboxes.forEach((checkbox) => {
         if (checkbox !== selectedCheckbox) {
-            checkbox.checked = false; // Снимаем выделение с других
+            checkbox.checked = false;
         }
     });
 }
@@ -85,7 +85,7 @@ function validateForm() {
         return false;
     }
 
-    const numberRegex = /^-?\d+(\.\d{1,15})?$/; // Разрешает числа с не более чем 15 знаками после запятой
+    const numberRegex = /^-?\d+(\.\d{1,15})?$/;
 
     if (!numberRegex.test(yValue)) {
         showError('Значение Y должно быть числом и содержать не более 15 знаков после запятой.');
