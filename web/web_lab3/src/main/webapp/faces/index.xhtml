@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       >
 <h:head>
     <meta charset="UTF-8"/>
@@ -21,32 +22,31 @@
 
         <section class="form-section">
             <h:form id="pointForm">
-                <!-- Изменение X -->
                 <div class="form-group">
                     <label>Изменение X:</label>
                     <h:panelGroup>
-                        <h:commandLink value="-5" action="#{pointBean.setXValue(-5)}" styleClass="x-value-link" />
-                        <h:commandLink value="-4" action="#{pointBean.setXValue(-4)}" styleClass="x-value-link" />
-                        <h:commandLink value="-3" action="#{pointBean.setXValue(-3)}" styleClass="x-value-link" />
-                        <h:commandLink value="-2" action="#{pointBean.setXValue(-2)}" styleClass="x-value-link" />
-                        <h:commandLink value="-1" action="#{pointBean.setXValue(-1)}" styleClass="x-value-link" />
-                        <h:commandLink value="0" action="#{pointBean.setXValue(0)}" styleClass="x-value-link" />
-                        <h:commandLink value="1" action="#{pointBean.setXValue(1)}" styleClass="x-value-link" />
-                        <h:commandLink value="2" action="#{pointBean.setXValue(2)}" styleClass="x-value-link" />
-                        <h:commandLink value="3" action="#{pointBean.setXValue(3)}" styleClass="x-value-link" />
+                        <h:commandLink value="-5" action="#{pointBean.setX(-5)}" styleClass="x-value-link" />
+                        <h:commandLink value="-4" action="#{pointBean.setX(-4)}" styleClass="x-value-link" />
+                        <h:commandLink value="-3" action="#{pointBean.setX(-3)}" styleClass="x-value-link" />
+                        <h:commandLink value="-2" action="#{pointBean.setX(-2)}" styleClass="x-value-link" />
+                        <h:commandLink value="-1" action="#{pointBean.setX(-1)}" styleClass="x-value-link" />
+                        <h:commandLink value="0" action="#{pointBean.setX(0)}" styleClass="x-value-link" />
+                        <h:commandLink value="1" action="#{pointBean.setX(1)}" styleClass="x-value-link" />
+                        <h:commandLink value="2" action="#{pointBean.setX(2)}" styleClass="x-value-link" />
+                        <h:commandLink value="3" action="#{pointBean.setX(3)}" styleClass="x-value-link" />
                     </h:panelGroup>
 
                 </div>
                 <!-- Изменение Y -->
                 <div class="form-group">
                     <label for="yValue">Изменение Y:</label>
-                    <h:inputText id="yValue" value="#{pointBean.yValue}" placeholder="(-3 ... 3)" />
+                    <h:inputText id="yValue" value="#{pointBean.y}" placeholder="(-3 ... 3)" />
                 </div>
 
                 <!-- Изменение R -->
                 <div class="form-group">
                     <label>Изменение R:</label>
-                    <h:selectOneRadio id="rValue" value="#{pointBean.rValue}">
+                    <h:selectOneRadio id="rValue" value="#{pointBean.r}">
                         <f:selectItem itemValue="1" itemLabel="1" />
                         <f:selectItem itemValue="2" itemLabel="2" />
                         <f:selectItem itemValue="3" itemLabel="3" />
@@ -65,21 +65,20 @@
 
         <section id="result-section">
             <h3>Результаты</h3>
-            <table id="resultsTable">
-                <thead>
-                <tr>
-                    <th>Результат</th>
-                    <th>X</th>
-                    <th>Y</th>
-                    <th>R</th>
-                    <th>Время запроса</th>
-                    <th>Время выполнения micsec</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- JSF не изменяет эту секцию, можно заполнять динамически через JavaScript -->
-                </tbody>
-            </table>
+            <p:dataTable value="#{pointBean.points}" var="point" rendered="#{not empty pointBean.points}" id="table">
+                <p:column headerText="Результат" style="text-align: center;">
+                    <h:outputText value="#{point.res ? 'Да' : 'Нет'}" style="color: #{point.res ? 'green' : 'red'}" />
+                </p:column>
+                <p:column headerText="X" style="text-align: center;">
+                    <h:outputText value="#{point.x}" />
+                </p:column>
+                <p:column headerText="Y" style="text-align: center;">
+                    <h:outputText value="#{point.y}" />
+                </p:column>
+                <p:column headerText="R" style="text-align: center;">
+                    <h:outputText value="#{point.r}" />
+                </p:column>
+            </p:dataTable>
         </section>
     </div>
 </h:body>
