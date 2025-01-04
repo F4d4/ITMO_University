@@ -82,8 +82,8 @@
             <h:inputHidden id="hiddenR" value="#{pointBean.r}" />
 
             <!-- Кнопка отправки -->
-            <h:commandButton id = "submitButton" value="Проверить" action="#{pointBean.addPoint()}" styleClass="custom-button" disabled="#{!pointBean.valid}" >
-               <f:ajax execute="@form" render="pointsTable hiddenX hiddenY hiddenR "/>
+            <h:commandButton id = "submitButton" value="Проверить" onclick="return validateForm()" styleClass="custom-button"  >
+               <f:ajax execute="@form" listener="#{pointBean.addPoint()}" render="pointsTable hiddenX hiddenY hiddenR "/>
             </h:commandButton>
 
          </h:form>
