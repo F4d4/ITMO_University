@@ -112,3 +112,70 @@ input[type="text"], select {
 fieldset{
     border:none
 }
+
+
+#pointsTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#pointsTable th {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#pointsTable th:last-child {
+    border-right: none;
+}
+
+#pointsTable td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+    color: #333;
+}
+
+#pointsTable td:last-child {
+    border-right: none;
+}
+
+#pointsTable tr:last-child td {
+    border-bottom: none;
+}
+
+#pointsTable tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+#result-section h3 {
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+/* Zebra striping for better readability */
+#pointsTable tr:nth-child(even) {
+    background-color: rgba(0, 123, 255, 0.02);
+}
+
+/* Responsive design */
+@media screen and (max-width: 600px) {
+    #pointsTable {
+        font-size: 14px;
+    }
+
+    #pointsTable th,
+    #pointsTable td {
+        padding: 8px 10px;
+    }
+}

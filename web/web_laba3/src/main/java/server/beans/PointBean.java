@@ -12,44 +12,79 @@ import java.util.List;
 @ApplicationScoped
 public class PointBean {
 
-    private double x;
-    private double y;
-    private double r;
+    private Double x;
+    private Double y;
+    private Double r;
 
     private List<Point> points = new ArrayList<>();
 
-    public double getX() {
+    public Double getX() {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(Double x) {
         this.x = x;
     }
 
-    public double getY() {
+    public Double getY() {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(Double y) {
         this.y = y;
     }
 
-    public double getR() {
+    public Double getR() {
         return r;
     }
 
-    public void setR(double r) {
+    public void setR(Double r) {
         this.r = r;
     }
 
-    public List<Point> getPoints(){
+    public List<Point> getPoints() {
         return points;
     }
 
-    public void addPoint(){
-        points.add(new Point(Area.Check.calculate(x,y,r), x,y,r));
+    public void addPoint() {
+        points.add(new Point(Area.Check.calculate(x, y, r), x, y, r));
     }
 
+    public boolean isValid() {
+        if (y == null ||y < -3 || y > 3){
+            return false;
+        }
+
+        double[] validXvalues = { -5 , -4 , -3 , -2 , -1 , 0 , 1 , 2 , 3};
+        boolean xValid = false;
+        for(double validValue : validXvalues){
+            if(x == validValue){
+                xValid = true;
+                break;
+            }
+        }
+
+        if(!xValid||x==null){
+            return false;
+        }
+
+        double[] validRvalues = { -5 , -4 , -3 , -2 , -1 , 0 , 1 , 2 , 3};
+        boolean rValid = false;
+        for(double validValue : validXvalues){
+            if(x == validValue){
+                rValid = true;
+                break;
+            }
+        }
+
+        if(!rValid || r==null){
+            return false;
+        }
+
+        return true;
+
+
+    }
 
 
 }
