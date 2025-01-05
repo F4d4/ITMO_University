@@ -83,12 +83,10 @@
             <h:inputHidden id="hiddenR" value="#{pointBean.r}" />
 
             <h:commandButton id = "submitButton" value="Проверить" onclick="return validateForm()" styleClass="custom-button"  >
-               <f:ajax execute="@form" listener="#{pointBean.addPoint()}" render="pointsTable hiddenX hiddenY hiddenR "/>
+               <f:ajax execute="@form" listener="#{pointBean.addPoint()}" render="pointsTable hiddenX hiddenY hiddenR" onevent="drawResultsGraph()"/>
             </h:commandButton>
-
          </h:form>
       </section>
-
 
       <section id="result-section">
          <h3>Результаты</h3>
