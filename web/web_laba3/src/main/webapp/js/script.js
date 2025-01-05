@@ -34,13 +34,10 @@ function showError(massage) {
     const errorDiv = document.getElementById('error-message');
     const errorText = document.getElementById('error-text');
 
-    // Устанавливаем текст ошибки
     errorText.textContent = massage ;
 
-    // Показываем сообщение об ошибке
     errorDiv.style.display = 'block';
 
-    // Скрываем сообщение через 3 секунды
     setTimeout(() => {
         errorDiv.style.display = 'none';
     }, 5000); // Через 3 секунды скрываем сообщение

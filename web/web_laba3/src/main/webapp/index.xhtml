@@ -81,7 +81,6 @@
             <h:inputHidden id="hiddenY" value="#{pointBean.y}" />
             <h:inputHidden id="hiddenR" value="#{pointBean.r}" />
 
-            <!-- Кнопка отправки -->
             <h:commandButton id = "submitButton" value="Проверить" onclick="return validateForm()" styleClass="custom-button"  >
                <f:ajax execute="@form" listener="#{pointBean.addPoint()}" render="pointsTable hiddenX hiddenY hiddenR "/>
             </h:commandButton>
@@ -108,6 +107,14 @@
             <h:column>
                <f:facet name="header">R</f:facet>
                #{point.r}
+            </h:column>
+            <h:column>
+               <f:facet name="header">Дата выполнения</f:facet>
+               #{point.dateOfRequest}
+            </h:column>
+            <h:column>
+               <f:facet name="header">Время выполнения micsec</f:facet>
+               #{point.executionTime}
             </h:column>
          </h:dataTable>
       </section>

@@ -5,6 +5,8 @@ import jakarta.inject.Named;
 import server.models.Point;
 import server.utils.Area;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,9 @@ public class PointBean {
     }
 
     public void addPoint() {
-        points.add(new Point(Area.Check.calculate(x, y, r), x, y, r));
+        long started = System.nanoTime();
+        boolean hit = Area.Check.calculate(x, y, r);
+        long ended = System.nanoTime();
+        points.add(new Point(hit, x, y, r , LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")), (ended - started) / 1000));
     }
 }
