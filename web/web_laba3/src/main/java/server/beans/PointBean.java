@@ -2,6 +2,7 @@ package server.beans;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletResponse;
 import server.models.Point;
 import server.utils.Area;
 
@@ -19,6 +20,8 @@ public class PointBean {
     private Double r;
 
     private List<Point> points = new ArrayList<>();
+
+
 
     public Double getX() {
         return x;
@@ -49,8 +52,11 @@ public class PointBean {
     }
 
     public void addPoint() {
+        if (!Area.validation(x,y,r)) {
+            return;
+        }
         long started = System.nanoTime();
-        boolean hit = Area.Check.calculate(x, y, r);
+        boolean hit = Area.calculate(x, y, r);
         long ended = System.nanoTime();
         points.add(new Point(hit, x, y, r , LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")), (ended - started) / 1000));
     }

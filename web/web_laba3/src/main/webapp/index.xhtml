@@ -8,6 +8,7 @@
    <title>Лабораторная работа</title>
    <link rel="stylesheet" href="styles/styles.css" />
    <script src="js/script.js"></script>
+   <script src="js/graph.js"></script>
 
 </h:head>
 <h:body>
@@ -73,7 +74,7 @@
                   <f:selectItem itemValue="3" itemLabel="3" />
                   <f:selectItem itemValue="4" itemLabel="4" />
                   <f:selectItem itemValue="5" itemLabel="5" />
-                  <f:ajax render="hiddenR submitButton" />
+                  <f:ajax render="hiddenR submitButton" onevent="drawgraph()"/>
                </h:selectOneRadio>
             </div>
 
