@@ -40,5 +40,5 @@ function showError(massage) {
 
     setTimeout(() => {
         errorDiv.style.display = 'none';
-    }, 5000); // Через 3 секунды скрываем сообщение
+    }, 3000); // Через 3 секунды скрываем сообщение
 }

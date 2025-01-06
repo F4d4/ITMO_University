@@ -19,7 +19,7 @@
          <h2>Вариант: 85290</h2>
       </header>
       <h3>График области</h3>
-      <canvas id="graphCanvas" width="400" height="400" style="border: 1px solid black;" ></canvas>
+      <canvas id="graphCanvas" width="400" height="400" style="border: 1px solid black;"></canvas>
 
       <section class="form-section">
          <h:form id="pointForm">
@@ -27,31 +27,31 @@
                <label>Изменение X:</label>
                <h:panelGroup>
                   <h:commandLink value="-5" action="#{pointBean.setX(-5)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                   <h:commandLink value="-4" action="#{pointBean.setX(-4)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                   <h:commandLink value="-3" action="#{pointBean.setX(-3)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                   <h:commandLink value="-2" action="#{pointBean.setX(-2)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                   <h:commandLink value="-1" action="#{pointBean.setX(-1)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                   <h:commandLink value="0" action="#{pointBean.setX(0)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                   <h:commandLink value="1" action="#{pointBean.setX(1)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                   <h:commandLink value="2" action="#{pointBean.setX(2)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                   <h:commandLink value="3" action="#{pointBean.setX(3)}" styleClass="x-value-link">
-                     <f:ajax render="hiddenX submitButton" />
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
                   </h:commandLink>
                </h:panelGroup>
 
@@ -61,7 +61,7 @@
                <label for="yValue">Изменение Y:</label>
                <h:inputText id="yValue" value="#{pointBean.y}" placeholder="(-3 ... 3)" maxlength="15">
                   <f:passThroughAttribute name="placeholder" value="(-3 ... 3)" />
-                  <f:ajax render="hiddenY submitButton" />
+                  <f:ajax render="hiddenY submitButton hiddenSubmitButton" />
                </h:inputText>
             </div>
 
@@ -74,7 +74,7 @@
                   <f:selectItem itemValue="3" itemLabel="3" />
                   <f:selectItem itemValue="4" itemLabel="4" />
                   <f:selectItem itemValue="5" itemLabel="5" />
-                  <f:ajax render="hiddenR submitButton" onevent="drawgraph()"/>
+                  <f:ajax render="hiddenR submitButton hiddenSubmitButton" onevent="drawgraph()"/>
                </h:selectOneRadio>
             </div>
 
@@ -84,6 +84,10 @@
 
             <h:commandButton id = "submitButton" value="Проверить" onclick="return validateForm()" styleClass="custom-button"  >
                <f:ajax execute="@form" listener="#{pointBean.addPoint()}" render="pointsTable hiddenX hiddenY hiddenR" onevent="drawResultsGraph()"/>
+            </h:commandButton>
+
+            <h:commandButton id="hiddenSubmitButton" value="Скрытая кнопка" style="display: none;">
+               <f:ajax execute="@form" listener="#{pointBean.addPoint()}" render="pointsTable hiddenX hiddenY hiddenR" onevent="drawResultsGraph()" />
             </h:commandButton>
          </h:form>
       </section>
@@ -121,5 +125,6 @@
          <span id="error-text"></span>
       </div>
    </div>
+   <script src="js/point.js"></script>
 </h:body>
 </html>
