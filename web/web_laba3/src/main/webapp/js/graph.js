@@ -167,15 +167,15 @@ function drawResultsGraph(){
 
     ctx.fillStyle = 'red'
 
-    if(xValue >= 0 && yValue >= 0 && xValue <= r && yValue <= r / 2){
+    if(xValue >= 0 && yValue >= 0 && xValue <= r && yValue <= r ){
         ctx.fillStyle = 'green'
     }
 
-    if(xValue <= 0 && yValue >= 0 && xValue >= -r && yValue <= r / 2 && (0.5 * xValue - yValue + r * 0.5) >= 0){
+    if(xValue <= 0 && yValue <= 0 && xValue >= -r/2 && yValue >= -r / 2 && (xValue + yValue + r * 0.5) >= 0){
         ctx.fillStyle = 'green'
     }
 
-    if(xValue <= 0 && yValue <= 0 && xValue >= -r && yValue >= -r && (Math.pow(xValue, 2) + Math.pow(yValue, 2) <= Math.pow(r, 2))){
+    if(xValue >= 0 && yValue <= 0 && yValue>-r/2 && xValue<=r/2 && Math.pow(xValue,2)+Math.pow(yValue,2)<=Math.pow(r/2,2)){
         ctx.fillStyle = 'green'
     }
 
