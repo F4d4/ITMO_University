@@ -179,3 +179,43 @@ fieldset{
         padding: 8px 10px;
     }
 }
+
+
+/* Стили для ссылок с классом styled-link */
+.styled-link {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    color: #ffffff;
+    text-decoration: none;
+    background: linear-gradient(45deg, #007bff, #1e90ff);
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.styled-link:hover {
+    background: linear-gradient(45deg, #0056b3, #004080);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+    text-decoration: underline;
+}
+
+.styled-link:active {
+    background: linear-gradient(45deg, #003366, #002244);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: scale(0.98);
+}
+
+/* styles.css */
+
+.clock {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+    color: #333;
+}
