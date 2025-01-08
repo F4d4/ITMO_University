@@ -95,7 +95,7 @@
 
       <section id="result-section">
          <h3>Результаты</h3>
-         <h:dataTable id="pointsTable" value="#{pointBean.points}" var="point">
+         <h:dataTable id="pointsTable" value="#{tableBean.points}" var="point">
             <h:column>
                <f:facet name="header">Результат</f:facet>
                #{point.res ? 'Попал' : 'Промахнулся'}

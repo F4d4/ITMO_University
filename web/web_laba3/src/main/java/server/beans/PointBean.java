@@ -2,10 +2,11 @@ package server.beans;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
-import jakarta.servlet.http.HttpServletResponse;
+import server.data.DataBase;
 import server.models.Point;
 import server.utils.Area;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class PointBean {
     private Double y;
     private Double r;
 
-    private List<Point> points = new ArrayList<>();
+
 
 
 
@@ -47,17 +48,20 @@ public class PointBean {
         this.r = r;
     }
 
-    public List<Point> getPoints() {
-        return points;
-    }
 
     public void addPoint() {
-        if (!Area.validation(x,y,r)) {
-            return;
+        try(var connection = DataBase.connect()){
+            if (!Area.validation(x,y,r)) {
+                return;
+            }
+
+            long started = System.nanoTime();
+            boolean hit = Area.calculate(x, y, r);
+            long ended = System.nanoTime();
+            DataBase.insertPoint(connection,hit,x,y,r,LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")),(ended - started) / 1000);
+        }catch(SQLException e ){
+            e.printStackTrace();
         }
-        long started = System.nanoTime();
-        boolean hit = Area.calculate(x, y, r);
-        long ended = System.nanoTime();
-        points.add(new Point(hit, x, y, r , LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")), (ended - started) / 1000));
     }
+
 }
