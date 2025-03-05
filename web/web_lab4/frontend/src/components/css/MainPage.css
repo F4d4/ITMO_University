@@ -1,0 +1,63 @@
+.main-page {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: transparent; /* Фон задаётся интерактивным блоком */
+}
+
+.main-content {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #e0f7fa;
+}
+
+.content-grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+    padding: 24px;
+}
+
+@media (min-width: 1024px) {
+    .content-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .results-section {
+        grid-column: span 2;
+    }
+}
+
+/* Общее оформление секций с космическим фоном */
+.form-section,
+.graph-section,
+.results-section {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+    background: rgba(10, 10, 20, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.graph-section {
+    animation-delay: 0.2s;
+}
+
+.results-section {
+    animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,22 @@
+.graph-container {
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 0 30px rgba(88, 101, 242, 0.2);
+    width: fit-content;
+    margin: 0 auto;
+    border: 1px solid rgba(88, 101, 242, 0.3);
+}
+
+.graph-canvas {
+    /*cursor: crosshair;*/
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+    background: linear-gradient(to bottom right, rgba(13, 17, 23, 0.95), rgba(23, 27, 33, 0.95));
+}
+
+.graph-canvas:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.3);
+}

@@ -1,0 +1,161 @@
+/* Общие настройки */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Контейнер для формы */
+.point-form {
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 0 30px rgba(88, 101, 242, 0.2);
+    max-width: 600px;
+    margin: 20px auto;
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Группы формы */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+/* Контейнер для кнопок */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+/* Стили для кнопок (координаты X и радиус R) */
+.btn {
+    background: rgba(88, 101, 242, 0.1);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.btn:hover {
+    background: rgba(88, 101, 242, 0.2);
+    border-color: rgba(88, 101, 242, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 0 15px rgba(88, 101, 242, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Выбранная кнопка */
+.btn-active {
+    background: rgba(88, 101, 242, 0.8) !important;
+    color: #ffffff !important;
+    border-color: rgba(88, 101, 242, 0.9) !important;
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+}
+
+/* Стили для input */
+.point-form input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    background: rgba(13, 17, 23, 0.95);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.point-form input[type="number"]:focus {
+    outline: none;
+    border-color: rgba(88, 101, 242, 0.5);
+    box-shadow: 0 0 15px rgba(88, 101, 242, 0.2);
+}
+
+.point-form input[type="number"]::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Стили для кнопки отправки */
+.submit-btn {
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.9), rgba(88, 101, 242, 0.7));
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 16px;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, rgba(88, 101, 242, 1), rgba(88, 101, 242, 0.8));
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Стили для ошибок */
+.error {
+    color: rgba(242, 88, 88, 0.9);
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+
+/* Стили для кнопок выбора X и R */
+.checkbox-label {
+    display: inline-block;
+    background: #001f3f; /* базовый темно-синий цвет */
+    border: 1px solid #001f3f;
+    border-radius: 6px;
+    padding: 8px 16px;
+    margin-right: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+    color: #ffffff;
+}
+
+/* Скрываем стандартный чекбокс */
+.checkbox-label input {
+    display: none;
+}
+
+/* При наведении меняется оттенок */
+.checkbox-label:hover {
+    background: #001933;
+}
+
+/* Если чекбокс отмечен, кнопка подсвечивается */
+/* Используем селектор :has для родительского элемента (поддерживается в современных браузерах) */
+.checkbox-label:has(input:checked) {
+    background: #0B3D91; /* более яркий оттенок синего */
+    border-color: #0B3D91;
+    box-shadow: 0 0 10px rgba(11, 61, 145, 0.7);
+}

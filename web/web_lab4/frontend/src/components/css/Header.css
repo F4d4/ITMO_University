@@ -1,0 +1,51 @@
+.app-header {
+    background: rgba(10, 10, 20, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content h1 {
+    font-size: 28px;
+    font-weight: 500;
+    color: #e0f7fa;  /* светлый циан */
+    margin: 0;
+    text-shadow: 0 0 5px rgba(224, 247, 250, 0.8);
+    /* Легкая анимация «сияния» */
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    0% { text-shadow: 0 0 5px rgba(224, 247, 250, 0.5); }
+    50% { text-shadow: 0 0 20px rgba(224, 247, 250, 1); }
+    100% { text-shadow: 0 0 5px rgba(224, 247, 250, 0.5); }
+}
+
+.logout-button {
+    background: transparent;
+    border: 1px solid rgba(224, 247, 250, 0.6);
+    padding: 8px 16px;
+    border-radius: 6px;
+    color: #e0f7fa;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.logout-button:hover {
+    background: rgba(224, 247, 250, 0.1);
+    transform: translateY(-2px);
+}

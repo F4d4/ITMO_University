@@ -1,0 +1,163 @@
+/* Контейнер таблицы */
+.results-container {
+    background: rgba(15, 21, 36, 0.95);            /* Тёмный базовый фон */
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    max-width: 1000px;
+    margin: 0 auto;
+    border: 1px solid rgba(142, 36, 170, 0.4);      /* Фиолетовая рамка */
+    font-family: 'Roboto', sans-serif;
+    color: #f0f0f0;                                 /* Светлый текст */
+}
+
+/* Обёртка таблицы для скроллинга */
+.table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+/* Таблица */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif;
+    color: #ffffff;
+}
+
+/* Заголовок таблицы */
+.results-table th {
+    background: linear-gradient(135deg, #8e24aa, #3f0d82);
+    padding: 12px;
+    font-weight: 500;
+    color: #ffffff;
+    border-bottom: 2px solid #8e24aa;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* Ячейки таблицы */
+.results-table td {
+    background: rgba(13, 17, 23, 0.95);
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid rgb(213, 167, 167);
+}
+
+/* Строки таблицы при наведении */
+.result-row {
+    transition: background-color 0.2s ease;
+}
+
+.result-row:hover {
+    background-color: rgba(142, 36, 170, 0.2);
+}
+
+/* Моноширинный шрифт */
+.mono {
+    font-family: "SF Mono", monospace;
+}
+
+/* Статус-бейджи */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.status-badge.hit {
+    background: #8e24aa;      /* Фиолетовый для попадания */
+    color: #ffffff;
+}
+
+.status-badge.miss {
+    background: #b71c1c;      /* Красноватый для мимо */
+    color: #ffffff;
+}
+
+.status-badge:hover {
+    transform: scale(1.05);
+}
+
+/* Время */
+.time {
+    color: #ffffff;
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(142, 36, 170, 0.4);
+}
+
+/* Выбор количества строк */
+.rows-select {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #f0f0f0;
+}
+
+.rows-select select {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #8e24aa;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #f0f0f0;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.rows-select select:hover {
+    border-color: #7b1fa2;
+}
+
+/* Контролы страниц */
+.page-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #f0f0f0;
+}
+
+.page-info {
+    font-size: 14px;
+}
+
+/* Кнопки пагинации */
+.buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.page-button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #8e24aa;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f0f0f0;
+}
+
+.page-button:hover:not(:disabled) {
+    background: rgba(142, 36, 170, 0.3);
+}
+
+.page-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
