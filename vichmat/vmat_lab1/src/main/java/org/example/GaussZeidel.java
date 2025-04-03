@@ -2,6 +2,7 @@ package org.example;
 
 import org.w3c.dom.ls.LSOutput;
 
+import java.sql.SQLOutput;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -59,7 +60,7 @@ public class GaussZeidel {
                     maxDiff = diff;
                 }
             }
-             DecimalFormat df = new DecimalFormat("#.###" , new DecimalFormatSymbols(Locale.US));
+             DecimalFormat df = new DecimalFormat("#.####" , new DecimalFormatSymbols(Locale.US));
              System.out.println("Вектор погрешностей для итерации N"+iterationCounter+" = " + df.format(maxDiff));
 
             if (maxDiff < marginOfError) {
@@ -73,6 +74,14 @@ public class GaussZeidel {
             System.out.println("Решение найдено:");
             for (int i = 0; i < size; i++) {
                 System.out.println("x" + (i + 1) + " = " + x[i]);
+            }
+            System.out.println("Векторы невязки: ");
+            for ( int i =0 ; i< size ; i++){
+                double sumFonev = 0;
+                for(int j =0 ; j< size ; j++){
+                    sumFonev+=arguments[i][j]*x[j];
+                }
+                System.out.println(sumFonev - arguments[i][size]);
             }
         } else {
             System.out.println("Не сошлось за " + maxIterations + " итераций.");

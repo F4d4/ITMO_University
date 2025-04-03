@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Выберите как вы хотите вводить данные. 1- клвиатура ; 2 - файл :");
+        System.out.println("Выберите как вы хотите вводить данные. 1- клавиатура ; 2 - файл :");
         try{
             int userChoice = Integer.valueOf(scanner.nextLine().trim());
             if(userChoice == 2){
@@ -33,7 +33,8 @@ public class Main {
                         printMatrix(argumentsFromFile);
                     } else {
                         System.out.println("Подходящей перестановки нет.");
-                        System.exit(0);
+                        printMatrix(argumentsFromFile);
+                        //System.exit(0);
                     }
                     double marginFromFile = Double.parseDouble(scannerFile.nextLine().trim());
                     GaussZeidel gaussZeidel = new GaussZeidel(argumentsFromFile, sizeFromFile,marginFromFile);
@@ -77,7 +78,8 @@ public class Main {
                 printMatrix(arguments);
             } else {
                 System.out.println("Подходящей перестановки нет.");
-                System.exit(0);
+                printMatrix(arguments);
+                //System.exit(0);
             }
 
             System.out.println("Введите точность");
@@ -91,7 +93,6 @@ public class Main {
 
 
     public static boolean ensureDiagonalDominance(double[][] arguments, int n) {
-        // Проверяем исходное состояние
         if (isDiagonallyDominant(arguments, n)) {
             return true;
         }
@@ -102,7 +103,6 @@ public class Main {
             rowOrder[i] = i;
         }
 
-        // Пробуем все перестановки строк
         return permuteAndCheck(arguments, rowOrder, 0, n);
     }
 
@@ -116,7 +116,7 @@ public class Main {
                     offDiagonalSum += Math.abs(arguments[i][j]);
                 }
             }
-            if (diagonal <= offDiagonalSum) {
+            if (diagonal < offDiagonalSum) {
                 return false;
             }
         }

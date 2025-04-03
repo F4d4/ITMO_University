@@ -41,7 +41,8 @@ class ChordMethod(Method):
             delta = abs(new_x - x)
 
             # Проверяем достижение необходимой точности
-            if delta < eps:
+            if delta < eps and abs(f(new_x)) < eps:
+                x = new_x
                 break
 
             x = new_x

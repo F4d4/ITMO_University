@@ -1,4 +1,6 @@
 from typing import Callable
+
+import numpy as np
 from scipy.differentiate import derivative
 
 
@@ -20,11 +22,37 @@ class Equation:
         :return: True, если функция имеет решения на выбранном отрезке.
         """
         f = self.function
+        n_points = 1000
+        xs = np.linspace(a, b, n_points)
+        tolerance = 1e-7
 
-        fa = f(a)
-        fb = f(b)
+        roots = []
+        i = 0
+        while i < n_points - 1:
+            x1 = xs[i]
+            x2 = xs[i + 1]
+            f1 = f(x1)
+            f2 = f(x2)
 
-        fa_ = derivative(f, a).df
-        fb_ = derivative(f, b).df
 
-        return (fa * fb < 0) and (fa_ * fb_ > 0)
+            if abs(f1) < tolerance:
+                if not roots or abs(x1 - roots[-1]) > (b - a) / n_points:
+                    roots.append(x1)
+                i += 1
+                continue
+
+
+            if f1 * f2 < 0:
+                r = (x1 + x2) / 2
+                if not roots or abs(r - roots[-1]) > (b - a) / n_points:
+                    roots.append(r)
+            i += 1
+
+        if len(roots) == 0:
+            print("На выбранном отрезке нет корней.")
+            return False
+        elif len(roots) > 1:
+            print("На данном отрезке больше 1 корня, выберите отрезок, на котором будет только 1 корень функции.")
+            return False
+        else:
+            return True

@@ -47,7 +47,7 @@ class SecantMethod(Method):
             delta = abs(x - x1)
 
             # Проверяем достижение необходимой точности
-            if delta < eps:
+            if delta < eps and abs(f(x)) < eps:
                 break
 
             x0 = x1

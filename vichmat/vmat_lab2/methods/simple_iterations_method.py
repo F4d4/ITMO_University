@@ -40,7 +40,8 @@ class SimpleIterationsMethod(Method):
             print(f'Метод не сходится, так как q >= 1')
 
         prev_x = a
-
+        print(derivative(phi, a).df)
+        print(derivative(phi, b).df)
         while True:
             if iterations == MAX_ITERATIONS:
                 raise Exception(f'Выполнено {MAX_ITERATIONS} итераций. Решение н найдено')

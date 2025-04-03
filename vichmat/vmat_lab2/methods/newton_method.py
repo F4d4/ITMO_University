@@ -102,4 +102,10 @@ class NewtonMethod:
 
             v = next_v.tolist()
 
+        f_final = system[0].function(v[0], v[1])
+        g_final = system[1].function(v[0], v[1])
+        print(f"Значение первой функции в точке ({v[0]}, {v[1]}) = {f_final}")
+        print(f"Значение второй функции в точке ({v[0]}, {v[1]}) = {g_final}")
+        print(delta[0])
+        print(delta[1])
         return Result2(v[0], iteration, v[1])
