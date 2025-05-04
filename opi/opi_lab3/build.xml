@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="lab3" default="build">
+    <property file="build.properties"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+        <fileset dir="${main.dir}" includes="*.java"/>
+    </path>
+
+    <target name="compile" >
+        <echo message="***** COMPILE STARTED *****"/>
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false"/>
+        <echo message="***** COMPILE COMPLETED *****"/>
+    </target>
+
+    <target name="build" depends="compile">
+        <echo message="***** BUILD STARTED *****"/>
+        <copy todir="${build.dir}">
+            <fileset dir="${web.dir}"/>
+        </copy>
+        <copy todir="${build.dir.lib}">
+            <fileset dir="${lib.dir}"/>
+        </copy>
+        <jar destfile="${build.dir}/${ant.project.name}.jar">
+            <fileset dir="${classes.dir}"/>
+            <manifest>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="NoClass"/>
+            </manifest>
+        </jar>
+        <war destfile="${build.dir}/${ant.project.name}.war" webxml="${build.web.xml}">
+            <fileset dir="${build.dir}">
+                <exclude name="${ant.project.name}.jar"/>
+            </fileset>
+            <manifest>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="NoClass"/>
+            </manifest>
+        </war>
+
+        <echo message="***** BUILD COMPLETED *****"/>
+    </target>
+
+    <target name ="clean">
+        <echo message="***** CLEAN STARTED *****"/>
+        <delete dir="${build.dir}"/>
+        <echo message="***** CLEAN COMPLETED *****"/>
+    </target>
+</project>
