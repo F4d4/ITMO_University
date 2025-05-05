@@ -11,7 +11,8 @@
     <target name="compile" >
         <echo message="***** COMPILE STARTED *****"/>
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false" source="17" target="17"/>
+        <javac srcdir="${test.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false"/>
         <echo message="***** COMPILE COMPLETED *****"/>
     </target>
 
@@ -27,25 +28,87 @@
             <fileset dir="${classes.dir}"/>
             <manifest>
                 <attribute name="Manifest-Version" value="1.0"/>
-                <attribute name="Main-Class" value="NoClass"/>
             </manifest>
         </jar>
         <war destfile="${build.dir}/${ant.project.name}.war" webxml="${build.web.xml}">
             <fileset dir="${build.dir}">
                 <exclude name="${ant.project.name}.jar"/>
+                <exclude name="${ant.project.name}.war"/>
             </fileset>
             <manifest>
                 <attribute name="Manifest-Version" value="1.0"/>
-                <attribute name="Main-Class" value="NoClass"/>
             </manifest>
         </war>
 
         <echo message="***** BUILD COMPLETED *****"/>
     </target>
 
+    <target name="test" depends="build">
+        <echo message="***** TEST STARTED *****"/>
+        <mkdir dir="${build}/test-results"/>
+        <junit printsummary="yes" haltonfailure="no">
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="${build.dir}/${ant.project.name}.jar"/>
+            </classpath>
+            <test name="${test.class}" todir="${build}/test-results" if="test.class"/>
+            <batchtest fork="yes" todir="${build}/test-results" unless="test.class">
+                <fileset dir="${classes.dir}" includes="**/*Test.class"/>
+            </batchtest>
+            <formatter type="xml"/>
+        </junit>
+        <echo message="***** TEST COMPLETED *****"/>
+    </target>
+
+    <target name="xml">
+        <echo message="***** XML VALIDATION STARTED *****"/>
+        <xmlvalidate failonerror="yes" lenient="true">
+            <fileset dir="${src.dir}" includes="**/*.xml"/>
+        </xmlvalidate>
+        <echo message="***** XML VALIDATION COMPLETED *****"/>
+    </target>
+
     <target name ="clean">
         <echo message="***** CLEAN STARTED *****"/>
         <delete dir="${build.dir}"/>
         <echo message="***** CLEAN COMPLETED *****"/>
+    </target>
+
+    <target name="history">
+        <echo message="***** HISTORY CHECK STARTED *****"/>
+        <exec executable="git" outputproperty="git.status" failifexecutionfails="false"/>
+        <condition property="git.available">
+            <not><equals arg1="${git.status}" arg2=""/></not>
+        </condition>
+        <echo message="Git is available: ${git.available}"/>
+        <echo message="Trying to compile current version..."/>
+        <antcall target="compile" inheritall="true"/>
+        <condition property="compile.failed">
+            <not><equals arg1="${ant.result}" arg2="0"/></not>
+        </condition>
+        <exec executable="git" outputproperty="git.head" failifexecutionfails="false">
+            <arg value="rev-parse"/>
+            <arg value="HEAD"/>
+        </exec>
+        <exec executable="git" outputproperty="git.first" failifexecutionfails="false">
+            <arg value="rev-list"/>
+            <arg value="--max-parents=0"/>
+            <arg value="HEAD"/>
+        </exec>
+        <condition property="is.first.commit">
+            <equals arg1="${git.head}" arg2="${git.first}"/>
+        </condition>
+        <echo message="Compilation failed, checking out previous version..."/>
+        <exec executable="git" failifexecutionfails="false">
+            <arg value="checkout"/>
+            <arg value="HEAD~1"/>
+        </exec>
+        <echo message="Reached first commit, generating diff..."/>
+        <exec executable="git" output="diff.txt" failifexecutionfails="false">
+            <arg value="diff"/>
+            <arg value="HEAD"/>
+            <arg value="HEAD~1"/>
+        </exec>
+        <echo message="***** HISTORY CHECK COMPLETED *****"/>
     </target>
 </project>
