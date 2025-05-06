@@ -15,7 +15,6 @@ public class TableBeanTest {
 
     @Test
     public void testGetPointsNotNull() {
-        // Проверка, что метод возвращает не-null результат
         assertNotNull("Список точек не должен быть null", tableBean.getPoints());
     }
 } 

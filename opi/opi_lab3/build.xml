@@ -8,6 +8,11 @@
         <fileset dir="${main.dir}" includes="*.java"/>
     </path>
 
+    <path id="fuzzing.classpath">
+        <path refid="classpath"/>
+        <fileset dir="lib/fuzzing" includes="*.jar"/>
+    </path>
+
     <target name="compile" >
         <echo message="***** COMPILE STARTED *****"/>
         <mkdir dir="${classes.dir}"/>
@@ -60,6 +65,19 @@
         <echo message="***** TEST COMPLETED *****"/>
     </target>
 
+    <target name="test-fuzzing" depends="compile">
+        <echo message="***** FUZZING TEST STARTED *****"/>
+        <mkdir dir="${build}/fuzzing-results"/>
+        <javac srcdir="${test.dir}" destdir="${classes.dir}" classpathref="fuzzing.classpath" includeantruntime="false"/>
+        <java classname="server.utils.CustomFuzzTest" fork="true" failonerror="true">
+            <classpath>
+                <path refid="fuzzing.classpath"/>
+                <pathelement location="${classes.dir}"/>
+            </classpath>
+        </java>
+        <echo message="***** FUZZING TEST COMPLETED *****"/>
+    </target>
+
     <target name="xml">
         <echo message="***** XML VALIDATION STARTED *****"/>
         <xmlvalidate failonerror="yes" lenient="true">
@@ -68,7 +86,7 @@
         <echo message="***** XML VALIDATION COMPLETED *****"/>
     </target>
 
-    <target name ="clean">
+    <target name="clean">
         <echo message="***** CLEAN STARTED *****"/>
         <delete dir="${build.dir}"/>
         <echo message="***** CLEAN COMPLETED *****"/>

@@ -78,4 +78,42 @@ public class PointTest {
         point.setExecutionTime(200L);
         assertEquals(200L, point.getExecutionTime());
     }
+
+    @Test
+    public void testPointCreationWithRandomValues() {
+        // Fuzzing test with random values
+        for (int i = 0; i < 100; i++) {
+            double x = Math.random() * 1000 * (Math.random() > 0.5 ? 1 : -1);
+            double y = Math.random() * 1000 * (Math.random() > 0.5 ? 1 : -1);
+            double r = Math.random() * 1000;
+            boolean res = Math.random() > 0.5;
+            String dateOfRequest = "TestDate" + i;
+            long executionTime = (long) (Math.random() * 100000);
+
+            Point point = new Point(res, x, y, r, dateOfRequest, executionTime);
+
+            assertEquals(x, point.getX(), 0.0001);
+            assertEquals(y, point.getY(), 0.0001);
+            assertEquals(r, point.getR(), 0.0001);
+            assertEquals(res, point.getRes());
+            assertEquals(dateOfRequest, point.getDateOfRequest());
+            assertEquals(executionTime, point.getExecutionTime());
+        }
+    }
+
+    @Test
+    public void testPointWithBoundaryValues() {
+        // Fuzzing test with boundary values
+        double[] boundaryValues = {Double.MIN_VALUE, Double.MAX_VALUE, 0.0, -0.0, Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+        for (double x : boundaryValues) {
+            for (double y : boundaryValues) {
+                for (double r : boundaryValues) {
+                    Point point = new Point(true, x, y, r, "BoundaryTest", 100L);
+                    assertEquals(x, point.getX(), 0.0);
+                    assertEquals(y, point.getY(), 0.0);
+                    assertEquals(r, point.getR(), 0.0);
+                }
+            }
+        }
+    }
 } 
