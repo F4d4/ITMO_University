@@ -23,6 +23,7 @@ dependencies {
     runtimeOnly 'org.glassfish.web:jakarta.servlet.jsp.jstl:2.0.0'
     implementation 'org.glassfish:jakarta.el:4.0.0'
     implementation 'org.postgresql:postgresql:42.7.3'
+    testImplementation 'edu.berkeley.cs.jqf:jqf-fuzz:1.7'
 }
 
 java {

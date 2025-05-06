@@ -1,0 +1,377 @@
+diff --git a/opi/opi_lab3/build.properties b/opi/opi_lab3/build.properties
+index c805d00..cff01b5 100644
+--- a/opi/opi_lab3/build.properties
++++ b/opi/opi_lab3/build.properties
+@@ -4,7 +4,6 @@ src.dir=src/main
+ main.dir=${src.dir}/java
+ web.dir=${src.dir}/webapp
+ 
+-test.dir=src/test
+ 
+ ant.dir=ant
+ build.dir=${ant.dir}/build
+diff --git a/opi/opi_lab3/build.xml b/opi/opi_lab3/build.xml
+index a676f90..4f29d4b 100644
+--- a/opi/opi_lab3/build.xml
++++ b/opi/opi_lab3/build.xml
+@@ -11,8 +11,7 @@
+     <target name="compile" >
+         <echo message="***** COMPILE STARTED *****"/>
+         <mkdir dir="${classes.dir}"/>
+-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false" source="17" target="17"/>
+-        <javac srcdir="${test.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false"/>
++        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false"/>
+         <echo message="***** COMPILE COMPLETED *****"/>
+     </target>
+ 
+@@ -28,87 +27,25 @@
+             <fileset dir="${classes.dir}"/>
+             <manifest>
+                 <attribute name="Manifest-Version" value="1.0"/>
++                <attribute name="Main-Class" value="NoClass"/>
+             </manifest>
+         </jar>
+         <war destfile="${build.dir}/${ant.project.name}.war" webxml="${build.web.xml}">
+             <fileset dir="${build.dir}">
+                 <exclude name="${ant.project.name}.jar"/>
+-                <exclude name="${ant.project.name}.war"/>
+             </fileset>
+             <manifest>
+                 <attribute name="Manifest-Version" value="1.0"/>
++                <attribute name="Main-Class" value="NoClass"/>
+             </manifest>
+         </war>
+ 
+         <echo message="***** BUILD COMPLETED *****"/>
+     </target>
+ 
+-    <target name="test" depends="build">
+-        <echo message="***** TEST STARTED *****"/>
+-        <mkdir dir="${build}/test-results"/>
+-        <junit printsummary="yes" haltonfailure="no">
+-            <classpath>
+-                <path refid="classpath"/>
+-                <pathelement location="${build.dir}/${ant.project.name}.jar"/>
+-            </classpath>
+-            <test name="${test.class}" todir="${build}/test-results" if="test.class"/>
+-            <batchtest fork="yes" todir="${build}/test-results" unless="test.class">
+-                <fileset dir="${classes.dir}" includes="**/*Test.class"/>
+-            </batchtest>
+-            <formatter type="xml"/>
+-        </junit>
+-        <echo message="***** TEST COMPLETED *****"/>
+-    </target>
+-
+-    <target name="xml">
+-        <echo message="***** XML VALIDATION STARTED *****"/>
+-        <xmlvalidate failonerror="yes" lenient="true">
+-            <fileset dir="${src.dir}" includes="**/*.xml"/>
+-        </xmlvalidate>
+-        <echo message="***** XML VALIDATION COMPLETED *****"/>
+-    </target>
+-
+     <target name ="clean">
+         <echo message="***** CLEAN STARTED *****"/>
+         <delete dir="${build.dir}"/>
+         <echo message="***** CLEAN COMPLETED *****"/>
+     </target>
+-
+-    <target name="history">
+-        <echo message="***** HISTORY CHECK STARTED *****"/>
+-        <exec executable="git" outputproperty="git.status" failifexecutionfails="false"/>
+-        <condition property="git.available">
+-            <not><equals arg1="${git.status}" arg2=""/></not>
+-        </condition>
+-        <echo message="Git is available: ${git.available}"/>
+-        <echo message="Trying to compile current version..."/>
+-        <antcall target="compile" inheritall="true"/>
+-        <condition property="compile.failed">
+-            <not><equals arg1="${ant.result}" arg2="0"/></not>
+-        </condition>
+-        <exec executable="git" outputproperty="git.head" failifexecutionfails="false">
+-            <arg value="rev-parse"/>
+-            <arg value="HEAD"/>
+-        </exec>
+-        <exec executable="git" outputproperty="git.first" failifexecutionfails="false">
+-            <arg value="rev-list"/>
+-            <arg value="--max-parents=0"/>
+-            <arg value="HEAD"/>
+-        </exec>
+-        <condition property="is.first.commit">
+-            <equals arg1="${git.head}" arg2="${git.first}"/>
+-        </condition>
+-        <echo message="Compilation failed, checking out previous version..."/>
+-        <exec executable="git" failifexecutionfails="false">
+-            <arg value="checkout"/>
+-            <arg value="HEAD~1"/>
+-        </exec>
+-        <echo message="Reached first commit, generating diff..."/>
+-        <exec executable="git" output="diff.txt" failifexecutionfails="false">
+-            <arg value="diff"/>
+-            <arg value="HEAD"/>
+-            <arg value="HEAD~1"/>
+-        </exec>
+-        <echo message="***** HISTORY CHECK COMPLETED *****"/>
+-    </target>
+ </project>
+\ No newline at end of file
+diff --git a/opi/opi_lab3/lib/hamcrest-core-1.3.jar b/opi/opi_lab3/lib/hamcrest-core-1.3.jar
+deleted file mode 100644
+index 9d5fe16..0000000
+Binary files a/opi/opi_lab3/lib/hamcrest-core-1.3.jar and /dev/null differ
+diff --git a/opi/opi_lab3/lib/jakarta.jakartaee-api-10.0.0.jar b/opi/opi_lab3/lib/jakarta.jakartaee-api-10.0.0.jar
+deleted file mode 100644
+index 2cedb2d..0000000
+Binary files a/opi/opi_lab3/lib/jakarta.jakartaee-api-10.0.0.jar and /dev/null differ
+diff --git a/opi/opi_lab3/lib/junit-4.13.2.jar b/opi/opi_lab3/lib/junit-4.13.2.jar
+deleted file mode 100644
+index 6da55d8..0000000
+Binary files a/opi/opi_lab3/lib/junit-4.13.2.jar and /dev/null differ
+diff --git a/opi/opi_lab3/lib/mockito-all-1.10.19.jar b/opi/opi_lab3/lib/mockito-all-1.10.19.jar
+deleted file mode 100644
+index c831489..0000000
+Binary files a/opi/opi_lab3/lib/mockito-all-1.10.19.jar and /dev/null differ
+diff --git a/opi/opi_lab3/lib/postgresql-42.7.3.jar b/opi/opi_lab3/lib/postgresql-42.7.3.jar
+deleted file mode 100644
+index fa42b1d..0000000
+Binary files a/opi/opi_lab3/lib/postgresql-42.7.3.jar and /dev/null differ
+diff --git a/opi/opi_lab3/src/main/java/server/data/DataBase.java b/opi/opi_lab3/src/main/java/server/data/DataBase.java
+index 9665ba5..12840fc 100644
+--- a/opi/opi_lab3/src/main/java/server/data/DataBase.java
++++ b/opi/opi_lab3/src/main/java/server/data/DataBase.java
+@@ -7,9 +7,9 @@ import java.util.ArrayList;
+ 
+ 
+ public class DataBase {
+-    private static final String URL = "jdbc:postgresql://localhost:5432/studs";
+-    private static final String USER = "mike-yasnov";
+-    private static final String PASSWORD = "20348722";
++    private static final String URL = "jdbc:postgresql://pg:5432/studs";
++    private static final String USER = "s408367";
++    private static final String PASSWORD = "QpjZpMmemnlctw7E";
+ 
+ 
+ 
+diff --git a/opi/opi_lab3/src/test/java/server/beans/PointBeanTest.java b/opi/opi_lab3/src/test/java/server/beans/PointBeanTest.java
+deleted file mode 100644
+index c6bb1b5..0000000
+--- a/opi/opi_lab3/src/test/java/server/beans/PointBeanTest.java
++++ /dev/null
+@@ -1,36 +0,0 @@
+-package server.beans;
+-
+-import org.junit.Before;
+-import org.junit.Test;
+-import static org.junit.Assert.*;
+-
+-public class PointBeanTest {
+-
+-    private PointBean pointBean;
+-
+-    @Before
+-    public void setUp() {
+-        pointBean = new PointBean();
+-    }
+-
+-    @Test
+-    public void testSetAndGetX() {
+-        Double x = 1.5;
+-        pointBean.setX(x);
+-        assertEquals(x, pointBean.getX());
+-    }
+-
+-    @Test
+-    public void testSetAndGetY() {
+-        Double y = 2.5;
+-        pointBean.setY(y);
+-        assertEquals(y, pointBean.getY());
+-    }
+-
+-    @Test
+-    public void testSetAndGetR() {
+-        Double r = 3.0;
+-        pointBean.setR(r);
+-        assertEquals(r, pointBean.getR());
+-    }
+-} 
+\ No newline at end of file
+diff --git a/opi/opi_lab3/src/test/java/server/beans/TableBeanTest.java b/opi/opi_lab3/src/test/java/server/beans/TableBeanTest.java
+deleted file mode 100644
+index 6173a2b..0000000
+--- a/opi/opi_lab3/src/test/java/server/beans/TableBeanTest.java
++++ /dev/null
+@@ -1,21 +0,0 @@
+-package server.beans;
+-
+-import org.junit.Before;
+-import org.junit.Test;
+-import static org.junit.Assert.*;
+-
+-public class TableBeanTest {
+-
+-    private TableBean tableBean;
+-
+-    @Before
+-    public void setUp() {
+-        tableBean = new TableBean();
+-    }
+-
+-    @Test
+-    public void testGetPointsNotNull() {
+-        // Проверка, что метод возвращает не-null результат
+-        assertNotNull("Список точек не должен быть null", tableBean.getPoints());
+-    }
+-} 
+\ No newline at end of file
+diff --git a/opi/opi_lab3/src/test/java/server/models/PointTest.java b/opi/opi_lab3/src/test/java/server/models/PointTest.java
+deleted file mode 100644
+index 8c45899..0000000
+--- a/opi/opi_lab3/src/test/java/server/models/PointTest.java
++++ /dev/null
+@@ -1,81 +0,0 @@
+-package server.models;
+-
+-import org.junit.Before;
+-import org.junit.Test;
+-import static org.junit.Assert.*;
+-
+-public class PointTest {
+-
+-    private Point point;
+-
+-    @Before
+-    public void setUp() {
+-        point = new Point(true, 1.0, 2.0, 3.0, "test-date", 100L);
+-    }
+-
+-    @Test
+-    public void testGetX() {
+-        assertEquals(1.0, point.getX(), 0.01);
+-    }
+-
+-    @Test
+-    public void testGetY() {
+-        assertEquals(2.0, point.getY(), 0.01);
+-    }
+-
+-    @Test
+-    public void testGetR() {
+-        assertEquals(3.0, point.getR(), 0.01);
+-    }
+-
+-    @Test
+-    public void testGetRes() {
+-        assertTrue(point.getRes());
+-    }
+-
+-    @Test
+-    public void testGetDateOfRequest() {
+-        assertEquals("test-date", point.getDateOfRequest());
+-    }
+-
+-    @Test
+-    public void testGetExecutionTime() {
+-        assertEquals(100L, point.getExecutionTime());
+-    }
+-
+-    @Test
+-    public void testSetX() {
+-        point.setX(4.0);
+-        assertEquals(4.0, point.getX(), 0.01);
+-    }
+-
+-    @Test
+-    public void testSetY() {
+-        point.setY(5.0);
+-        assertEquals(5.0, point.getY(), 0.01);
+-    }
+-
+-    @Test
+-    public void testSetR() {
+-        point.setR(6.0);
+-        assertEquals(6.0, point.getR(), 0.01);
+-    }
+-
+-    @Test
+-    public void testSetRes() {
+-        point.setRes(false);
+-        assertFalse(point.getRes());
+-    }
+-
+-    @Test
+-    public void testSetDateOfRequest() {
+-        point.setDateOfRequest("new-date");
+-        assertEquals("new-date", point.getDateOfRequest());
+-    }
+-
+-    @Test
+-    public void testSetExecutionTime() {
+-        point.setExecutionTime(200L);
+-        assertEquals(200L, point.getExecutionTime());
+-    }
+-} 
+\ No newline at end of file
+diff --git a/opi/opi_lab3/src/test/java/server/utils/AreaTest.java b/opi/opi_lab3/src/test/java/server/utils/AreaTest.java
+deleted file mode 100644
+index bedb2da..0000000
+--- a/opi/opi_lab3/src/test/java/server/utils/AreaTest.java
++++ /dev/null
+@@ -1,57 +0,0 @@
+-package server.utils;
+-
+-import org.junit.Test;
+-import static org.junit.Assert.*;
+-
+-public class AreaTest {
+-
+-    @Test
+-    public void testCalculateInsideFirstQuadrant() {
+-        assertTrue(Area.calculate(1.0, 1.0, 2.0));
+-    }
+-
+-    @Test
+-    public void testCalculateOutsideFirstQuadrant() {
+-        assertFalse(Area.calculate(3.0, 3.0, 2.0));
+-    }
+-
+-    @Test
+-    public void testCalculateInsideThirdQuadrantTriangle() {
+-        assertTrue(Area.calculate(-0.5, -0.5, 2.0));
+-    }
+-
+-    @Test
+-    public void testCalculateOutsideThirdQuadrantTriangle() {
+-        assertFalse(Area.calculate(-1.5, -1.5, 2.0));
+-    }
+-
+-    @Test
+-    public void testCalculateInsideFourthQuadrantCircle() {
+-        assertTrue(Area.calculate(0.5, -0.5, 2.0));
+-    }
+-
+-    @Test
+-    public void testCalculateOutsideFourthQuadrantCircle() {
+-        assertFalse(Area.calculate(1.5, -1.5, 2.0));
+-    }
+-
+-    @Test
+-    public void testValidationValidValues() {
+-        assertTrue(Area.validation(1.0, 1.0, 1.0));
+-    }
+-
+-    @Test
+-    public void testValidationInvalidX() {
+-        assertFalse(Area.validation(-6.0, 1.0, 1.0));
+-    }
+-
+-    @Test
+-    public void testValidationInvalidY() {
+-        assertFalse(Area.validation(1.0, -6.0, 1.0));
+-    }
+-
+-    @Test
+-    public void testValidationInvalidR() {
+-        assertFalse(Area.validation(1.0, 1.0, -6.0));
+-    }
+-} 
+\ No newline at end of file
