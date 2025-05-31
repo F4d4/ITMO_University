@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+   <meta charset="UTF-8"/>
+   <title>Лабораторная работа</title>
+   <link rel="stylesheet" href="styles/styles.css" />
+   <script src="js/script.js"></script>
+   <script src="js/graph.js"></script>
+
+</h:head>
+<h:body>
+   <div class = "container">
+      <header>
+         <h1>Вердиев Фада Ильхам оглы</h1>
+         <h2>Группа: P3217</h2>
+         <h2>Вариант: 85290</h2>
+         <h:link value="Вернуться в начальную страницу" outcome="welcome" styleClass="styled-link" />
+      </header>
+      <h3>График области</h3>
+      <canvas id="graphCanvas" width="400" height="400" style="border: 1px solid black;"></canvas>
+
+      <section class="form-section">
+         <h:form id="pointForm">
+            <div class="form-group">
+               <label>Изменение X:</label>
+               <h:panelGroup>
+                  <h:commandLink value="-5" action="#{pointBean.setX(-5)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+                  <h:commandLink value="-4" action="#{pointBean.setX(-4)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+                  <h:commandLink value="-3" action="#{pointBean.setX(-3)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+                  <h:commandLink value="-2" action="#{pointBean.setX(-2)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+                  <h:commandLink value="-1" action="#{pointBean.setX(-1)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+                  <h:commandLink value="0" action="#{pointBean.setX(0)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+                  <h:commandLink value="1" action="#{pointBean.setX(1)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+                  <h:commandLink value="2" action="#{pointBean.setX(2)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+                  <h:commandLink value="3" action="#{pointBean.setX(3)}" styleClass="x-value-link">
+                     <f:ajax render="hiddenX submitButton hiddenSubmitButton" />
+                  </h:commandLink>
+               </h:panelGroup>
+
+            </div>
+            <!-- Изменение Y -->
+            <div class="form-group">
+               <label for="yValue">Изменение Y:</label>
+               <h:inputText id="yValue" value="#{pointBean.y}" placeholder="(-3 ... 3)" maxlength="15">
+                  <f:passThroughAttribute name="placeholder" value="(-3 ... 3)" />
+                  <f:ajax render="hiddenY submitButton hiddenSubmitButton" />
+               </h:inputText>
+            </div>
+
+            <!-- Изменение R -->
+            <div class="form-group">
+               <label>Изменение R:</label>
+               <h:selectOneRadio id="rValue" value="#{pointBean.r}">
+                  <f:selectItem itemValue="1" itemLabel="1" />
+                  <f:selectItem itemValue="2" itemLabel="2" />
+                  <f:selectItem itemValue="3" itemLabel="3" />
+                  <f:selectItem itemValue="4" itemLabel="4" />
+                  <f:selectItem itemValue="5" itemLabel="5" />
+                  <f:ajax render="hiddenR submitButton hiddenSubmitButton" onevent="drawgraph()"/>
+               </h:selectOneRadio>
+            </div>
+
+            <h:inputHidden id="hiddenX" value="#{pointBean.x}" />
+            <h:inputHidden id="hiddenY" value="#{pointBean.y}" />
+            <h:inputHidden id="hiddenR" value="#{pointBean.r}" />
+
+            <h:commandButton id = "submitButton" value="Проверить" onclick="return validateForm()" styleClass="custom-button"  >
+               <f:ajax execute="@form" listener="#{pointBean.addPoint()}" render="pointsTable hiddenX hiddenY hiddenR" onevent="drawResultsGraph()"/>
+            </h:commandButton>
+
+            <h:commandButton id="hiddenSubmitButton" value="Скрытая кнопка" style="display: none;">
+               <f:ajax execute="@form" listener="#{pointBean.addPoint()}" render="pointsTable hiddenX hiddenY hiddenR" onevent="drawResultsGraph()" />
+            </h:commandButton>
+         </h:form>
+      </section>
+
+      <section id="result-section">
+         <h3>Результаты</h3>
+         <h:dataTable id="pointsTable" value="#{tableBean.points}" var="point">
+            <h:column>
+               <f:facet name="header">Результат</f:facet>
+               #{point.res ? 'Попал' : 'Промахнулся'}
+            </h:column>
+            <h:column>
+               <f:facet name="header">X</f:facet>
+               #{point.x}
+            </h:column>
+            <h:column>
+               <f:facet name="header">Y</f:facet>
+               #{point.y}
+            </h:column>
+            <h:column>
+               <f:facet name="header">R</f:facet>
+               #{point.r}
+            </h:column>
+            <h:column>
+               <f:facet name="header">Дата выполнения</f:facet>
+               #{point.dateOfRequest}
+            </h:column>
+            <h:column>
+               <f:facet name="header">Время выполнения micsec</f:facet>
+               #{point.executionTime}
+            </h:column>
+         </h:dataTable>
+      </section>
+      <div id="error-message" style="display: none; background-color: #f44336; color: white; padding: 20px; position: fixed; top: 40px; right: 10px; border-radius: 50px;">
+         <span id="error-text"></span>
+      </div>
+   </div>
+   <script src="js/point.js"></script>
+</h:body>
+</html>
