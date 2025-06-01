@@ -48,7 +48,7 @@ public class PointStatisticsMBean implements PointStatisticsMXBean, Notification
                 this,
                 sequenceNumber++,
                 System.currentTimeMillis(),
-                "Пользователь совершил 2 промаха подряд!"
+                "the user made 2 misses in a row"
         );
         
         for (NotificationListener listener : listeners) {
@@ -64,7 +64,7 @@ public class PointStatisticsMBean implements PointStatisticsMXBean, Notification
     @Override
     public void removeNotificationListener(NotificationListener listener) throws ListenerNotFoundException {
         if (!listeners.remove(listener)) {
-            throw new ListenerNotFoundException("Слушатель не найден");
+            throw new ListenerNotFoundException("Listener not found");
         }
     }
     
@@ -77,7 +77,7 @@ public class PointStatisticsMBean implements PointStatisticsMXBean, Notification
     public MBeanNotificationInfo[] getNotificationInfo() {
         String[] types = new String[] {"two.consecutive.misses"};
         String name = Notification.class.getName();
-        String description = "Оповещение о двух промахах подряд";
+        String description = "Alert for two consecutive misses";
         MBeanNotificationInfo info = new MBeanNotificationInfo(types, name, description);
         return new MBeanNotificationInfo[] {info};
     }

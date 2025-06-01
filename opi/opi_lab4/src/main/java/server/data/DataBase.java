@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 
 public class DataBase {
-    private static final String URL = "jdbc:postgresql://localhost:5432/studs";
-    private static final String USER = "mike-yasnov";
-    private static final String PASSWORD = "20348722";
+    private static final String URL = "jdbc:postgresql://localhost:5432/test";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "KosPrav1979";
 
 
 

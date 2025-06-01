@@ -28,7 +28,7 @@ public class MBeanRegistrator {
             
             initialized = true;
             
-            System.out.println("MBean-компоненты успешно зарегистрированы.");
+            System.out.println("MBean components registered successfully");
         } catch (MalformedObjectNameException | InstanceAlreadyExistsException | 
                  MBeanRegistrationException | NotCompliantMBeanException e) {
             e.printStackTrace();
