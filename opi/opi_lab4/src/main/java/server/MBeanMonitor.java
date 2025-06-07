@@ -35,16 +35,33 @@ public class MBeanMonitor {
             System.out.println("ОС: " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
             System.out.println("JVM: " + System.getProperty("java.vm.name") + " " + System.getProperty("java.version"));
             
-            // Пример использования MBean в коде
-            // Добавим тестовые точки
-            statisticsMBean.addPoint(true);  // Попадание
-            statisticsMBean.addPoint(false); // Промах
-            statisticsMBean.addPoint(false); // Промах, должно быть уведомление
+            // Даем время на подключение JConsole и подписку
+            System.out.println("\nПОДОЖДИТЕ! Подключитесь JConsole и подпишитесь на уведомления от PointStatistics.");
+            System.out.println("Нажмите Enter в этой консоли, чтобы продолжить и добавить тестовые точки...");
+            new Scanner(System.in).nextLine(); // Пауза
+
+            System.out.println("DEBUG: Добавляем тестовые точки...");
+            statisticsMBean.addPoint(true);  // Попадание. consecutiveMisses = 0
+            System.out.println("DEBUG: После первого addPoint(true), consecutiveMisses = " + statisticsMBean.getConsecutiveMisses());
             
+            statisticsMBean.addPoint(false); // Первый промах. consecutiveMisses = 1
+            System.out.println("DEBUG: После первого addPoint(false), consecutiveMisses = " + statisticsMBean.getConsecutiveMisses());
+            
+            statisticsMBean.addPoint(false); // Второй промах. consecutiveMisses = 2. ДОЛЖНО БЫТЬ УВЕДОМЛЕНИЕ
+            System.out.println("DEBUG: После второго addPoint(false), consecutiveMisses = " + statisticsMBean.getConsecutiveMisses());
+            
+            // Можно добавить еще для проверки
+            statisticsMBean.addPoint(true); // Сброс
+             System.out.println("DEBUG: После addPoint(true), consecutiveMisses = " + statisticsMBean.getConsecutiveMisses());
+            statisticsMBean.addPoint(false); // 1
+             System.out.println("DEBUG: После addPoint(false), consecutiveMisses = " + statisticsMBean.getConsecutiveMisses());
+            statisticsMBean.addPoint(false); // 2 -> Уведомление
+             System.out.println("DEBUG: После второго addPoint(false), consecutiveMisses = " + statisticsMBean.getConsecutiveMisses());
+
             // Ожидание ввода пользователя для остановки
             System.out.println("\nВведите 'exit' для остановки:");
-            Scanner scanner = new Scanner(System.in);
-            while (!scanner.nextLine().equals("exit")) {
+            Scanner exitScanner = new Scanner(System.in); // Используем новый Scanner для exit
+            while (!exitScanner.nextLine().equals("exit")) {
                 System.out.println("Введите 'exit' для остановки:");
             }
             

@@ -3,13 +3,13 @@ package server.beans;
 import java.util.ArrayList;
 import java.util.List;
 import javax.management.*;
+import javax.management.NotificationBroadcasterSupport;
 
-public class PointStatisticsMBean implements PointStatisticsMXBean, NotificationEmitter {
+public class PointStatisticsMBean extends NotificationBroadcasterSupport implements PointStatisticsMXBean {
 
     private int totalPoints = 0;
     private int missedPoints = 0;
     private int consecutiveMisses = 0;
-    private final List<NotificationListener> listeners = new ArrayList<>();
     private long sequenceNumber = 1;
     
     @Override
@@ -50,27 +50,8 @@ public class PointStatisticsMBean implements PointStatisticsMXBean, Notification
                 System.currentTimeMillis(),
                 "Пользователь совершил 2 промаха подряд!"
         );
-        
-        for (NotificationListener listener : listeners) {
-            listener.handleNotification(notification, null);
-        }
-    }
-    
-    @Override
-    public void addNotificationListener(NotificationListener listener, NotificationFilter filter, Object handback) {
-        listeners.add(listener);
-    }
-    
-    @Override
-    public void removeNotificationListener(NotificationListener listener) throws ListenerNotFoundException {
-        if (!listeners.remove(listener)) {
-            throw new ListenerNotFoundException("Слушатель не найден");
-        }
-    }
-    
-    @Override
-    public void removeNotificationListener(NotificationListener listener, NotificationFilter filter, Object handback) throws ListenerNotFoundException {
-        removeNotificationListener(listener);
+        sendNotification(notification);
+        System.out.println("DEBUG: Уведомление отправлено! consecutiveMisses = " + consecutiveMisses);
     }
     
     @Override
