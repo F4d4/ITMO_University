@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.example.entity">
+
+    <class name="Vehicle" table="vehicle">
+
+        <id name="id" column="id" type="java.lang.Integer">
+            <generator class="identity"/>
+        </id>
+
+        <property name="name" type="string" not-null="true">
+            <column name="name" length="255" not-null="true"/>
+        </property>
+
+        <many-to-one name="coordinates"
+                     class="Coordinates"
+                     column="coordinates_id"
+                     cascade="all"
+                     not-null="true"
+                     lazy="false"/>
+
+        <property name="creationDate" type="timestamp" not-null="true">
+            <column name="creation_date" not-null="true" default="CURRENT_TIMESTAMP"/>
+        </property>
+
+        <property name="type" type="org.example.entity.VehicleType">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.example.entity.VehicleType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+
+        <property name="enginePower" type="int" not-null="true">
+            <column name="engine_power" not-null="true"/>
+        </property>
+
+        <property name="numberOfWheels" type="int" not-null="true">
+            <column name="number_of_wheels" not-null="true"/>
+        </property>
+
+        <property name="capacity" type="double" not-null="true">
+            <column name="capacity" not-null="true"/>
+        </property>
+
+        <property name="distanceTravelled" type="long" not-null="true">
+            <column name="distance_travelled" not-null="true"/>
+        </property>
+
+        <property name="fuelConsumption" type="long" not-null="true">
+            <column name="fuel_consumption" not-null="true"/>
+        </property>
+
+        <property name="fuelType" type="org.example.entity.FuelType">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.example.entity.FuelType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+
+    </class>
+
+</hibernate-mapping>

@@ -1,0 +1,638 @@
+===================================================================
+КАК BACKEND РАБОТАЕТ С БАЗОЙ ДАННЫХ
+Vehicle Management System - Подробное объяснение
+===================================================================
+
+ОБЗОР ТЕХНОЛОГИЙ
+===================================================================
+
+Backend → Hibernate Native API → JDBC → PostgreSQL
+
+Компоненты:
+1. WildFly - предоставляет DataSource (пул соединений с БД)
+2. Hibernate - ORM фреймворк для маппинга объектов на таблицы
+3. PostgreSQL - реляционная база данных
+
+
+===================================================================
+ШАГ 1: ИНИЦИАЛИЗАЦИЯ (ЗАПУСК ПРИЛОЖЕНИЯ)
+===================================================================
+
+Когда WildFly запускается и деплоит backend.war:
+
+1.1. WildFly создает DataSource (пул соединений)
+    ┌─────────────────────────────────────────┐
+    │ WildFly Configuration                   │
+    │                                         │
+    │ DataSource: java:/PostgresDS            │
+    │ URL: jdbc:postgresql://pg:5432/studs   │
+    │ User: ваш_логин                         │
+    │ Password: ваш_пароль                    │
+    │ Pool Size: 10 connections               │
+    └─────────────────────────────────────────┘
+
+1.2. Hibernate инициализируется (HibernateUtil)
+    
+    @Singleton
+    @Startup  ← Запускается при старте приложения
+    public class HibernateUtil {
+        
+        @PostConstruct  ← Вызывается автоматически
+        public void init() {
+            // 1. Создаем Configuration
+            Configuration config = new Configuration();
+            
+            // 2. Настройки Hibernate
+            properties.put(Environment.DATASOURCE, "java:/PostgresDS");
+            properties.put(Environment.DIALECT, "PostgreSQLDialect");
+            properties.put(Environment.HBM2DDL_AUTO, "update");
+            
+            // 3. Загружаем XML маппинг файлы
+            config.addResource("org/example/entity/Coordinates.hbm.xml");
+            config.addResource("org/example/entity/Vehicle.hbm.xml");
+            
+            // 4. Создаем SessionFactory (один на всё приложение!)
+            sessionFactory = config.buildSessionFactory();
+        }
+    }
+
+1.3. Hibernate читает XML маппинги и создает схему БД
+
+    Читает: Coordinates.hbm.xml
+    ┌──────────────────────────────────────┐
+    │ <class name="Coordinates"            │
+    │        table="coordinates">          │
+    │   <id name="id" generator="identity"/>│
+    │   <property name="x" type="double"/> │
+    │   <property name="y" type="long"/>   │
+    │ </class>                             │
+    └──────────────────────────────────────┘
+    
+    Создает в PostgreSQL:
+    ┌──────────────────────────────────────┐
+    │ CREATE TABLE coordinates (           │
+    │   id SERIAL PRIMARY KEY,             │
+    │   x DOUBLE PRECISION NOT NULL,       │
+    │   y BIGINT NOT NULL                  │
+    │ );                                   │
+    └──────────────────────────────────────┘
+
+    Аналогично для Vehicle.hbm.xml → таблица vehicle
+
+1.4. Приложение готово к работе!
+    
+    SessionFactory ┬─ Session 1 (для транзакции 1)
+                   ├─ Session 2 (для транзакции 2)
+                   └─ Session N (для транзакции N)
+
+
+===================================================================
+ШАГ 2: ОБРАБОТКА REST ЗАПРОСА (ПРИМЕР: СОЗДАНИЕ VEHICLE)
+===================================================================
+
+2.1. HTTP Запрос от клиента (браузер/Postman)
+
+    POST http://localhost:8080/backend/api/vehicles
+    Content-Type: application/json
+    
+    {
+      "name": "Tesla Model S",
+      "x": 100.5,
+      "y": 200,
+      "type": "CAR",
+      "enginePower": 500,
+      "numberOfWheels": 4,
+      "capacity": 5.0,
+      "distanceTravelled": 0,
+      "fuelConsumption": 20,
+      "fuelType": "ELECTRICITY"
+    }
+
+
+2.2. JAX-RS маршрутизирует на Controller
+
+    VehicleController.createVehicle() вызывается
+    ↓
+    @POST
+    public Response createVehicle(@Valid VehicleCreateDTO createDTO) {
+        VehicleDTO created = vehicleService.createVehicle(createDTO);
+        return Response.status(201).entity(created).build();
+    }
+
+
+2.3. Controller передает в Service
+
+    VehicleServiceImpl.createVehicle() вызывается
+    ↓
+    @Stateless  ← EJB автоматически начинает JTA транзакцию
+    public class VehicleServiceImpl {
+        
+        public VehicleDTO createVehicle(VehicleCreateDTO dto) {
+            // 1. Валидация
+            validateCreateDTO(dto);
+            
+            // 2. Создание Entity
+            Vehicle vehicle = new Vehicle();
+            vehicle.setName(dto.getName());
+            
+            Coordinates coords = new Coordinates(dto.getX(), dto.getY());
+            vehicle.setCoordinates(coords);
+            // ... остальные поля
+            
+            // 3. Сохранение через DAO
+            Vehicle saved = vehicleDAO.save(vehicle);
+            
+            // 4. Конвертация в DTO и возврат
+            return convertToDTO(saved);
+        }
+    }
+
+
+2.4. Service передает в DAO
+
+    VehicleDAOImpl.save() вызывается
+    ↓
+    @Stateless
+    public class VehicleDAOImpl {
+        
+        @Inject
+        private HibernateUtil hibernateUtil;
+        
+        public Vehicle save(Vehicle vehicle) {
+            // 1. Получаем Session из текущей JTA транзакции
+            Session session = hibernateUtil
+                .getSessionFactory()
+                .getCurrentSession();
+            
+            // 2. Persist - добавляем в контекст Hibernate
+            session.persist(vehicle);
+            
+            // 3. Flush - немедленно отправляем в БД
+            session.flush();
+            
+            return vehicle;
+        }
+    }
+
+
+2.5. Hibernate генерирует SQL и выполняет
+
+    Hibernate видит:
+    - Vehicle (новый объект, нет ID)
+    - Coordinates (связанный объект, нет ID)
+    
+    Генерирует SQL:
+    
+    -- Сначала сохраняет Coordinates
+    INSERT INTO coordinates (x, y) 
+    VALUES (100.5, 200) 
+    RETURNING id;
+    
+    -- Получает id=1 для coordinates
+    
+    -- Затем сохраняет Vehicle
+    INSERT INTO vehicle (
+        name, coordinates_id, creation_date, type,
+        engine_power, number_of_wheels, capacity,
+        distance_travelled, fuel_consumption, fuel_type
+    ) VALUES (
+        'Tesla Model S', 1, NOW(), 'CAR',
+        500, 4, 5.0, 0, 20, 'ELECTRICITY'
+    ) RETURNING id;
+    
+    -- Получает id=1 для vehicle
+
+
+2.6. PostgreSQL выполняет запросы
+
+    ┌─────────────────────────────────────┐
+    │ PostgreSQL Database: studs          │
+    ├─────────────────────────────────────┤
+    │ Table: coordinates                  │
+    │ ┌────┬───────┬─────┐                │
+    │ │ id │   x   │  y  │                │
+    │ ├────┼───────┼─────┤                │
+    │ │ 1  │ 100.5 │ 200 │ ← INSERTED     │
+    │ └────┴───────┴─────┘                │
+    │                                     │
+    │ Table: vehicle                      │
+    │ ┌────┬───────────┬──────┬───┬─────┐│
+    │ │ id │   name    │coord.│...│     ││
+    │ ├────┼───────────┼──────┼───┼─────┤│
+    │ │ 1  │Tesla Model│  1   │...│     ││ ← INSERTED
+    │ └────┴───────────┴──────┴───┴─────┘│
+    └─────────────────────────────────────┘
+
+
+2.7. Транзакция завершается
+
+    @Stateless EJB автоматически:
+    - Если всё ОК → COMMIT (сохраняет изменения)
+    - Если ошибка → ROLLBACK (отменяет изменения)
+
+
+2.8. Ответ клиенту
+
+    HTTP/1.1 201 Created
+    Content-Type: application/json
+    
+    {
+      "id": 1,
+      "name": "Tesla Model S",
+      "x": 100.5,
+      "y": 200,
+      "creationDate": "2025-11-14T10:30:00",
+      "type": "CAR",
+      "enginePower": 500,
+      "numberOfWheels": 4,
+      "capacity": 5.0,
+      "distanceTravelled": 0,
+      "fuelConsumption": 20,
+      "fuelType": "ELECTRICITY"
+    }
+
+
+===================================================================
+ШАГ 3: ЧТЕНИЕ ДАННЫХ (ПРИМЕР: ПОЛУЧЕНИЕ ВСЕХ VEHICLE)
+===================================================================
+
+3.1. HTTP Запрос
+
+    GET http://localhost:8080/backend/api/vehicles?page=0&size=10
+
+
+3.2. Путь через слои
+
+    Controller → Service → DAO → Hibernate → PostgreSQL
+
+
+3.3. DAO выполняет запрос
+
+    public List<Vehicle> findAll(int page, int size) {
+        Session session = getSession();
+        
+        // HQL (Hibernate Query Language)
+        Query<Vehicle> query = session.createQuery(
+            "FROM Vehicle v ORDER BY v.id", 
+            Vehicle.class
+        );
+        
+        query.setFirstResult(page * size);  // OFFSET
+        query.setMaxResults(size);          // LIMIT
+        
+        return query.getResultList();
+    }
+
+
+3.4. Hibernate генерирует SQL
+
+    SELECT 
+        v.id, v.name, v.coordinates_id, v.creation_date,
+        v.type, v.engine_power, v.number_of_wheels,
+        v.capacity, v.distance_travelled, v.fuel_consumption,
+        v.fuel_type
+    FROM vehicle v
+    ORDER BY v.id
+    LIMIT 10 OFFSET 0;
+
+
+3.5. Hibernate загружает связанные Coordinates
+
+    Так как lazy="false" в Vehicle.hbm.xml:
+    
+    SELECT c.id, c.x, c.y
+    FROM coordinates c
+    WHERE c.id IN (1, 2, 3, ...);  -- IDs из vehicle
+
+
+3.6. Hibernate создает объекты
+
+    Из результатов SQL создает:
+    
+    Vehicle {
+        id = 1,
+        name = "Tesla Model S",
+        coordinates = Coordinates { id=1, x=100.5, y=200 },
+        creationDate = 2025-11-14,
+        ...
+    }
+
+
+3.7. Service конвертирует в DTO и возвращает
+
+    PaginatedResponse {
+        content: [VehicleDTO, VehicleDTO, ...],
+        totalElements: 42,
+        currentPage: 0,
+        pageSize: 10,
+        totalPages: 5
+    }
+
+
+===================================================================
+ШАГ 4: ОБНОВЛЕНИЕ ДАННЫХ (ПРИМЕР: UPDATE VEHICLE)
+===================================================================
+
+4.1. HTTP Запрос
+
+    PUT http://localhost:8080/backend/api/vehicles/1
+    Content-Type: application/json
+    
+    {
+      "capacity": 6.0,
+      "distanceTravelled": 5000
+    }
+
+
+4.2. DAO обновляет
+
+    public Vehicle update(Vehicle vehicle) {
+        Session session = getSession();
+        
+        // merge - обновляет существующий объект
+        Vehicle merged = session.merge(vehicle);
+        session.flush();
+        
+        return merged;
+    }
+
+
+4.3. Hibernate генерирует UPDATE
+
+    UPDATE vehicle
+    SET capacity = 6.0,
+        distance_travelled = 5000
+    WHERE id = 1;
+
+
+4.4. PostgreSQL обновляет строку
+
+    Table: vehicle
+    ┌────┬───────────┬──────┬──────────┬─────────────────┐
+    │ id │   name    │coord.│ capacity │ distance_trav.  │
+    ├────┼───────────┼──────┼──────────┼─────────────────┤
+    │ 1  │Tesla Model│  1   │ 5.0 → 6.0│ 0 → 5000        │
+    └────┴───────────┴──────┴──────────┴─────────────────┘
+
+
+===================================================================
+ШАГ 5: УДАЛЕНИЕ ДАННЫХ (ПРИМЕР: DELETE VEHICLE)
+===================================================================
+
+5.1. HTTP Запрос
+
+    DELETE http://localhost:8080/backend/api/vehicles/1
+
+
+5.2. DAO удаляет
+
+    public void deleteById(Integer id) {
+        Session session = getSession();
+        
+        // 1. Загружаем объект
+        Vehicle vehicle = session.get(Vehicle.class, id);
+        
+        // 2. Удаляем
+        session.remove(vehicle);
+        session.flush();
+    }
+
+
+5.3. Hibernate генерирует DELETE
+
+    Благодаря cascade="all" в Vehicle.hbm.xml:
+    
+    -- Сначала удаляет Vehicle
+    DELETE FROM vehicle WHERE id = 1;
+    
+    -- Затем удаляет связанные Coordinates
+    DELETE FROM coordinates WHERE id = 1;
+
+
+5.4. PostgreSQL удаляет строки
+
+    Обе записи удаляются из БД
+
+
+===================================================================
+ВАЖНЫЕ КОНЦЕПЦИИ
+===================================================================
+
+1. SESSION vs SESSION FACTORY
+-------------------------------------------------------------------
+
+SessionFactory:
+- Создается ОДИН РАЗ при запуске приложения
+- Тяжелый объект (содержит всю конфигурацию)
+- Thread-safe (можно использовать из разных потоков)
+- Живет всё время работы приложения
+
+Session:
+- Создается для КАЖДОЙ транзакции
+- Легкий объект
+- НЕ thread-safe (один поток = одна Session)
+- Живет только во время транзакции
+
+
+2. JTA ТРАНЗАКЦИИ
+-------------------------------------------------------------------
+
+@Stateless EJB автоматически управляет транзакциями:
+
+    BEGIN TRANSACTION
+    ↓
+    [ваш код Service/DAO]
+    ↓
+    Если всё ОК → COMMIT
+    Если Exception → ROLLBACK
+
+
+getCurrentSession() привязывается к текущей JTA транзакции:
+
+    @Stateless
+    public void someMethod() {
+        // Транзакция начата автоматически
+        
+        Session s1 = sessionFactory.getCurrentSession();
+        Session s2 = sessionFactory.getCurrentSession();
+        
+        // s1 == s2 (это ОДНА И ТА ЖЕ сессия в одной транзакции!)
+        
+        // Транзакция завершится автоматически
+    }
+
+
+3. HIBERNATE CACHE (1st LEVEL)
+-------------------------------------------------------------------
+
+Session имеет кэш первого уровня:
+
+    Session session = getSession();
+    
+    Vehicle v1 = session.get(Vehicle.class, 1);  // SQL: SELECT
+    Vehicle v2 = session.get(Vehicle.class, 1);  // Из кэша, без SQL!
+    
+    // v1 == v2 (один и тот же объект!)
+
+
+4. LAZY vs EAGER LOADING
+-------------------------------------------------------------------
+
+В Vehicle.hbm.xml мы используем lazy="false":
+
+    <many-to-one name="coordinates" lazy="false"/>
+
+Это значит:
+- При загрузке Vehicle, Coordinates загружаются СРАЗУ
+- Генерируется дополнительный SELECT для Coordinates
+
+Если бы было lazy="true":
+- Coordinates загружались бы только при обращении к ним
+- Может вызвать LazyInitializationException вне транзакции
+
+
+===================================================================
+ПОТОК ДАННЫХ: ПОЛНАЯ СХЕМА
+===================================================================
+
+                 HTTP REQUEST
+                      ↓
+    ┌─────────────────────────────────────────┐
+    │         WILDFLY SERVER                  │
+    │  ┌────────────────────────────────────┐ │
+    │  │  JAX-RS (REST API)                 │ │
+    │  └──────────────┬─────────────────────┘ │
+    │                 ↓                        │
+    │  ┌────────────────────────────────────┐ │
+    │  │  CONTROLLER LAYER                  │ │
+    │  │  - VehicleController               │ │
+    │  │  - Валидация @Valid                │ │
+    │  │  - Обработка ошибок                │ │
+    │  └──────────────┬─────────────────────┘ │
+    │                 ↓                        │
+    │  ┌────────────────────────────────────┐ │
+    │  │  SERVICE LAYER (@Stateless EJB)    │ │
+    │  │  - VehicleServiceImpl              │ │
+    │  │  - Бизнес-логика                   │ │
+    │  │  - Валидация данных                │ │
+    │  │  - Entity ↔ DTO конвертация        │ │
+    │  │  ← JTA ТРАНЗАКЦИЯ НАЧИНАЕТСЯ       │ │
+    │  └──────────────┬─────────────────────┘ │
+    │                 ↓                        │
+    │  ┌────────────────────────────────────┐ │
+    │  │  DAO LAYER (@Stateless EJB)        │ │
+    │  │  - VehicleDAOImpl                  │ │
+    │  │  - Session = getCurrentSession()   │ │
+    │  │  - HQL запросы                     │ │
+    │  └──────────────┬─────────────────────┘ │
+    │                 ↓                        │
+    │  ┌────────────────────────────────────┐ │
+    │  │  HIBERNATE                         │ │
+    │  │  - SessionFactory (singleton)      │ │
+    │  │  - Session (per transaction)       │ │
+    │  │  - XML Mapping (.hbm.xml)          │ │
+    │  │  - SQL генерация                   │ │
+    │  │  - Кэш первого уровня              │ │
+    │  └──────────────┬─────────────────────┘ │
+    │                 ↓                        │
+    │  ┌────────────────────────────────────┐ │
+    │  │  JDBC + DataSource                 │ │
+    │  │  - Connection Pool (10 connections)│ │
+    │  │  - Управление соединениями         │ │
+    │  └──────────────┬─────────────────────┘ │
+    │                 ↓ JTA COMMIT/ROLLBACK   │
+    └─────────────────┼───────────────────────┘
+                      ↓
+    ┌─────────────────────────────────────────┐
+    │      POSTGRESQL DATABASE                │
+    │  ┌────────────────────────────────────┐ │
+    │  │  Table: vehicle                    │ │
+    │  │  Table: coordinates                │ │
+    │  │  Constraints, Indexes              │ │
+    │  └────────────────────────────────────┘ │
+    └─────────────────────────────────────────┘
+                      ↓
+                 HTTP RESPONSE
+
+
+===================================================================
+ПРИМЕР: ПОЛНЫЙ ЦИКЛ СОЗДАНИЯ VEHICLE
+===================================================================
+
+1. Клиент отправляет POST /api/vehicles с JSON
+2. JAX-RS десериализует JSON в VehicleCreateDTO
+3. Controller вызывает Service.createVehicle()
+4. EJB начинает JTA транзакцию
+5. Service валидирует данные
+6. Service создает Entity объекты (Vehicle + Coordinates)
+7. Service вызывает DAO.save(vehicle)
+8. DAO получает Session из SessionFactory
+9. DAO вызывает session.persist(vehicle)
+10. Hibernate добавляет объекты в контекст
+11. DAO вызывает session.flush()
+12. Hibernate генерирует SQL INSERT
+13. JDBC отправляет SQL в PostgreSQL
+14. PostgreSQL выполняет INSERT
+15. PostgreSQL возвращает generated ID
+16. Hibernate обновляет vehicle.id
+17. DAO возвращает vehicle с ID
+18. Service конвертирует vehicle в VehicleDTO
+19. Service возвращает VehicleDTO
+20. EJB коммитит JTA транзакцию
+21. Controller создает Response с VehicleDTO
+22. JAX-RS сериализует VehicleDTO в JSON
+23. WildFly отправляет HTTP 201 Created с JSON
+
+
+===================================================================
+ЛОГИРОВАНИЕ SQL (для отладки)
+===================================================================
+
+В hibernate.cfg.xml установлено:
+
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.format_sql">true</property>
+
+Это значит, что в логах WildFly вы увидите весь SQL:
+
+    Hibernate: 
+        insert 
+        into
+            coordinates
+            (x, y) 
+        values
+            (?, ?)
+    
+    Hibernate: 
+        insert 
+        into
+            vehicle
+            (capacity, coordinates_id, creation_date, 
+             distance_travelled, engine_power, fuel_consumption, 
+             fuel_type, name, number_of_wheels, type) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+
+
+===================================================================
+РЕЗЮМЕ
+===================================================================
+
+Backend работает с БД через многоуровневую архитектуру:
+
+1. WildFly предоставляет DataSource (пул соединений)
+2. Hibernate управляет маппингом объектов на таблицы
+3. JTA управляет транзакциями
+4. SessionFactory создается один раз при старте
+5. Session создается для каждой транзакции
+6. XML файлы описывают маппинг Entity → Table
+7. HQL запросы транслируются в SQL
+8. JDBC выполняет SQL в PostgreSQL
+9. Результаты превращаются обратно в объекты Java
+
+Всё происходит автоматически! Вы пишете код с Java объектами,
+а Hibernate заботится о БД.
+
+
+===================================================================
+

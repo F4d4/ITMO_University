@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure>
+    <deployment>
+        <!-- Exclude WildFly modules to use libraries from WAR -->
+        <exclusions>
+            <module name="org.hibernate"/>
+            <module name="org.hibernate.commons-annotations"/>
+            <module name="org.hibernate.jipijapa-hibernate6"/>
+            <module name="org.postgresql"/>
+            <module name="jakarta.persistence.api"/>
+        </exclusions>
+
+        <exclude-subsystems>
+            <subsystem name="jpa"/>
+        </exclude-subsystems>
+
+        <dependencies>
+            <!-- Only Jakarta APIs that we need -->
+            <module name="jakarta.validation.api"/>
+            <module name="jakarta.transaction.api"/>
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>

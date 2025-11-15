@@ -1,0 +1,305 @@
+===================================================================
+АРХИТЕКТУРА VEHICLE MANAGEMENT SYSTEM BACKEND
+===================================================================
+
+ОБЗОР
+===================================================================
+Backend приложение разработано на Jakarta EE 10 с использованием:
+- CDI (Contexts and Dependency Injection) для управления компонентами
+- EJB (Enterprise JavaBeans) для транзакций и бизнес-логики
+- JAX-RS для REST API
+- Hibernate Native API (без JPA EntityManager) для работы с БД
+- PostgreSQL как СУБД
+
+
+СЛОИ ПРИЛОЖЕНИЯ
+===================================================================
+
+1. ENTITY LAYER (org.example.entity)
+-------------------------------------------------------------------
+Доменные модели данных с Hibernate аннотациями:
+
+- Vehicle.java          - Основная сущность транспортного средства
+- Coordinates.java      - Координаты транспортного средства
+- VehicleType.java      - Enum типов транспорта (CAR, HELICOPTER, BOAT, HOVERBOARD)
+- FuelType.java         - Enum типов топлива (KEROSENE, ELECTRICITY, DIESEL, ALCOHOL)
+
+Особенности:
+- Vehicle имеет связь ManyToOne с Coordinates
+- Валидация на уровне entity (через сеттеры)
+- Автоматическая генерация ID и даты создания
+
+
+2. DAO LAYER (org.example.repository)
+-------------------------------------------------------------------
+Слой доступа к данным через Hibernate Session API:
+
+- VehicleDAO.java       - Интерфейс для работы с Vehicle
+- VehicleDAOImpl.java   - Реализация DAO с использованием Hibernate Session
+
+Реализованные операции:
+- CRUD операции (save, findById, findAll, update, deleteById)
+- Специальные запросы:
+  * findByMaxCapacity()
+  * findByNameStartsWith(String prefix)
+  * findByFuelConsumptionGreaterThan(long fuelConsumption)
+  * findByType(VehicleType type)
+  * resetDistanceTravelled(Integer id)
+- Пагинация и фильтрация:
+  * findWithFilters(...)
+  * countWithFilters(...)
+
+Особенности:
+- @Stateless EJB для автоматического управления транзакциями
+- Использование HQL (Hibernate Query Language)
+- Логирование всех операций
+
+
+3. SERVICE LAYER (org.example.service)
+-------------------------------------------------------------------
+Бизнес-логика приложения:
+
+- VehicleService.java       - Интерфейс бизнес-логики
+- VehicleServiceImpl.java   - Реализация бизнес-логики
+
+Обязанности:
+- Валидация входных данных
+- Координация между DAO и контроллерами
+- Преобразование Entity <-> DTO
+- Обработка бизнес-правил
+
+Особенности:
+- @Stateless EJB
+- @Inject для dependency injection
+- Детальная валидация всех входных данных
+- Информативные сообщения об ошибках
+
+
+4. DTO LAYER (org.example.dto)
+-------------------------------------------------------------------
+Data Transfer Objects для передачи данных между клиентом и сервером:
+
+- VehicleDTO.java           - Полное представление Vehicle для чтения
+- VehicleCreateDTO.java     - DTO для создания нового Vehicle
+- VehicleUpdateDTO.java     - DTO для обновления Vehicle (все поля опциональные)
+- PaginatedResponse.java    - Обертка для пагинированных ответов
+- ErrorResponse.java        - Стандартизированный формат ошибок
+
+Особенности:
+- Использование Jakarta Validation аннотаций (@NotBlank, @Positive, @Max)
+- Разделение DTO для создания и обновления
+- Serializable для возможности кэширования
+
+
+5. CONTROLLER LAYER (org.example.controller)
+-------------------------------------------------------------------
+REST API endpoints:
+
+- VehicleController.java    - REST контроллер для работы с Vehicle
+- JaxRsApplication.java     - Конфигурация JAX-RS (базовый путь /api)
+
+REST API Endpoints:
+┌────────────────────────────────────────────────────────────────┐
+│ METHOD │ PATH                           │ ОПИСАНИЕ             │
+├────────┼────────────────────────────────┼──────────────────────┤
+│ POST   │ /api/vehicles                  │ Создать Vehicle      │
+│ GET    │ /api/vehicles                  │ Получить все Vehicle │
+│ GET    │ /api/vehicles/{id}             │ Получить по ID       │
+│ PUT    │ /api/vehicles/{id}             │ Обновить Vehicle     │
+│ DELETE │ /api/vehicles/{id}             │ Удалить Vehicle      │
+│ GET    │ /api/vehicles/max-capacity     │ Макс. capacity       │
+│ GET    │ /api/vehicles/by-name-prefix   │ Поиск по префиксу    │
+│ GET    │ /api/vehicles/by-fuel-consumption│ По расходу топлива │
+│ GET    │ /api/vehicles/by-type          │ По типу Vehicle      │
+│ POST   │ /api/vehicles/{id}/reset-distance│ Сбросить пробег    │
+└────────────────────────────────────────────────────────────────┘
+
+Особенности:
+- @Path, @GET, @POST, @PUT, @DELETE аннотации JAX-RS
+- @Inject для dependency injection
+- Обработка исключений с возвратом ErrorResponse
+- Поддержка пагинации через query параметры
+- Фильтрация и сортировка
+
+
+6. CONFIG LAYER (org.example.config)
+-------------------------------------------------------------------
+Конфигурация и утилиты:
+
+- HibernateUtil.java        - Управление Hibernate SessionFactory
+- CorsFilter.java           - CORS фильтр для кросс-доменных запросов
+
+Особенности HibernateUtil:
+- @Singleton EJB с @Startup для инициализации при старте
+- Настройка Hibernate для работы с JTA транзакциями WildFly
+- Программная конфигурация SessionFactory
+- Использование JNDI DataSource (java:/PostgresDS)
+
+
+КОНФИГУРАЦИОННЫЕ ФАЙЛЫ
+===================================================================
+
+1. persistence.xml
+-------------------------------------------------------------------
+Расположение: src/main/resources/META-INF/persistence.xml
+Назначение: Конфигурация JPA/Hibernate persistence unit
+Содержит:
+- JNDI имя DataSource
+- Список entity классов
+- Настройки Hibernate (диалект, hbm2ddl, логирование)
+- Настройки JTA транзакций
+
+2. hibernate.cfg.xml
+-------------------------------------------------------------------
+Расположение: src/main/resources/hibernate.cfg.xml
+Назначение: Альтернативная конфигурация Hibernate
+Содержит аналогичные настройки для работы с Hibernate Native API
+
+3. beans.xml
+-------------------------------------------------------------------
+Расположение: src/main/webapp/WEB-INF/beans.xml
+Назначение: Активация CDI
+Режим: bean-discovery-mode="all"
+
+4. web.xml
+-------------------------------------------------------------------
+Расположение: src/main/webapp/WEB-INF/web.xml
+Назначение: Конфигурация веб-приложения
+Содержит:
+- Регистрация CorsFilter
+- Настройки сессий
+- Welcome files
+
+
+ПОТОК ДАННЫХ
+===================================================================
+
+Запрос от клиента
+      ↓
+CorsFilter (CORS обработка)
+      ↓
+VehicleController (REST endpoint)
+      ↓
+VehicleService (бизнес-логика, валидация)
+      ↓
+VehicleDAO (работа с БД через Hibernate Session)
+      ↓
+Hibernate Session → PostgreSQL Database
+      ↓
+Entity → DTO преобразование
+      ↓
+JSON Response → Клиент
+
+
+УПРАВЛЕНИЕ ТРАНЗАКЦИЯМИ
+===================================================================
+
+- Используется JTA (Java Transaction API)
+- @Stateless EJB автоматически управляют транзакциями (CMT)
+- Каждый метод в Service/DAO слое выполняется в транзакции
+- Rollback происходит автоматически при RuntimeException
+- Hibernate Session получается из SessionFactory.getCurrentSession()
+  который привязан к JTA транзакции
+
+
+ВАЛИДАЦИЯ ДАННЫХ
+===================================================================
+
+Многоуровневая валидация:
+1. Jakarta Validation аннотации в DTO (@NotBlank, @Positive, @Max)
+2. Валидация в сеттерах Entity (проверка бизнес-правил)
+3. Валидация в Service слое (дополнительные проверки)
+4. Constraint'ы БД (nullable, unique и т.д.)
+
+
+ОБРАБОТКА ОШИБОК
+===================================================================
+
+- IllegalArgumentException → 400 Bad Request
+- EntityNotFoundException → 404 Not Found
+- RuntimeException → 500 Internal Server Error
+- Все ошибки возвращаются в формате ErrorResponse с:
+  * timestamp
+  * status
+  * error
+  * message
+  * path
+
+
+ЛОГИРОВАНИЕ
+===================================================================
+
+- Используется java.util.logging.Logger
+- Логируются:
+  * Успешные операции (INFO)
+  * Ошибки валидации (WARNING)
+  * Исключения (SEVERE)
+- SQL запросы логируются через hibernate.show_sql
+
+
+ЗАВИСИМОСТИ
+===================================================================
+
+Основные:
+- jakarta.platform:jakarta.jakartaee-web-api:10.0.0 (compileOnly)
+- org.hibernate.orm:hibernate-core:6.2.7.Final (compileOnly)
+- jakarta.validation:jakarta.validation-api:3.0.2 (compileOnly)
+
+Все зависимости помечены как compileOnly, так как предоставляются
+WildFly Application Server во время выполнения.
+
+
+ОСОБЕННОСТИ РЕАЛИЗАЦИИ
+===================================================================
+
+1. Hibernate без JPA EntityManager
+   - Используется Hibernate Session напрямую
+   - SessionFactory управляется HibernateUtil
+   - getCurrentSession() для получения Session из JTA транзакции
+
+2. CDI + EJB
+   - @Inject для dependency injection
+   - @Stateless для автоматических транзакций
+   - @Singleton для HibernateUtil
+
+3. Координаты как отдельная сущность
+   - Vehicle → Coordinates (ManyToOne)
+   - Cascade.ALL для автоматического сохранения
+   - FetchType.EAGER для всегда загружать координаты
+
+4. Специальные операции
+   - Все реализованы через HQL запросы
+   - Не используются процедуры БД
+   - Выполняются на уровне приложения
+
+
+БЕЗОПАСНОСТЬ
+===================================================================
+
+Текущая реализация:
+- CORS разрешен для всех источников (*)
+- Нет аутентификации/авторизации
+- Все операции доступны всем
+
+Для production необходимо добавить:
+- JWT или Session-based аутентификацию
+- Role-based доступ к операциям
+- Ограничение CORS для конкретных доменов
+- Input sanitization
+- Rate limiting
+
+
+МАСШТАБИРУЕМОСТЬ
+===================================================================
+
+- Stateless архитектура позволяет горизонтальное масштабирование
+- Connection pooling через WildFly DataSource
+- Можно добавить кэширование (Hibernate Second Level Cache)
+- Можно добавить асинхронную обработку (@Asynchronous)
+
+
+===================================================================
+
+
+
+

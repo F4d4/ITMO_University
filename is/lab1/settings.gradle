@@ -1,0 +1,4 @@
+rootProject.name = 'lab1'
+include 'backend'
+include 'frontend'
+

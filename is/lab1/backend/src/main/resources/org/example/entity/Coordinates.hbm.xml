@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.example.entity">
+    
+    <class name="Coordinates" table="coordinates">
+        
+        <!-- Primary Key -->
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="identity"/>
+        </id>
+        
+        <!-- Properties -->
+        <property name="x" column="x" type="double" not-null="true"/>
+        
+        <property name="y" type="long" not-null="true">
+            <column name="y" sql-type="bigint" check="y &lt;= 621"/>
+        </property>
+        
+    </class>
+    
+</hibernate-mapping>
+
+
+

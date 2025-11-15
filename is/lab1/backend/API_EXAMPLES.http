@@ -1,0 +1,191 @@
+### Vehicle Management System API Examples
+### BASE URL: http://localhost:8080/backend/api
+
+###
+### 1. Создать новый Vehicle
+POST http://localhost:8080/backend/api/vehicles
+Content-Type: application/json
+
+{
+  "name": "Tesla Model S",
+  "x": 100.5,
+  "y": 200,
+  "type": "CAR",
+  "enginePower": 500,
+  "numberOfWheels": 4,
+  "capacity": 5.0,
+  "distanceTravelled": 0,
+  "fuelConsumption": 20,
+  "fuelType": "ELECTRICITY"
+}
+
+###
+### 2. Получить все Vehicle (с пагинацией)
+GET http://localhost:8080/backend/api/vehicles?page=0&size=10
+
+###
+### 3. Получить Vehicle по ID
+GET http://localhost:8080/backend/api/vehicles/1
+
+###
+### 4. Обновить Vehicle
+PUT http://localhost:8080/backend/api/vehicles/1
+Content-Type: application/json
+
+{
+  "name": "Tesla Model S Updated",
+  "capacity": 5.5,
+  "distanceTravelled": 1000
+}
+
+###
+### 5. Удалить Vehicle
+DELETE http://localhost:8080/backend/api/vehicles/1
+
+###
+### 6. Получить все Vehicle с фильтрацией по имени
+GET http://localhost:8080/backend/api/vehicles?filterField=name&filterValue=Tesla&page=0&size=10
+
+###
+### 7. Получить все Vehicle с сортировкой
+GET http://localhost:8080/backend/api/vehicles?sortField=capacity&sortDirection=desc&page=0&size=10
+
+###
+### 8. Получить Vehicle с максимальной capacity
+GET http://localhost:8080/backend/api/vehicles/max-capacity
+
+###
+### 9. Получить Vehicle по префиксу имени
+GET http://localhost:8080/backend/api/vehicles/by-name-prefix?prefix=Tesla
+
+###
+### 10. Получить Vehicle с расходом топлива больше заданного
+GET http://localhost:8080/backend/api/vehicles/by-fuel-consumption?minConsumption=50
+
+###
+### 11. Получить Vehicle по типу
+GET http://localhost:8080/backend/api/vehicles/by-type?type=CAR
+
+###
+### 12. Сбросить пробег Vehicle
+POST http://localhost:8080/backend/api/vehicles/1/reset-distance
+
+###
+### Примеры создания разных типов Vehicle
+
+###
+### Helicopter
+POST http://localhost:8080/backend/api/vehicles
+Content-Type: application/json
+
+{
+  "name": "AgustaWestland AW139",
+  "x": 50.0,
+  "y": 300,
+  "type": "HELICOPTER",
+  "enginePower": 2000,
+  "numberOfWheels": 3,
+  "capacity": 15.0,
+  "distanceTravelled": 5000,
+  "fuelConsumption": 200,
+  "fuelType": "KEROSENE"
+}
+
+###
+### Boat
+POST http://localhost:8080/backend/api/vehicles
+Content-Type: application/json
+
+{
+  "name": "Speedboat 3000",
+  "x": 10.5,
+  "y": 100,
+  "type": "BOAT",
+  "enginePower": 350,
+  "numberOfWheels": 0,
+  "capacity": 8.0,
+  "distanceTravelled": 2000,
+  "fuelConsumption": 80,
+  "fuelType": "DIESEL"
+}
+
+###
+### Hoverboard
+POST http://localhost:8080/backend/api/vehicles
+Content-Type: application/json
+
+{
+  "name": "Future Hoverboard",
+  "x": 5.0,
+  "y": 50,
+  "type": "HOVERBOARD",
+  "enginePower": 100,
+  "numberOfWheels": 0,
+  "capacity": 1.0,
+  "distanceTravelled": 100,
+  "fuelConsumption": 5,
+  "fuelType": "ELECTRICITY"
+}
+
+###
+### Примеры ошибочных запросов
+
+###
+### Ошибка: пустое имя
+POST http://localhost:8080/backend/api/vehicles
+Content-Type: application/json
+
+{
+  "name": "",
+  "x": 100.5,
+  "y": 200,
+  "type": "CAR",
+  "enginePower": 500,
+  "numberOfWheels": 4,
+  "capacity": 5.0,
+  "distanceTravelled": 0,
+  "fuelConsumption": 20,
+  "fuelType": "ELECTRICITY"
+}
+
+###
+### Ошибка: Y > 621
+POST http://localhost:8080/backend/api/vehicles
+Content-Type: application/json
+
+{
+  "name": "Invalid Vehicle",
+  "x": 100.5,
+  "y": 700,
+  "type": "CAR",
+  "enginePower": 500,
+  "numberOfWheels": 4,
+  "capacity": 5.0,
+  "distanceTravelled": 0,
+  "fuelConsumption": 20,
+  "fuelType": "ELECTRICITY"
+}
+
+###
+### Ошибка: отрицательная capacity
+POST http://localhost:8080/backend/api/vehicles
+Content-Type: application/json
+
+{
+  "name": "Invalid Vehicle",
+  "x": 100.5,
+  "y": 200,
+  "type": "CAR",
+  "enginePower": 500,
+  "numberOfWheels": 4,
+  "capacity": -5.0,
+  "distanceTravelled": 0,
+  "fuelConsumption": 20,
+  "fuelType": "ELECTRICITY"
+}
+
+###
+
+
+
+
