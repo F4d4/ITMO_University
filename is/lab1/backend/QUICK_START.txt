@@ -82,3 +82,7 @@ Entity (POJO) <--> XML Mapping <--> Hibernate Session API
 
 
 
+
+
+
+

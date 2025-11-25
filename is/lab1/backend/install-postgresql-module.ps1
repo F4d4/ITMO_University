@@ -66,3 +66,7 @@ Write-Host "`nТеперь вы можете:" -ForegroundColor Cyan
 Write-Host "1. Запустить WildFly: $WILDFLY_HOME\bin\standalone.bat" -ForegroundColor White
 Write-Host "2. Задеплоить WAR: jboss-cli.bat --connect --command=`"deploy C:\ITMO_University\is\lab1\backend\build\libs\backend.war --force`"" -ForegroundColor White
 
+
+
+
+
