@@ -207,41 +207,101 @@ public class VehicleDAOImpl implements VehicleDAO {
             int page, int size) {
         try (Session session = hibernateUtil.getSessionFactory().openSession()) {
 
-            StringBuilder hql = new StringBuilder("FROM Vehicle v WHERE 1=1");
-
-            // Добавление фильтрации
-            if (filterField != null && !filterField.isEmpty() &&
-                    filterValue != null && !filterValue.isEmpty()) {
-                hql.append(" AND LOWER(CAST(v.").append(filterField)
-                        .append(" AS string)) LIKE LOWER(:filterValue)");
-            }
-
-            // Добавление сортировки
-            if (sortField != null && !sortField.isEmpty()) {
-                hql.append(" ORDER BY v.").append(sortField);
-                if (sortDirection != null && sortDirection.equalsIgnoreCase("desc")) {
-                    hql.append(" DESC");
+            boolean hasFilter = filterField != null && !filterField.isEmpty() &&
+                    filterValue != null && !filterValue.isEmpty();
+            
+            // Для enum полей (type, fuelType) используем фильтрацию в памяти
+            // так как они могут храниться как bytea в БД
+            if (hasFilter && ("type".equals(filterField) || "fuelType".equals(filterField))) {
+                LOGGER.info("Фильтрация enum поля " + filterField + " в Java коде");
+                
+                // Загружаем все записи
+                StringBuilder hql = new StringBuilder("FROM Vehicle v");
+                
+                // Добавление сортировки
+                if (sortField != null && !sortField.isEmpty()) {
+                    hql.append(" ORDER BY v.").append(sortField);
+                    if (sortDirection != null && sortDirection.equalsIgnoreCase("desc")) {
+                        hql.append(" DESC");
+                    } else {
+                        hql.append(" ASC");
+                    }
                 } else {
-                    hql.append(" ASC");
+                    hql.append(" ORDER BY v.id ASC");
                 }
+                
+                Query<Vehicle> query = session.createQuery(hql.toString(), Vehicle.class);
+                List<Vehicle> allVehicles = query.getResultList();
+                
+                // Фильтруем в Java
+                String lowerFilterValue = filterValue.toLowerCase();
+                List<Vehicle> filtered = new java.util.ArrayList<>();
+                
+                for (Vehicle v : allVehicles) {
+                    String fieldValue = null;
+                    if ("type".equals(filterField) && v.getType() != null) {
+                        fieldValue = v.getType().toString();
+                    } else if ("fuelType".equals(filterField) && v.getFuelType() != null) {
+                        fieldValue = v.getFuelType().toString();
+                    }
+                    
+                    if (fieldValue != null && fieldValue.toLowerCase().contains(lowerFilterValue)) {
+                        filtered.add(v);
+                    }
+                }
+                
+                LOGGER.info("Отфильтровано " + filtered.size() + " из " + allVehicles.size() + " записей");
+                
+                // Применяем пагинацию
+                int start = page * size;
+                int end = Math.min(start + size, filtered.size());
+                
+                if (start >= filtered.size()) {
+                    return new java.util.ArrayList<>();
+                }
+                
+                return filtered.subList(start, end);
             } else {
-                hql.append(" ORDER BY v.id ASC");
+                // HQL запрос для обычных полей
+                StringBuilder hql = new StringBuilder("FROM Vehicle v");
+                
+                if (hasFilter) {
+                    hql.append(" WHERE LOWER(v.").append(filterField).append(") LIKE LOWER(:filterValue)");
+                }
+
+                // Добавление сортировки
+                if (sortField != null && !sortField.isEmpty()) {
+                    hql.append(" ORDER BY v.").append(sortField);
+                    if (sortDirection != null && sortDirection.equalsIgnoreCase("desc")) {
+                        hql.append(" DESC");
+                    } else {
+                        hql.append(" ASC");
+                    }
+                } else {
+                    hql.append(" ORDER BY v.id ASC");
+                }
+
+                LOGGER.info("Executing HQL: " + hql.toString());
+                
+                Query<Vehicle> query = session.createQuery(hql.toString(), Vehicle.class);
+
+                if (hasFilter) {
+                    query.setParameter("filterValue", "%" + filterValue + "%");
+                    LOGGER.info("Filter value: " + filterValue);
+                }
+
+                query.setFirstResult(page * size);
+                query.setMaxResults(size);
+
+                List<Vehicle> results = query.getResultList();
+                LOGGER.info("Found " + results.size() + " vehicles via HQL");
+                
+                return results;
             }
-
-            Query<Vehicle> query = session.createQuery(hql.toString(), Vehicle.class);
-
-            if (filterField != null && !filterField.isEmpty() &&
-                    filterValue != null && !filterValue.isEmpty()) {
-                query.setParameter("filterValue", "%" + filterValue + "%");
-            }
-
-            query.setFirstResult(page * size);
-            query.setMaxResults(size);
-
-            return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle с фильтрами: " + e.getMessage());
-            throw new RuntimeException("Не удалось найти Vehicle с фильтрами", e);
+            e.printStackTrace();
+            throw new RuntimeException("Не удалось найти Vehicle с фильтрами: " + e.getMessage(), e);
         }
     }
 
@@ -249,25 +309,61 @@ public class VehicleDAOImpl implements VehicleDAO {
     public long countWithFilters(String filterField, String filterValue) {
         try (Session session = hibernateUtil.getSessionFactory().openSession()) {
 
-            StringBuilder hql = new StringBuilder("SELECT COUNT(v) FROM Vehicle v WHERE 1=1");
+            boolean hasFilter = filterField != null && !filterField.isEmpty() &&
+                    filterValue != null && !filterValue.isEmpty();
+            
+            // Для enum полей (type, fuelType) используем подсчет в памяти
+            if (hasFilter && ("type".equals(filterField) || "fuelType".equals(filterField))) {
+                LOGGER.info("Подсчет для enum поля " + filterField + " в Java коде");
+                
+                // Загружаем все записи
+                Query<Vehicle> query = session.createQuery("FROM Vehicle v", Vehicle.class);
+                List<Vehicle> allVehicles = query.getResultList();
+                
+                // Считаем совпадения в Java
+                String lowerFilterValue = filterValue.toLowerCase();
+                long count = 0;
+                
+                for (Vehicle v : allVehicles) {
+                    String fieldValue = null;
+                    if ("type".equals(filterField) && v.getType() != null) {
+                        fieldValue = v.getType().toString();
+                    } else if ("fuelType".equals(filterField) && v.getFuelType() != null) {
+                        fieldValue = v.getFuelType().toString();
+                    }
+                    
+                    if (fieldValue != null && fieldValue.toLowerCase().contains(lowerFilterValue)) {
+                        count++;
+                    }
+                }
+                
+                LOGGER.info("Count result: " + count);
+                return count;
+            } else {
+                // HQL запрос для обычных полей
+                StringBuilder hql = new StringBuilder("SELECT COUNT(v) FROM Vehicle v");
+                
+                if (hasFilter) {
+                    hql.append(" WHERE LOWER(v.").append(filterField).append(") LIKE LOWER(:filterValue)");
+                }
 
-            if (filterField != null && !filterField.isEmpty() &&
-                    filterValue != null && !filterValue.isEmpty()) {
-                hql.append(" AND LOWER(CAST(v.").append(filterField)
-                        .append(" AS string)) LIKE LOWER(:filterValue)");
+                LOGGER.info("Executing count HQL: " + hql.toString());
+                
+                Query<Long> query = session.createQuery(hql.toString(), Long.class);
+
+                if (hasFilter) {
+                    query.setParameter("filterValue", "%" + filterValue + "%");
+                }
+
+                long count = query.getSingleResult();
+                LOGGER.info("Count result via HQL: " + count);
+                
+                return count;
             }
-
-            Query<Long> query = session.createQuery(hql.toString(), Long.class);
-
-            if (filterField != null && !filterField.isEmpty() &&
-                    filterValue != null && !filterValue.isEmpty()) {
-                query.setParameter("filterValue", "%" + filterValue + "%");
-            }
-
-            return query.getSingleResult();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при подсчете Vehicle с фильтрами: " + e.getMessage());
-            throw new RuntimeException("Не удалось подсчитать Vehicle с фильтрами", e);
+            e.printStackTrace();
+            throw new RuntimeException("Не удалось подсчитать Vehicle с фильтрами: " + e.getMessage(), e);
         }
     }
 }

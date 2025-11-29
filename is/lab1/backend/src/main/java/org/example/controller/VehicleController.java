@@ -83,20 +83,28 @@ public class VehicleController {
             @QueryParam("sortField") String sortField,
             @QueryParam("sortDirection") @DefaultValue("asc") String sortDirection) {
         try {
+            LOGGER.info("Получен запрос: page=" + page + ", size=" + size + 
+                       ", filterField=" + filterField + ", filterValue=" + filterValue + 
+                       ", sortField=" + sortField + ", sortDirection=" + sortDirection);
+            
             PaginatedResponse<VehicleDTO> response;
 
-            if (filterField != null && !filterField.isEmpty()) {
+            if (filterField != null && !filterField.isEmpty() && 
+                filterValue != null && !filterValue.isEmpty()) {
+                LOGGER.info("Используется фильтрация по полю: " + filterField + " со значением: " + filterValue);
                 response = vehicleService.getVehiclesWithFilters(
                         filterField, filterValue, sortField, sortDirection, page, size);
             } else {
+                LOGGER.info("Фильтрация не применяется, получаем все записи");
                 response = vehicleService.getAllVehicles(page, size);
             }
 
             return Response.ok(response).build();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при получении списка Vehicle: " + e.getMessage());
+            e.printStackTrace();
             ErrorResponse error = new ErrorResponse(500, "Internal Server Error",
-                    "Не удалось получить список Vehicle", "/api/vehicles");
+                    "Не удалось получить список Vehicle: " + e.getMessage(), "/api/vehicles");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         }
     }
