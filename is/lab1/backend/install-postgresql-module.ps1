@@ -70,3 +70,4 @@ Write-Host "2. Задеплоить WAR: jboss-cli.bat --connect --command=`"dep
 
 
 
+
