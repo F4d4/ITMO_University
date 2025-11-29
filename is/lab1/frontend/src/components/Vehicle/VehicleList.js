@@ -25,6 +25,66 @@ const VehicleList = () => {
     loadVehicles();
   }, [currentPage, pageSize, sortField, sortDirection]);
 
+  // WebSocket для real-time обновлений
+  useEffect(() => {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.hostname}:8080/backend/ws/vehicles`;
+    
+    let ws = null;
+    
+    const connectWebSocket = () => {
+      try {
+        ws = new WebSocket(wsUrl);
+        
+        ws.onopen = () => {
+          console.log('WebSocket подключен');
+        };
+        
+        ws.onmessage = (event) => {
+          console.log('Получено WebSocket сообщение:', event.data);
+          try {
+            const message = JSON.parse(event.data);
+            
+            if (message.type === 'DELETED') {
+              // Удаляем объект из списка
+              setVehicles(prevVehicles => 
+                prevVehicles.filter(v => v.id !== message.id)
+              );
+              setTotalElements(prev => prev - 1);
+              console.log(`Vehicle ${message.id} удален из списка`);
+            } else if (message.type === 'CREATED' || message.type === 'UPDATED') {
+              // Перезагружаем список при создании или обновлении
+              loadVehicles();
+            }
+          } catch (e) {
+            console.error('Ошибка парсинга WebSocket сообщения:', e);
+          }
+        };
+        
+        ws.onerror = (error) => {
+          console.error('WebSocket ошибка:', error);
+        };
+        
+        ws.onclose = () => {
+          console.log('WebSocket отключен. Переподключение через 3 секунды...');
+          setTimeout(connectWebSocket, 3000);
+        };
+      } catch (error) {
+        console.error('Ошибка создания WebSocket:', error);
+        setTimeout(connectWebSocket, 3000);
+      }
+    };
+    
+    connectWebSocket();
+    
+    // Очистка при размонтировании компонента
+    return () => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    };
+  }, []); // Пустой массив зависимостей - подключаемся только один раз
+
   const loadVehicles = async () => {
     try {
       setLoading(true);

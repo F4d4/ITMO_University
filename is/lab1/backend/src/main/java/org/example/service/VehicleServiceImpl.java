@@ -7,6 +7,7 @@ import org.example.entity.Coordinates;
 import org.example.entity.Vehicle;
 import org.example.entity.VehicleType;
 import org.example.repository.VehicleDAO;
+import org.example.websocket.VehicleWebSocket;
 
 import java.util.Date;
 import java.util.List;
@@ -47,6 +48,9 @@ public class VehicleServiceImpl implements VehicleService {
             
             Vehicle saved = vehicleDAO.save(vehicle);
             LOGGER.info("Vehicle успешно создан с ID: " + saved.getId());
+            
+            // Уведомляем всех клиентов о создании
+            VehicleWebSocket.notifyVehicleCreated(saved.getId());
             
             return convertToDTO(saved);
         } catch (Exception e) {
@@ -128,6 +132,9 @@ public class VehicleServiceImpl implements VehicleService {
             Vehicle updated = vehicleDAO.update(vehicle);
             LOGGER.info("Vehicle успешно обновлен с ID: " + id);
             
+            // Уведомляем всех клиентов об обновлении
+            VehicleWebSocket.notifyVehicleUpdated(id);
+            
             return convertToDTO(updated);
         } catch (Exception e) {
             LOGGER.severe("Ошибка при обновлении Vehicle: " + e.getMessage());
@@ -144,6 +151,9 @@ public class VehicleServiceImpl implements VehicleService {
             
             vehicleDAO.deleteById(id);
             LOGGER.info("Vehicle успешно удален с ID: " + id);
+            
+            // Уведомляем всех клиентов об удалении
+            VehicleWebSocket.notifyVehicleDeleted(id);
         } catch (Exception e) {
             LOGGER.severe("Ошибка при удалении Vehicle: " + e.getMessage());
             throw new RuntimeException("Не удалось удалить Vehicle", e);
