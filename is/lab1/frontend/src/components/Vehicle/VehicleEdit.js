@@ -55,10 +55,22 @@ const VehicleEdit = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    let parsedValue = value;
+
+    // Правильно парсим числовые значения
+    if (type === 'number') {
+      if (name === 'capacity' || name === 'x') {
+        parsedValue = value === '' ? '' : parseFloat(value);
+      } else if (name === 'y' || name === 'enginePower' || name === 'numberOfWheels' || 
+                 name === 'distanceTravelled' || name === 'fuelConsumption') {
+        parsedValue = value === '' ? '' : parseInt(value, 10);
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: parsedValue,
     }));
     if (errors[name]) {
       setErrors((prev) => ({
@@ -116,14 +128,14 @@ const VehicleEdit = () => {
 
       const dataToSend = {
         name: formData.name,
-        x: parseFloat(formData.x),
-        y: parseInt(formData.y),
+        x: Number(formData.x),
+        y: Number(formData.y),
         type: formData.type || null,
-        enginePower: parseInt(formData.enginePower),
-        numberOfWheels: parseInt(formData.numberOfWheels),
-        capacity: parseFloat(formData.capacity),
-        distanceTravelled: parseInt(formData.distanceTravelled),
-        fuelConsumption: parseInt(formData.fuelConsumption),
+        enginePower: Number(formData.enginePower),
+        numberOfWheels: Number(formData.numberOfWheels),
+        capacity: Number(formData.capacity),
+        distanceTravelled: Number(formData.distanceTravelled),
+        fuelConsumption: Number(formData.fuelConsumption),
         fuelType: formData.fuelType || null,
       };
 

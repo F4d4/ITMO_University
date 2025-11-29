@@ -135,7 +135,25 @@ const SpecialOperations = () => {
   };
 
   const formatDate = (date) => {
-    return new Date(date).toLocaleString('ru-RU');
+    if (!date) return '-';
+    try {
+      const parsedDate = new Date(date);
+      // Проверяем, что дата валидна
+      if (isNaN(parsedDate.getTime())) {
+        return 'Invalid Date';
+      }
+      return parsedDate.toLocaleString('ru-RU', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    } catch (e) {
+      console.error('Error parsing date:', date, e);
+      return 'Invalid Date';
+    }
   };
 
   return (
