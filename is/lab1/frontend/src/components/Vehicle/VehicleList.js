@@ -94,12 +94,50 @@ const VehicleList = () => {
 
   const formatDate = (date) => {
     if (!date) return '-';
+    
     try {
-      const parsedDate = new Date(date);
+      console.log('Received date:', date, 'Type:', typeof date);
+      let parsedDate;
+      
+      // Если дата уже объект Date
+      if (date instanceof Date) {
+        parsedDate = date;
+      }
+      // Если это число (timestamp в миллисекундах)
+      else if (typeof date === 'number') {
+        parsedDate = new Date(date);
+      }
+      // Если это строка
+      else if (typeof date === 'string') {
+        // Пробуем парсить как ISO строку или другой формат
+        parsedDate = new Date(date);
+        
+        // Если не получилось, пробуем как timestamp
+        if (isNaN(parsedDate.getTime())) {
+          const timestamp = parseInt(date, 10);
+          if (!isNaN(timestamp)) {
+            parsedDate = new Date(timestamp);
+          }
+        }
+      }
+      // Если это объект с полями даты
+      else if (typeof date === 'object') {
+        // Возможно, это объект вида {year: 2025, month: 11, day: 29, ...}
+        parsedDate = new Date(date.year, date.month - 1, date.day, 
+                              date.hour || 0, date.minute || 0, date.second || 0);
+      }
+      else {
+        parsedDate = new Date(date);
+      }
+      
+      console.log('Parsed date:', parsedDate, 'IsValid:', !isNaN(parsedDate.getTime()));
+      
       // Проверяем, что дата валидна
       if (isNaN(parsedDate.getTime())) {
+        console.error('Invalid date value:', date);
         return 'Invalid Date';
       }
+      
       return parsedDate.toLocaleString('ru-RU', {
         year: 'numeric',
         month: '2-digit',
@@ -109,7 +147,7 @@ const VehicleList = () => {
         second: '2-digit'
       });
     } catch (e) {
-      console.error('Error parsing date:', date, e);
+      console.error('Error parsing date:', date, 'Type:', typeof date, 'Error:', e);
       return 'Invalid Date';
     }
   };

@@ -226,7 +226,8 @@ public class VehicleServiceImpl implements VehicleService {
         dto.setName(vehicle.getName());
         dto.setX(vehicle.getCoordinates().getX());
         dto.setY(vehicle.getCoordinates().getY());
-        dto.setCreationDate(vehicle.getCreationDate());
+        // Конвертируем Date в timestamp (миллисекунды)
+        dto.setCreationDate(vehicle.getCreationDate() != null ? vehicle.getCreationDate().getTime() : null);
         dto.setType(vehicle.getType());
         dto.setEnginePower(vehicle.getEnginePower());
         dto.setNumberOfWheels(vehicle.getNumberOfWheels());

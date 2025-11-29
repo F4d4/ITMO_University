@@ -4,7 +4,6 @@ import org.example.entity.FuelType;
 import org.example.entity.VehicleType;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * DTO для отображения полной информации о Vehicle
@@ -15,7 +14,7 @@ public class VehicleDTO implements Serializable {
     private String name;
     private double x;
     private long y;
-    private Date creationDate;
+    private Long creationDate; // Отправляем как timestamp (миллисекунды)
     private VehicleType type;
     private int enginePower;
     private int numberOfWheels;
@@ -60,11 +59,11 @@ public class VehicleDTO implements Serializable {
         this.y = y;
     }
 
-    public Date getCreationDate() {
+    public Long getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(Long creationDate) {
         this.creationDate = creationDate;
     }
 
