@@ -32,7 +32,7 @@ const VehicleList = () => {
   // WebSocket для real-time обновлений
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.hostname}:8080/backend/ws/vehicles`;
+    const wsUrl = `${protocol}//${window.location.hostname}:8368/backend/ws/vehicles`;
     
     let ws = null;
     
