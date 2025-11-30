@@ -65,21 +65,25 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
 
       {/* Тип транспорта */}
       <div className="form-group">
-        <label htmlFor="type">Тип транспортного средства</label>
+        <label htmlFor="type">
+          Тип транспортного средства <span className="required">*</span>
+        </label>
         <select
           id="type"
           name="type"
           value={formData.type}
           onChange={onChange}
-          className="form-control"
+          className={`form-control ${errors.type ? 'is-invalid' : ''}`}
+          required
         >
-          <option value="">-- Не выбрано --</option>
+          <option value="">-- Выберите тип --</option>
           {vehicleTypes.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>
           ))}
         </select>
+        {errors.type && <div className="error-message">{errors.type}</div>}
       </div>
 
       {/* Мощность двигателя и колеса */}
@@ -177,21 +181,25 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
 
       {/* Тип топлива */}
       <div className="form-group">
-        <label htmlFor="fuelType">Тип топлива</label>
+        <label htmlFor="fuelType">
+          Тип топлива <span className="required">*</span>
+        </label>
         <select
           id="fuelType"
           name="fuelType"
           value={formData.fuelType}
           onChange={onChange}
-          className="form-control"
+          className={`form-control ${errors.fuelType ? 'is-invalid' : ''}`}
+          required
         >
-          <option value="">-- Не выбрано --</option>
+          <option value="">-- Выберите тип топлива --</option>
           {fuelTypes.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>
           ))}
         </select>
+        {errors.fuelType && <div className="error-message">{errors.fuelType}</div>}
       </div>
 
       {/* Кнопки */}

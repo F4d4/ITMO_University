@@ -80,6 +80,14 @@ const VehicleCreate = () => {
       newErrors.fuelConsumption = 'Расход топлива должен быть больше 0';
     }
 
+    if (!formData.type || formData.type === '') {
+      newErrors.type = 'Необходимо выбрать тип транспортного средства';
+    }
+
+    if (!formData.fuelType || formData.fuelType === '') {
+      newErrors.fuelType = 'Необходимо выбрать тип топлива';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
