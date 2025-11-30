@@ -52,6 +52,29 @@
   gap: 10px;
 }
 
+/* Search Form */
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 15px;
+  align-items: end;
+}
+
+.search-button-group {
+  display: flex;
+  align-items: flex-end;
+}
+
+.search-button-group .btn {
+  width: 100%;
+}
+
 /* Table */
 .table-responsive {
   overflow-x: auto;

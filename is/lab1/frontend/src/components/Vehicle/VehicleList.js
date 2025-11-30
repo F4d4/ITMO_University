@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { vehicleService } from '../../services/api';
 import './VehicleList.css';
 
 const VehicleList = () => {
+  const navigate = useNavigate();
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,6 +21,9 @@ const VehicleList = () => {
   const [filterValue, setFilterValue] = useState('');
   const [sortField, setSortField] = useState('id');
   const [sortDirection, setSortDirection] = useState('asc');
+
+  // Поиск по ID
+  const [searchId, setSearchId] = useState('');
 
   useEffect(() => {
     loadVehicles();
@@ -141,6 +145,13 @@ const VehicleList = () => {
     setFilterValue('');
     setCurrentPage(0);
     setTimeout(loadVehicles, 0);
+  };
+
+  const handleSearchById = (e) => {
+    e.preventDefault();
+    if (searchId && searchId.trim()) {
+      navigate(`/vehicles/${searchId.trim()}`);
+    }
   };
 
   const handleSort = (field) => {
@@ -292,6 +303,35 @@ const VehicleList = () => {
             <button type="button" onClick={handleClearFilter} className="btn btn-secondary">
               Очистить
             </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Поиск по ID */}
+      <div className="card">
+        <div className="card-header">👁️ Получить информацию об объекте по ID</div>
+        <form onSubmit={handleSearchById} className="search-form">
+          <div className="search-row">
+            <div className="form-group">
+              <label>ID транспортного средства:</label>
+              <input
+                type="number"
+                value={searchId}
+                onChange={(e) => setSearchId(e.target.value)}
+                placeholder="Введите ID..."
+                className="form-control"
+                min="1"
+              />
+            </div>
+            <div className="form-group search-button-group">
+              <button 
+                type="submit" 
+                className="btn btn-info"
+                disabled={!searchId || searchId.trim() === ''}
+              >
+                👁️ Просмотреть
+              </button>
+            </div>
           </div>
         </form>
       </div>
