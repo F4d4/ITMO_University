@@ -69,7 +69,7 @@ task copyFrontendToWebapp(type: Copy, dependsOn: [cleanFrontendWebapp, buildFron
 }
 
 war {
-    archiveFileName = 'backend.war'
+    archiveFileName = 'project.war'
     dependsOn copyFrontendToWebapp
 }
 

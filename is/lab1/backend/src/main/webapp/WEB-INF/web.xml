@@ -1,40 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
-         https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
-    
+
     <display-name>Vehicle Management System</display-name>
-    
-    <!-- CORS фильтр для кросс-доменных запросов -->
-    <filter>
-        <filter-name>CorsFilter</filter-name>
-        <filter-class>org.example.config.CorsFilter</filter-class>
-    </filter>
-    
-    <filter-mapping>
-        <filter-name>CorsFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    
-    <!-- Настройка сессий -->
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
-    
-    <!-- Приветственные файлы -->
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-        <welcome-file>index.htm</welcome-file>
-    </welcome-file-list>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/index.html</location>
+    </error-page>
+
 </web-app>
-
-
-
-
-
-
-
-
-

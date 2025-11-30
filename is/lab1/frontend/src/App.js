@@ -10,7 +10,7 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/project">
       <Layout>
         <Routes>
           <Route path="/" element={<Navigate to="/vehicles" replace />} />
