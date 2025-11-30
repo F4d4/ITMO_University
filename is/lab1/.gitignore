@@ -40,3 +40,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+backend/src/main/webapp/asset-manifest.json
+backend/src/main/webapp/index.html
+backend/src/main/webapp/static/

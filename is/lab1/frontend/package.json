@@ -2,6 +2,7 @@
   "name": "vehicle-management-frontend",
   "version": "1.0.0",
   "private": true,
+  "homepage": "/backend",
   "description": "React frontend for Vehicle Management System",
   "scripts": {
     "start": "react-scripts start",

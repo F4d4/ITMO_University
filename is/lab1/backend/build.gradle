@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'war' // собираем .war именно для бэкенда
+    id 'war'
 }
 
 group = 'org.example'
@@ -17,22 +17,11 @@ repositories {
 }
 
 dependencies {
-    // Jakarta EE API (предоставляется WildFly)
     compileOnly 'jakarta.platform:jakarta.jakartaee-web-api:10.0.0'
-    
-    // Hibernate Core - теперь включаем в приложение для standalone подключения
     implementation 'org.hibernate.orm:hibernate-core:6.2.7.Final'
-    
-    // Jakarta Validation API
     compileOnly 'jakarta.validation:jakarta.validation-api:3.0.2'
-    
-    // PostgreSQL JDBC Driver - включаем в приложение
     implementation 'org.postgresql:postgresql:42.7.6'
-    
-    // C3P0 Connection Pool для управления пулом соединений
     implementation 'org.hibernate.orm:hibernate-c3p0:6.2.7.Final'
-    
-    // Тестовые зависимости
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
@@ -45,6 +34,43 @@ test {
     useJUnitPlatform()
 }
 
+task installFrontendDeps(type: Exec) {
+    workingDir file('../frontend')
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'npm', 'install'
+    } else {
+        commandLine 'npm', 'install'
+    }
+    onlyIf {
+        !file('../frontend/node_modules').exists()
+    }
+}
+
+task buildFrontend(type: Exec) {
+    dependsOn installFrontendDeps
+    workingDir file('../frontend')
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'npm', 'run', 'build'
+    } else {
+        commandLine 'npm', 'run', 'build'
+    }
+}
+
+task cleanFrontendWebapp(type: Delete) {
+    delete fileTree('src/main/webapp') {
+        exclude 'WEB-INF/**'
+        exclude 'META-INF/**'
+    }
+}
+
+task copyFrontendToWebapp(type: Copy, dependsOn: [cleanFrontendWebapp, buildFrontend]) {
+    from '../frontend/build'
+    into 'src/main/webapp'
+}
+
 war {
     archiveFileName = 'backend.war'
+    dependsOn copyFrontendToWebapp
 }
+
+clean.dependsOn cleanFrontendWebapp
