@@ -1,0 +1,337 @@
+@startuml
+
+title Архитектура приложения Vehicle Management
+
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+package "Уровень представления" {
+    class Frontend {
+        +VehicleList
+        +VehicleCreate
+        +VehicleEdit
+        +VehicleDetails
+        +SpecialOperations
+    }
+    
+    class WSClient {
+        +WebSocket connection
+        +onMessage()
+        +onOpen()
+        +onClose()
+    }
+}
+
+package "Уровень REST API" {
+    class VehicleController {
+        +createVehicle()
+        +getVehicleById()
+        +getAllVehicles()
+        +updateVehicle()
+        +deleteVehicle()
+        +getVehicleWithMaxCapacity()
+        +getVehiclesByNamePrefix()
+        +getVehiclesByFuelConsumption()
+        +getVehiclesByType()
+        +resetDistanceTravelled()
+    }
+    
+    class JaxRsApplication {
+        +configure()
+    }
+}
+
+package "Уровень бизнес-логики" {
+    interface VehicleService {
+        +createVehicle()
+        +getVehicleById()
+        +getAllVehicles()
+        +updateVehicle()
+        +deleteVehicle()
+        +getVehicleWithMaxCapacity()
+        +getVehiclesByNamePrefix()
+        +getVehiclesByFuelConsumption()
+        +getVehiclesByType()
+        +resetDistanceTravelled()
+        +getVehiclesWithFilters()
+    }
+    
+    class VehicleServiceImpl {
+        +createVehicle()
+        +getVehicleById()
+        +getAllVehicles()
+        +updateVehicle()
+        +deleteVehicle()
+        +getVehicleWithMaxCapacity()
+        +getVehiclesByNamePrefix()
+        +getVehiclesByFuelConsumption()
+        +getVehiclesByType()
+        +resetDistanceTravelled()
+        +getVehiclesWithFilters()
+        -convertToDTO()
+        -validateCreateDTO()
+        -validateUpdateDTO()
+    }
+}
+
+package "DTO слой" {
+    class VehicleDTO {
+        -Integer id
+        -String name
+        -Float x
+        -int y
+        -Long creationDate
+        -VehicleType type
+        -int enginePower
+        -long numberOfWheels
+        -float capacity
+        -long distanceTravelled
+        -long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class VehicleCreateDTO {
+        -String name
+        -Float x
+        -int y
+        -VehicleType type
+        -int enginePower
+        -long numberOfWheels
+        -float capacity
+        -long distanceTravelled
+        -long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class VehicleUpdateDTO {
+        -String name
+        -Float x
+        -Integer y
+        -VehicleType type
+        -Integer enginePower
+        -Long numberOfWheels
+        -Float capacity
+        -Long distanceTravelled
+        -Long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class PaginatedResponse {
+        -List<T> content
+        -long totalElements
+        -int totalPages
+        -int currentPage
+        -int pageSize
+    }
+    
+    class ErrorResponse {
+        -int status
+        -String error
+        -String message
+        -String path
+    }
+}
+
+package "Уровень доступа к данным" {
+    interface VehicleDAO {
+        +save()
+        +findById()
+        +findAll()
+        +count()
+        +update()
+        +deleteById()
+        +findByMaxCapacity()
+        +findByNameStartsWith()
+        +findByFuelConsumptionGreaterThan()
+        +findByType()
+        +resetDistanceTravelled()
+        +findWithFilters()
+        +countWithFilters()
+    }
+    
+    class VehicleDAOImpl {
+        +save()
+        +findById()
+        +findAll()
+        +count()
+        +update()
+        +deleteById()
+        +findByMaxCapacity()
+        +findByNameStartsWith()
+        +findByFuelConsumptionGreaterThan()
+        +findByType()
+        +resetDistanceTravelled()
+        +findWithFilters()
+        +countWithFilters()
+    }
+}
+
+package "Уровень JPA/Entity" {
+    class Vehicle {
+        -Integer id
+        -String name
+        -Coordinates coordinates
+        -Date creationDate
+        -VehicleType type
+        -int enginePower
+        -long numberOfWheels
+        -float capacity
+        -long distanceTravelled
+        -long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class Coordinates {
+        -int id
+        -Float x
+        -int y
+    }
+    
+    enum VehicleType {
+        CAR
+        HELICOPTER
+        BOAT
+        HOVERBOARD
+    }
+    
+    enum FuelType {
+        KEROSENE
+        ELECTRICITY
+        DIESEL
+        ALCOHOL
+    }
+}
+
+package "Конфигурация" {
+    class HibernateUtil {
+        -SessionFactory sessionFactory
+        +getSessionFactory()
+        +shutdown()
+    }
+    
+    class CorsFilter {
+        +filter()
+    }
+}
+
+package "WebSocket" {
+    class VehicleWebSocket {
+        +onOpen()
+        +onClose()
+        +onError()
+        +onMessage()
+        +broadcast()
+        +notifyVehicleDeleted()
+        +notifyVehicleCreated()
+        +notifyVehicleUpdated()
+    }
+}
+
+package "База данных" {
+    class DB_Vehicle {
+        id (PK)
+        name
+        coordinates_id (FK)
+        creation_date
+        type
+        engine_power
+        number_of_wheels
+        capacity
+        distance_travelled
+        fuel_consumption
+        fuel_type
+    }
+    
+    class DB_Coordinates {
+        id (PK)
+        x
+        y
+    }
+}
+
+' Связи Frontend → Backend
+Frontend --> VehicleController : HTTP REST
+WSClient --> VehicleWebSocket : WebSocket
+
+' Связи Controller → Service
+VehicleController --> VehicleService : @Inject
+VehicleController --> VehicleDTO : uses
+VehicleController --> VehicleCreateDTO : uses
+VehicleController --> VehicleUpdateDTO : uses
+VehicleController --> PaginatedResponse : uses
+VehicleController --> ErrorResponse : uses
+
+' Связи Service → DAO
+VehicleService <|.. VehicleServiceImpl : implements
+VehicleServiceImpl --> VehicleDAO : @Inject
+VehicleServiceImpl --> VehicleWebSocket : notify
+VehicleServiceImpl --> VehicleDTO : converts to
+
+' Связи DAO → Entity
+VehicleDAO <|.. VehicleDAOImpl : implements
+VehicleDAOImpl --> HibernateUtil : @Inject
+VehicleDAOImpl --> Vehicle : uses
+
+' Связи Entity
+Vehicle --> Coordinates : has
+Vehicle --> VehicleType : uses
+Vehicle --> FuelType : uses
+
+' Связи Hibernate → Database
+HibernateUtil --> Vehicle : maps
+HibernateUtil --> Coordinates : maps
+Vehicle --> DB_Vehicle : persists to
+Coordinates --> DB_Coordinates : persists to
+
+' Связь между таблицами БД
+DB_Vehicle --> DB_Coordinates : FK coordinates_id
+
+' JAX-RS Application
+JaxRsApplication --> VehicleController : registers
+JaxRsApplication --> CorsFilter : registers
+
+note right of VehicleServiceImpl
+@Stateless
+@Inject VehicleDAO
+@Inject VehicleWebSocket
+
+Sends real-time notifications
+after create/update/delete
+end note
+
+note right of VehicleDAOImpl
+@Stateless
+@Inject HibernateUtil
+
+Manual transaction management
+using Hibernate Session API
+end note
+
+note right of Vehicle
+@Entity
+@Table(name = "vehicle")
+
+Mapped using XML:
+Vehicle.hbm.xml
+Coordinates.hbm.xml
+end note
+
+note right of VehicleWebSocket
+@ServerEndpoint("/ws/vehicles")
+
+Broadcasts real-time updates:
+- CREATED
+- UPDATED
+- DELETED
+end note
+
+note right of HibernateUtil
+@ApplicationScoped
+SessionFactory management
+
+Configuration from
+hibernate.cfg.xml
+end note
+
+@enduml
+
