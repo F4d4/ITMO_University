@@ -6,11 +6,12 @@ import org.example.dto.*;
 import org.example.entity.Coordinates;
 import org.example.entity.Vehicle;
 import org.example.entity.VehicleType;
+import org.example.repository.CoordinatesDAO;
 import org.example.repository.VehicleDAO;
-import org.example.websocket.VehicleWebSocket;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,9 @@ public class VehicleServiceImpl implements VehicleService {
     @Inject
     private VehicleDAO vehicleDAO;
     
+    @Inject
+    private CoordinatesDAO coordinatesDAO;
+    
     @Override
     public VehicleDTO createVehicle(VehicleCreateDTO createDTO) {
         try {
@@ -33,8 +37,8 @@ public class VehicleServiceImpl implements VehicleService {
             Vehicle vehicle = new Vehicle();
             vehicle.setName(createDTO.getName());
             
-            // Создание координат
-            Coordinates coordinates = new Coordinates(createDTO.getX(), createDTO.getY());
+            // Получение или создание координат
+            Coordinates coordinates = getOrCreateCoordinates(createDTO);
             vehicle.setCoordinates(coordinates);
             
             vehicle.setCreationDate(new Date());
@@ -49,14 +53,45 @@ public class VehicleServiceImpl implements VehicleService {
             Vehicle saved = vehicleDAO.save(vehicle);
             LOGGER.info("Vehicle успешно создан с ID: " + saved.getId());
             
-            // Уведомляем всех клиентов о создании
-            VehicleWebSocket.notifyVehicleCreated(saved.getId());
-            
             return convertToDTO(saved);
         } catch (Exception e) {
             LOGGER.severe("Ошибка при создании Vehicle: " + e.getMessage());
             throw new RuntimeException("Не удалось создать Vehicle", e);
         }
+    }
+    
+    /**
+     * Получить существующие координаты или создать новые
+     */
+    private Coordinates getOrCreateCoordinates(VehicleCreateDTO createDTO) {
+        // Если указан coordinatesId - используем существующие
+        if (createDTO.getCoordinatesId() != null) {
+            LOGGER.info("Используем существующие координаты с ID: " + createDTO.getCoordinatesId());
+            return coordinatesDAO.findById(createDTO.getCoordinatesId())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Coordinates с ID " + createDTO.getCoordinatesId() + " не найдены"));
+        }
+        
+        // Если указаны x и y - проверяем существование или создаем новые
+        if (createDTO.getX() != null && createDTO.getY() != null) {
+            double x = createDTO.getX();
+            long y = createDTO.getY();
+            
+            // Ищем существующие координаты с такими же значениями
+            Optional<Coordinates> existing = coordinatesDAO.findByXAndY(x, y);
+            if (existing.isPresent()) {
+                LOGGER.info("Найдены существующие координаты (" + x + ", " + y + ") с ID: " + existing.get().getId());
+                return existing.get();
+            }
+            
+            // Создаем новые координаты
+            LOGGER.info("Создаем новые координаты (" + x + ", " + y + ")");
+            Coordinates newCoordinates = new Coordinates(x, y);
+            return coordinatesDAO.save(newCoordinates);
+        }
+        
+        throw new IllegalArgumentException(
+                "Необходимо указать либо coordinatesId, либо x и y для координат");
     }
     
     @Override
@@ -132,9 +167,6 @@ public class VehicleServiceImpl implements VehicleService {
             Vehicle updated = vehicleDAO.update(vehicle);
             LOGGER.info("Vehicle успешно обновлен с ID: " + id);
             
-            // Уведомляем всех клиентов об обновлении
-            VehicleWebSocket.notifyVehicleUpdated(id);
-            
             return convertToDTO(updated);
         } catch (Exception e) {
             LOGGER.severe("Ошибка при обновлении Vehicle: " + e.getMessage());
@@ -151,9 +183,6 @@ public class VehicleServiceImpl implements VehicleService {
             
             vehicleDAO.deleteById(id);
             LOGGER.info("Vehicle успешно удален с ID: " + id);
-            
-            // Уведомляем всех клиентов об удалении
-            VehicleWebSocket.notifyVehicleDeleted(id);
         } catch (Exception e) {
             LOGGER.severe("Ошибка при удалении Vehicle: " + e.getMessage());
             throw new RuntimeException("Не удалось удалить Vehicle", e);
@@ -234,6 +263,7 @@ public class VehicleServiceImpl implements VehicleService {
         VehicleDTO dto = new VehicleDTO();
         dto.setId(vehicle.getId());
         dto.setName(vehicle.getName());
+        dto.setCoordinatesId(vehicle.getCoordinates().getId());
         dto.setX(vehicle.getCoordinates().getX());
         dto.setY(vehicle.getCoordinates().getY());
         // Конвертируем Date в timestamp (миллисекунды)
@@ -252,7 +282,14 @@ public class VehicleServiceImpl implements VehicleService {
         if (dto.getName() == null || dto.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Имя не может быть пустым");
         }
-        if (dto.getY() > 621) {
+        
+        // Проверяем координаты
+        if (dto.getCoordinatesId() == null && (dto.getX() == null || dto.getY() == null)) {
+            throw new IllegalArgumentException(
+                    "Необходимо указать либо coordinatesId, либо x и y для координат");
+        }
+        
+        if (dto.getY() != null && dto.getY() > 621) {
             throw new IllegalArgumentException("Y координата не может превышать 621");
         }
         if (dto.getEnginePower() <= 0) {

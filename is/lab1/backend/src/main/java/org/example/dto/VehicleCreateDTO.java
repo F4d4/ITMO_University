@@ -14,10 +14,13 @@ public class VehicleCreateDTO implements Serializable {
     @NotBlank(message = "Имя не может быть пустым")
     private String name;
     
-    private double x;
+    // Либо coordinatesId (использовать существующие), либо x/y (создать новые)
+    private Long coordinatesId;
+    
+    private Double x;
     
     @Max(value = 621, message = "Y координата не может превышать 621")
-    private long y;
+    private Long y;
     
     private VehicleType type;
     
@@ -50,19 +53,27 @@ public class VehicleCreateDTO implements Serializable {
         this.name = name;
     }
 
-    public double getX() {
+    public Long getCoordinatesId() {
+        return coordinatesId;
+    }
+
+    public void setCoordinatesId(Long coordinatesId) {
+        this.coordinatesId = coordinatesId;
+    }
+
+    public Double getX() {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(Double x) {
         this.x = x;
     }
 
-    public long getY() {
+    public Long getY() {
         return y;
     }
 
-    public void setY(long y) {
+    public void setY(Long y) {
         this.y = y;
     }
 

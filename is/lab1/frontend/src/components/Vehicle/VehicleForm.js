@@ -1,9 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './VehicleForm.css';
+import { coordinatesService } from '../../services/api';
 
 const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
   const vehicleTypes = ['CAR', 'HELICOPTER', 'BOAT', 'HOVERBOARD'];
   const fuelTypes = ['KEROSENE', 'ELECTRICITY', 'DIESEL', 'ALCOHOL'];
+  
+  const [useExistingCoordinates, setUseExistingCoordinates] = useState(false);
+  const [availableCoordinates, setAvailableCoordinates] = useState([]);
+  const [loadingCoordinates, setLoadingCoordinates] = useState(false);
+
+  // Загрузка существующих координат
+  useEffect(() => {
+    const loadCoordinates = async () => {
+      try {
+        setLoadingCoordinates(true);
+        const response = await coordinatesService.getAll();
+        setAvailableCoordinates(response.data);
+      } catch (error) {
+        console.error('Ошибка загрузки координат:', error);
+      } finally {
+        setLoadingCoordinates(false);
+      }
+    };
+    loadCoordinates();
+  }, []);
+
+  const handleCoordinatesModeChange = (e) => {
+    const useExisting = e.target.value === 'existing';
+    setUseExistingCoordinates(useExisting);
+    
+    // Очищаем поля координат при переключении
+    if (useExisting) {
+      onChange({ target: { name: 'x', value: '' } });
+      onChange({ target: { name: 'y', value: '' } });
+    } else {
+      onChange({ target: { name: 'coordinatesId', value: '' } });
+    }
+  };
 
   return (
     <form onSubmit={onSubmit} className="vehicle-form">
@@ -25,43 +59,99 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
         {errors.name && <div className="error-message">{errors.name}</div>}
       </div>
 
-      {/* Координаты */}
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="x">
-            Координата X <span className="required">*</span>
+      {/* Выбор способа указания координат */}
+      <div className="form-group">
+        <label>
+          Координаты <span className="required">*</span>
+        </label>
+        <div className="radio-group">
+          <label className="radio-label">
+            <input
+              type="radio"
+              name="coordinatesMode"
+              value="new"
+              checked={!useExistingCoordinates}
+              onChange={handleCoordinatesModeChange}
+            />
+            <span>Создать новые координаты</span>
           </label>
-          <input
-            type="number"
-            id="x"
-            name="x"
-            value={formData.x}
-            onChange={onChange}
-            step="0.01"
-            className={`form-control ${errors.x ? 'is-invalid' : ''}`}
-            required
-          />
-          {errors.x && <div className="error-message">{errors.x}</div>}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="y">
-            Координата Y <span className="required">*</span>
-            <small> (макс. 621)</small>
+          <label className="radio-label">
+            <input
+              type="radio"
+              name="coordinatesMode"
+              value="existing"
+              checked={useExistingCoordinates}
+              onChange={handleCoordinatesModeChange}
+            />
+            <span>Использовать существующие координаты</span>
           </label>
-          <input
-            type="number"
-            id="y"
-            name="y"
-            value={formData.y}
-            onChange={onChange}
-            max="621"
-            className={`form-control ${errors.y ? 'is-invalid' : ''}`}
-            required
-          />
-          {errors.y && <div className="error-message">{errors.y}</div>}
         </div>
       </div>
+
+      {/* Выбор существующих координат */}
+      {useExistingCoordinates ? (
+        <div className="form-group">
+          <label htmlFor="coordinatesId">
+            Выберите координаты <span className="required">*</span>
+          </label>
+          <select
+            id="coordinatesId"
+            name="coordinatesId"
+            value={formData.coordinatesId || ''}
+            onChange={onChange}
+            className={`form-control ${errors.coordinatesId ? 'is-invalid' : ''}`}
+            required
+            disabled={loadingCoordinates}
+          >
+            <option value="">-- Выберите координаты --</option>
+            {availableCoordinates.map((coord) => (
+              <option key={coord.id} value={coord.id}>
+                ID: {coord.id} - X: {coord.x}, Y: {coord.y}
+              </option>
+            ))}
+          </select>
+          {loadingCoordinates && <small>Загрузка координат...</small>}
+          {errors.coordinatesId && <div className="error-message">{errors.coordinatesId}</div>}
+        </div>
+      ) : (
+        /* Ввод новых координат */
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="x">
+              Координата X <span className="required">*</span>
+            </label>
+            <input
+              type="number"
+              id="x"
+              name="x"
+              value={formData.x || ''}
+              onChange={onChange}
+              step="0.01"
+              className={`form-control ${errors.x ? 'is-invalid' : ''}`}
+              required={!useExistingCoordinates}
+            />
+            {errors.x && <div className="error-message">{errors.x}</div>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="y">
+              Координата Y <span className="required">*</span>
+              <small> (макс. 621)</small>
+            </label>
+            <input
+              type="number"
+              id="y"
+              name="y"
+              value={formData.y || ''}
+              onChange={onChange}
+              max="621"
+              className={`form-control ${errors.y ? 'is-invalid' : ''}`}
+              required={!useExistingCoordinates}
+            />
+            {errors.y && <div className="error-message">{errors.y}</div>}
+          </div>
+        </div>
+      )}
 
       {/* Тип транспорта */}
       <div className="form-group">

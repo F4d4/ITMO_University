@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.Response;
 import org.example.dto.*;
 import org.example.entity.VehicleType;
 import org.example.service.VehicleService;
+import org.example.websocket.VehicleWebSocket;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -32,16 +33,25 @@ public class VehicleController {
     @POST
     public Response createVehicle(@Valid VehicleCreateDTO createDTO) {
         try {
+            LOGGER.info("Получен запрос на создание Vehicle: " + createDTO.getName());
             VehicleDTO created = vehicleService.createVehicle(createDTO);
+            LOGGER.info("Vehicle успешно создан с ID: " + created.getId());
+            
+            // Уведомляем клиентов ПОСЛЕ завершения транзакции
+            // Транзакция коммитится после выхода из метода сервиса
+            VehicleWebSocket.notifyVehicleCreated(created.getId());
+            
             return Response.status(Response.Status.CREATED).entity(created).build();
         } catch (IllegalArgumentException e) {
             LOGGER.warning("Ошибка валидации при создании Vehicle: " + e.getMessage());
+            e.printStackTrace();
             ErrorResponse error = new ErrorResponse(400, "Bad Request", e.getMessage(), "/api/vehicles");
             return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при создании Vehicle: " + e.getMessage());
+            e.printStackTrace();
             ErrorResponse error = new ErrorResponse(500, "Internal Server Error",
-                    "Не удалось создать Vehicle", "/api/vehicles");
+                    "Не удалось создать Vehicle: " + e.getMessage(), "/api/vehicles");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         }
     }
@@ -118,6 +128,10 @@ public class VehicleController {
     public Response updateVehicle(@PathParam("id") Integer id, @Valid VehicleUpdateDTO updateDTO) {
         try {
             VehicleDTO updated = vehicleService.updateVehicle(id, updateDTO);
+            
+            // Уведомляем клиентов ПОСЛЕ завершения транзакции
+            VehicleWebSocket.notifyVehicleUpdated(id);
+            
             return Response.ok(updated).build();
         } catch (IllegalArgumentException e) {
             LOGGER.warning("Ошибка при обновлении Vehicle: " + e.getMessage());
@@ -141,6 +155,10 @@ public class VehicleController {
     public Response deleteVehicle(@PathParam("id") Integer id) {
         try {
             vehicleService.deleteVehicle(id);
+            
+            // Уведомляем клиентов ПОСЛЕ завершения транзакции
+            VehicleWebSocket.notifyVehicleDeleted(id);
+            
             return Response.noContent().build();
         } catch (IllegalArgumentException e) {
             LOGGER.warning("Vehicle не найден для удаления: " + e.getMessage());

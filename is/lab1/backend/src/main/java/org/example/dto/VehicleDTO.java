@@ -12,6 +12,7 @@ public class VehicleDTO implements Serializable {
     
     private Integer id;
     private String name;
+    private Long coordinatesId;  // ID координат
     private double x;
     private long y;
     private Long creationDate; // Отправляем как timestamp (миллисекунды)
@@ -41,6 +42,14 @@ public class VehicleDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getCoordinatesId() {
+        return coordinatesId;
+    }
+
+    public void setCoordinatesId(Long coordinatesId) {
+        this.coordinatesId = coordinatesId;
     }
 
     public double getX() {

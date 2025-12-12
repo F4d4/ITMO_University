@@ -71,6 +71,19 @@ export const vehicleService = {
   },
 };
 
+// CRUD операции для Coordinates
+export const coordinatesService = {
+  // Получить все координаты
+  getAll: () => {
+    return api.get('/coordinates');
+  },
+
+  // Получить координаты по ID
+  getById: (id) => {
+    return api.get(`/coordinates/${id}`);
+  },
+};
+
 export default api;
 
 

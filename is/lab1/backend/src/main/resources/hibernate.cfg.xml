@@ -6,9 +6,10 @@
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://pg:5432/studs</property>
-        <property name="hibernate.connection.username">s408367</property>
-        <property name="hibernate.connection.password">QpjZpMmemnlctw7E</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/test</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">KosPrav1979</property>
+
         
         <!-- SQL dialect -->
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
@@ -23,6 +24,12 @@
         
         <!-- Disable second-level cache -->
         <property name="hibernate.cache.use_second_level_cache">false</property>
+        
+        <!-- ИЗМЕНЕНО: Использовать thread-local сессии вместо JTA -->
+        <property name="hibernate.current_session_context_class">thread</property>
+        
+        <!-- ИЗМЕНЕНО: Использовать JDBC транзакции вместо JTA -->
+        <property name="hibernate.transaction.coordinator_class">jdbc</property>
         
         <!-- Connection pool settings -->
         <property name="hibernate.c3p0.min_size">5</property>

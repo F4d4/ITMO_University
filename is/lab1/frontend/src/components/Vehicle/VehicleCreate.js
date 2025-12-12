@@ -11,8 +11,9 @@ const VehicleCreate = () => {
 
   const [formData, setFormData] = useState({
     name: '',
-    x: 0,
-    y: 0,
+    coordinatesId: '',
+    x: '',
+    y: '',
     type: '',
     enginePower: 1,
     numberOfWheels: 4,
@@ -32,6 +33,8 @@ const VehicleCreate = () => {
         parsedValue = value === '' ? '' : parseFloat(value);
       } else if (name === 'y' || name === 'enginePower' || name === 'numberOfWheels' || 
                  name === 'distanceTravelled' || name === 'fuelConsumption') {
+        parsedValue = value === '' ? '' : parseInt(value, 10);
+      } else if (name === 'coordinatesId') {
         parsedValue = value === '' ? '' : parseInt(value, 10);
       }
     }
@@ -56,7 +59,13 @@ const VehicleCreate = () => {
       newErrors.name = 'Название не может быть пустым';
     }
 
-    if (formData.y > 621) {
+    // Проверяем координаты
+    if (!formData.coordinatesId && (!formData.x || !formData.y)) {
+      if (!formData.x) newErrors.x = 'Необходимо указать X координату';
+      if (!formData.y) newErrors.y = 'Необходимо указать Y координату';
+    }
+
+    if (formData.y && formData.y > 621) {
       newErrors.y = 'Y координата не может превышать 621';
     }
 
@@ -106,8 +115,6 @@ const VehicleCreate = () => {
       // Подготовка данных для отправки
       const dataToSend = {
         name: formData.name,
-        x: Number(formData.x),
-        y: Number(formData.y),
         type: formData.type || null,
         enginePower: Number(formData.enginePower),
         numberOfWheels: Number(formData.numberOfWheels),
@@ -116,6 +123,14 @@ const VehicleCreate = () => {
         fuelConsumption: Number(formData.fuelConsumption),
         fuelType: formData.fuelType || null,
       };
+
+      // Добавляем либо coordinatesId, либо x/y
+      if (formData.coordinatesId) {
+        dataToSend.coordinatesId = Number(formData.coordinatesId);
+      } else {
+        dataToSend.x = Number(formData.x);
+        dataToSend.y = Number(formData.y);
+      }
 
       await vehicleService.create(dataToSend);
       navigate('/vehicles');

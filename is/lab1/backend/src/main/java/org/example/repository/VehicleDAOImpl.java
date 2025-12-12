@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 /**
  * Реализация DAO для работы с Vehicle через Hibernate Session API
  * Использует ручное управление сессиями и транзакциями
- * (не JTA, как в standalonetest проекте)
  */
 @Stateless
 public class VehicleDAOImpl implements VehicleDAO {
@@ -28,36 +27,56 @@ public class VehicleDAOImpl implements VehicleDAO {
 
     @Override
     public Vehicle save(Vehicle vehicle) {
-        Transaction transaction = null;
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            
             session.persist(vehicle);
-            transaction.commit();
+            session.flush(); // Принудительно сохранить в БД
+            
+            tx.commit();
             LOGGER.info("Vehicle успешно сохранен с ID: " + vehicle.getId());
             return vehicle;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+                LOGGER.warning("Транзакция откачена");
             }
             LOGGER.severe("Ошибка при сохранении Vehicle: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось сохранить Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public Optional<Vehicle> findById(Integer id) {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
             Vehicle vehicle = session.get(Vehicle.class, id);
             return Optional.ofNullable(vehicle);
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle по ID " + id + ": " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось найти Vehicle по ID", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public List<Vehicle> findAll(int page, int size) {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
             Query<Vehicle> query = session.createQuery(
                     "FROM Vehicle v ORDER BY v.id", Vehicle.class);
             query.setFirstResult(page * size);
@@ -65,65 +84,98 @@ public class VehicleDAOImpl implements VehicleDAO {
             return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при получении списка Vehicle: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось получить список Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public long count() {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
             Query<Long> query = session.createQuery(
                     "SELECT COUNT(v) FROM Vehicle v", Long.class);
             return query.getSingleResult();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при подсчете Vehicle: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось подсчитать количество Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public Vehicle update(Vehicle vehicle) {
-        Transaction transaction = null;
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            
             Vehicle merged = session.merge(vehicle);
-            transaction.commit();
+            session.flush();
+            
+            tx.commit();
             LOGGER.info("Vehicle успешно обновлен с ID: " + vehicle.getId());
             return merged;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
             }
             LOGGER.severe("Ошибка при обновлении Vehicle: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось обновить Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public void deleteById(Integer id) {
-        Transaction transaction = null;
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            
             Vehicle vehicle = session.get(Vehicle.class, id);
             if (vehicle != null) {
                 session.remove(vehicle);
-                transaction.commit();
+                session.flush();
+                tx.commit();
                 LOGGER.info("Vehicle успешно удален с ID: " + id);
             } else {
                 throw new IllegalArgumentException("Vehicle с ID " + id + " не найден");
             }
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
             }
             LOGGER.severe("Ошибка при удалении Vehicle: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось удалить Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public Optional<Vehicle> findByMaxCapacity() {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
             Query<Vehicle> query = session.createQuery(
                     "FROM Vehicle v WHERE v.capacity = (SELECT MAX(v2.capacity) FROM Vehicle v2)",
                     Vehicle.class);
@@ -132,13 +184,20 @@ public class VehicleDAOImpl implements VehicleDAO {
             return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle с максимальной capacity: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось найти Vehicle с максимальной capacity", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public List<Vehicle> findByNameStartsWith(String prefix) {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
             Query<Vehicle> query = session.createQuery(
                     "FROM Vehicle v WHERE v.name LIKE :prefix",
                     Vehicle.class);
@@ -146,13 +205,20 @@ public class VehicleDAOImpl implements VehicleDAO {
             return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle по префиксу имени: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось найти Vehicle по префиксу имени", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public List<Vehicle> findByFuelConsumptionGreaterThan(long fuelConsumption) {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
             Query<Vehicle> query = session.createQuery(
                     "FROM Vehicle v WHERE v.fuelConsumption > :consumption",
                     Vehicle.class);
@@ -160,13 +226,20 @@ public class VehicleDAOImpl implements VehicleDAO {
             return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle по fuelConsumption: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось найти Vehicle по fuelConsumption", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public List<Vehicle> findByType(VehicleType type) {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
             Query<Vehicle> query = session.createQuery(
                     "FROM Vehicle v WHERE v.type = :type",
                     Vehicle.class);
@@ -174,30 +247,44 @@ public class VehicleDAOImpl implements VehicleDAO {
             return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle по типу: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось найти Vehicle по типу", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public void resetDistanceTravelled(Integer id) {
-        Transaction transaction = null;
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            
             Vehicle vehicle = session.get(Vehicle.class, id);
             if (vehicle != null) {
                 vehicle.setDistanceTravelled(0);
                 session.merge(vehicle);
-                transaction.commit();
+                session.flush();
+                tx.commit();
                 LOGGER.info("Пробег успешно скручен для Vehicle с ID: " + id);
             } else {
                 throw new IllegalArgumentException("Vehicle с ID " + id + " не найден");
             }
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
             }
             LOGGER.severe("Ошибка при сбросе пробега Vehicle: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Не удалось сбросить пробег Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
@@ -205,7 +292,9 @@ public class VehicleDAOImpl implements VehicleDAO {
     public List<Vehicle> findWithFilters(String filterField, String filterValue,
             String sortField, String sortDirection,
             int page, int size) {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
 
             boolean hasFilter = filterField != null && !filterField.isEmpty() &&
                     filterValue != null && !filterValue.isEmpty();
@@ -302,12 +391,18 @@ public class VehicleDAOImpl implements VehicleDAO {
             LOGGER.severe("Ошибка при поиске Vehicle с фильтрами: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Не удалось найти Vehicle с фильтрами: " + e.getMessage(), e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public long countWithFilters(String filterField, String filterValue) {
-        try (Session session = hibernateUtil.getSessionFactory().openSession()) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
 
             boolean hasFilter = filterField != null && !filterField.isEmpty() &&
                     filterValue != null && !filterValue.isEmpty();
@@ -364,6 +459,10 @@ public class VehicleDAOImpl implements VehicleDAO {
             LOGGER.severe("Ошибка при подсчете Vehicle с фильтрами: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Не удалось подсчитать Vehicle с фильтрами: " + e.getMessage(), e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 }
