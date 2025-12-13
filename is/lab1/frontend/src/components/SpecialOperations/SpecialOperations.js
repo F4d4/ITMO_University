@@ -16,6 +16,11 @@ const SpecialOperations = () => {
 
   const vehicleTypes = ['CAR', 'HELICOPTER', 'BOAT', 'HOVERBOARD'];
 
+  // Обработчик для предотвращения изменения значения числовых полей при прокрутке колёсика мыши
+  const handleWheel = (e) => {
+    e.target.blur();
+  };
+
   const clearMessages = () => {
     setError(null);
     setSuccess(null);
@@ -242,6 +247,7 @@ const SpecialOperations = () => {
               type="number"
               value={minFuelConsumption}
               onChange={(e) => setMinFuelConsumption(e.target.value)}
+              onWheel={handleWheel}
               placeholder="Минимальный расход"
               min="0"
               className="form-control"
@@ -284,6 +290,7 @@ const SpecialOperations = () => {
               type="number"
               value={resetVehicleId}
               onChange={(e) => setResetVehicleId(e.target.value)}
+              onWheel={handleWheel}
               placeholder="ID транспортного средства"
               min="1"
               className="form-control"

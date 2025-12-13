@@ -25,6 +25,11 @@ const VehicleList = () => {
   // Поиск по ID
   const [searchId, setSearchId] = useState('');
 
+  // Обработчик для предотвращения изменения значения числовых полей при прокрутке колёсика мыши
+  const handleWheel = (e) => {
+    e.target.blur();
+  };
+
   useEffect(() => {
     loadVehicles();
   }, [currentPage, pageSize, sortField, sortDirection]);
@@ -319,6 +324,7 @@ const VehicleList = () => {
                 type="number"
                 value={searchId}
                 onChange={(e) => setSearchId(e.target.value)}
+                onWheel={handleWheel}
                 placeholder="Введите ID..."
                 className="form-control"
                 min="1"

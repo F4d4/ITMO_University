@@ -10,6 +10,12 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
   const [availableCoordinates, setAvailableCoordinates] = useState([]);
   const [loadingCoordinates, setLoadingCoordinates] = useState(false);
 
+  // Обработчик для предотвращения изменения значения числовых полей при прокрутке колёсика мыши
+  const handleWheel = (e) => {
+    // Убираем фокус с поля, чтобы предотвратить изменение значения
+    e.target.blur();
+  };
+
   // Загрузка существующих координат
   useEffect(() => {
     const loadCoordinates = async () => {
@@ -126,6 +132,7 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
               name="x"
               value={formData.x || ''}
               onChange={onChange}
+              onWheel={handleWheel}
               step="0.01"
               className={`form-control ${errors.x ? 'is-invalid' : ''}`}
               required={!useExistingCoordinates}
@@ -144,6 +151,7 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
               name="y"
               value={formData.y || ''}
               onChange={onChange}
+              onWheel={handleWheel}
               max="621"
               className={`form-control ${errors.y ? 'is-invalid' : ''}`}
               required={!useExistingCoordinates}
@@ -188,6 +196,7 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
             name="enginePower"
             value={formData.enginePower}
             onChange={onChange}
+            onWheel={handleWheel}
             min="1"
             className={`form-control ${errors.enginePower ? 'is-invalid' : ''}`}
             required
@@ -205,6 +214,7 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
             name="numberOfWheels"
             value={formData.numberOfWheels}
             onChange={onChange}
+            onWheel={handleWheel}
             min="1"
             className={`form-control ${errors.numberOfWheels ? 'is-invalid' : ''}`}
             required
@@ -224,6 +234,7 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
           name="capacity"
           value={formData.capacity}
           onChange={onChange}
+          onWheel={handleWheel}
           min="0.01"
           step="0.01"
           className={`form-control ${errors.capacity ? 'is-invalid' : ''}`}
@@ -244,6 +255,7 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
             name="distanceTravelled"
             value={formData.distanceTravelled}
             onChange={onChange}
+            onWheel={handleWheel}
             min="0"
             className={`form-control ${errors.distanceTravelled ? 'is-invalid' : ''}`}
             required
@@ -261,6 +273,7 @@ const VehicleForm = ({ formData, errors, onChange, onSubmit, isEdit }) => {
             name="fuelConsumption"
             value={formData.fuelConsumption}
             onChange={onChange}
+            onWheel={handleWheel}
             min="1"
             className={`form-control ${errors.fuelConsumption ? 'is-invalid' : ''}`}
             required
