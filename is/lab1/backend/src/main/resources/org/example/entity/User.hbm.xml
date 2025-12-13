@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.example.entity.User" table="app_users">
+        <id name="id" type="long">
+            <column name="id"/>
+            <generator class="identity"/>
+        </id>
+        
+        <property name="username" type="string">
+            <column name="username" length="255" not-null="true" unique="true"/>
+        </property>
+        
+        <property name="admin" type="boolean">
+            <column name="is_admin" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>
+

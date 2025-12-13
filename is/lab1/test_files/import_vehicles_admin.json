@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Yamaha WaveRunner",
+    "x": 55.0,
+    "y": 120,
+    "type": "BOAT",
+    "enginePower": 150,
+    "numberOfWheels": 1,
+    "capacity": 3.0,
+    "distanceTravelled": 5000,
+    "fuelConsumption": 25,
+    "fuelType": "DIESEL"
+  },
+  {
+    "name": "Lexus Hoverboard X1",
+    "x": 0.0,
+    "y": 0,
+    "type": "HOVERBOARD",
+    "enginePower": 10,
+    "numberOfWheels": 1,
+    "capacity": 1.0,
+    "distanceTravelled": 100,
+    "fuelConsumption": 1,
+    "fuelType": "ELECTRICITY"
+  }
+]
+

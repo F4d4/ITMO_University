@@ -6,6 +6,7 @@ import VehicleCreate from './components/Vehicle/VehicleCreate';
 import VehicleEdit from './components/Vehicle/VehicleEdit';
 import VehicleDetails from './components/Vehicle/VehicleDetails';
 import SpecialOperations from './components/SpecialOperations/SpecialOperations';
+import Import from './components/Import/Import';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/vehicles/:id" element={<VehicleDetails />} />
           <Route path="/vehicles/:id/edit" element={<VehicleEdit />} />
           <Route path="/special-operations" element={<SpecialOperations />} />
+          <Route path="/import" element={<Import />} />
         </Routes>
       </Layout>
     </Router>

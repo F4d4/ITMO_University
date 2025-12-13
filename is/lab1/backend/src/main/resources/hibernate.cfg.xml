@@ -41,5 +41,7 @@
         <!-- Mapping files -->
         <mapping resource="org/example/entity/Coordinates.hbm.xml"/>
         <mapping resource="org/example/entity/Vehicle.hbm.xml"/>
+        <mapping resource="org/example/entity/User.hbm.xml"/>
+        <mapping resource="org/example/entity/ImportOperation.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

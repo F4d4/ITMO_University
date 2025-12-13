@@ -5,6 +5,12 @@
        https://jakarta.ee/xml/ns/jakartaee/beans_3_0.xsd"
        version="3.0"
        bean-discovery-mode="all">
+    
+    <!-- Регистрация интерцепторов AOP -->
+    <interceptors>
+        <class>org.example.aop.LoggingInterceptor</class>
+        <class>org.example.aop.ImportLockInterceptor</class>
+    </interceptors>
 </beans>
 
 

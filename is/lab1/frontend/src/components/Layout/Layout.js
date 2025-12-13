@@ -29,6 +29,9 @@ const Layout = ({ children }) => {
           <Link to="/special-operations" className={`nav-link ${isActive('/special-operations')}`}>
             ⚙️ Специальные операции
           </Link>
+          <Link to="/import" className={`nav-link ${isActive('/import')}`}>
+            📥 Импорт данных
+          </Link>
         </div>
       </nav>
 

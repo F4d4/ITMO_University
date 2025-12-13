@@ -24,6 +24,12 @@ public interface VehicleDAO {
     Optional<Vehicle> findById(Integer id);
     
     /**
+     * Найти Vehicle по ID с пессимистической блокировкой
+     * Используется для предотвращения одновременного редактирования
+     */
+    Optional<Vehicle> findByIdWithLock(Integer id);
+    
+    /**
      * Получить все Vehicle с пагинацией
      */
     List<Vehicle> findAll(int page, int size);

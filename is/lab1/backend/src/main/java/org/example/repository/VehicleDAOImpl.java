@@ -73,6 +73,39 @@ public class VehicleDAOImpl implements VehicleDAO {
     }
 
     @Override
+    public Optional<Vehicle> findByIdWithLock(Integer id) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            
+            // Пессимистическая блокировка - FOR UPDATE
+            Vehicle vehicle = session.createQuery(
+                    "FROM Vehicle v WHERE v.id = :id", Vehicle.class)
+                    .setParameter("id", id)
+                    .setLockMode(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+                    .uniqueResult();
+            
+            tx.commit();
+            LOGGER.info("Получена пессимистическая блокировка для Vehicle ID: " + id);
+            
+            return Optional.ofNullable(vehicle);
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            LOGGER.severe("Ошибка при получении блокировки для Vehicle ID " + id + ": " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Не удалось получить блокировку Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
     public List<Vehicle> findAll(int page, int size) {
         Session session = null;
         try {

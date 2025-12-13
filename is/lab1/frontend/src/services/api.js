@@ -84,6 +84,29 @@ export const coordinatesService = {
   },
 };
 
+// Операции импорта
+export const importService = {
+  // Импортировать Vehicle из JSON
+  importVehicles: (data, username, isAdmin) => {
+    return api.post('/import/vehicles', data, {
+      headers: {
+        'X-Username': username,
+        'X-Is-Admin': isAdmin.toString(),
+      },
+    });
+  },
+
+  // Получить историю импорта
+  getHistory: (username, isAdmin) => {
+    return api.get('/import/history', {
+      headers: {
+        'X-Username': username,
+        'X-Is-Admin': isAdmin.toString(),
+      },
+    });
+  },
+};
+
 export default api;
 
 

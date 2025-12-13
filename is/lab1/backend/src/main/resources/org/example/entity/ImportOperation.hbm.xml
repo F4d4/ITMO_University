@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.example.entity.ImportOperation" table="import_operations">
+        <id name="id" type="long">
+            <column name="id"/>
+            <generator class="identity"/>
+        </id>
+        
+        <property name="status">
+            <column name="status" not-null="true" length="20"/>
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.example.entity.ImportStatus</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        
+        <many-to-one name="user" class="org.example.entity.User" fetch="join">
+            <column name="user_id" not-null="true"/>
+        </many-to-one>
+        
+        <property name="addedCount" type="integer">
+            <column name="added_count"/>
+        </property>
+        
+        <property name="errorMessage" type="string">
+            <column name="error_message" length="2000"/>
+        </property>
+        
+        <property name="createdAt" type="timestamp">
+            <column name="created_at" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>
+

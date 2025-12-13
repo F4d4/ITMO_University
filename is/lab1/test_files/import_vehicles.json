@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Toyota Camry",
+    "x": 10.5,
+    "y": 200,
+    "type": "CAR",
+    "enginePower": 180,
+    "numberOfWheels": 4,
+    "capacity": 5.0,
+    "distanceTravelled": 50000,
+    "fuelConsumption": 8,
+    "fuelType": "DIESEL"
+  },
+  {
+    "name": "Apache AH-64",
+    "x": 0.0,
+    "y": 0,
+    "type": "HELICOPTER",
+    "enginePower": 3000,
+    "numberOfWheels": 3,
+    "capacity": 2.0,
+    "distanceTravelled": 10000,
+    "fuelConsumption": 500,
+    "fuelType": "KEROSENE"
+  },
+  {
+    "name": "Tesla Model 3",
+    "x": 25.7,
+    "y": 300,
+    "type": "CAR",
+    "enginePower": 283,
+    "numberOfWheels": 4,
+    "capacity": 5.0,
+    "distanceTravelled": 20000,
+    "fuelConsumption": 15,
+    "fuelType": "ELECTRICITY"
+  }
+]

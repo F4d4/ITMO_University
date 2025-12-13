@@ -29,10 +29,20 @@ public class VehicleServiceImpl implements VehicleService {
     @Inject
     private CoordinatesDAO coordinatesDAO;
     
+    @Inject
+    private UniquenessService uniquenessService;
+    
     @Override
     public VehicleDTO createVehicle(VehicleCreateDTO createDTO) {
         try {
             validateCreateDTO(createDTO);
+            
+            // Проверка ограничений уникальности на программном уровне
+            String type = createDTO.getType() != null ? createDTO.getType().toString() : null;
+            String fuelType = createDTO.getFuelType() != null ? createDTO.getFuelType().toString() : null;
+            uniquenessService.checkNameTypeUniqueness(createDTO.getName(), type, null);
+            uniquenessService.checkTechnicalConfigUniqueness(
+                createDTO.getEnginePower(), createDTO.getCapacity(), fuelType, null);
             
             Vehicle vehicle = new Vehicle();
             vehicle.setName(createDTO.getName());
@@ -116,10 +126,31 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public VehicleDTO updateVehicle(Integer id, VehicleUpdateDTO updateDTO) {
         try {
-            Vehicle vehicle = vehicleDAO.findById(id)
+            Vehicle vehicle = vehicleDAO.findByIdWithLock(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vehicle с ID " + id + " не найден"));
             
             validateUpdateDTO(updateDTO);
+            
+            // Проверка ограничений уникальности на программном уровне (при изменении соответствующих полей)
+            String newName = updateDTO.getName() != null ? updateDTO.getName() : vehicle.getName();
+            String newType = updateDTO.getType() != null ? updateDTO.getType().toString() : 
+                             (vehicle.getType() != null ? vehicle.getType().toString() : null);
+            
+            if (updateDTO.getName() != null || updateDTO.getType() != null) {
+                uniquenessService.checkNameTypeUniqueness(newName, newType, id);
+            }
+            
+            int newEnginePower = updateDTO.getEnginePower() != null ? 
+                                 updateDTO.getEnginePower() : vehicle.getEnginePower();
+            double newCapacity = updateDTO.getCapacity() != null ? 
+                                 updateDTO.getCapacity() : vehicle.getCapacity();
+            String newFuelType = updateDTO.getFuelType() != null ? updateDTO.getFuelType().toString() :
+                                 (vehicle.getFuelType() != null ? vehicle.getFuelType().toString() : null);
+            
+            if (updateDTO.getEnginePower() != null || updateDTO.getCapacity() != null || 
+                updateDTO.getFuelType() != null) {
+                uniquenessService.checkTechnicalConfigUniqueness(newEnginePower, newCapacity, newFuelType, id);
+            }
             
             // Обновление полей
             if (updateDTO.getName() != null) {
@@ -177,12 +208,14 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public void deleteVehicle(Integer id) {
         try {
-            // Проверяем существование Vehicle перед удалением
-            vehicleDAO.findById(id)
+            // Проверяем существование Vehicle перед удалением с пессимистической блокировкой
+            vehicleDAO.findByIdWithLock(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vehicle с ID " + id + " не найден"));
             
             vehicleDAO.deleteById(id);
             LOGGER.info("Vehicle успешно удален с ID: " + id);
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
             LOGGER.severe("Ошибка при удалении Vehicle: " + e.getMessage());
             throw new RuntimeException("Не удалось удалить Vehicle", e);
