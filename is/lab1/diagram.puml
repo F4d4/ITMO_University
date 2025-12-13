@@ -36,6 +36,11 @@ package "Уровень REST API" {
         +resetDistanceTravelled()
     }
     
+    class CoordinatesController {
+        +getAllCoordinates()
+        +getCoordinatesById()
+    }
+    
     class JaxRsApplication {
         +configure()
     }
@@ -68,9 +73,21 @@ package "Уровень бизнес-логики" {
         +getVehiclesByType()
         +resetDistanceTravelled()
         +getVehiclesWithFilters()
+        -getOrCreateCoordinates()
         -convertToDTO()
         -validateCreateDTO()
         -validateUpdateDTO()
+    }
+    
+    interface CoordinatesService {
+        +getAllCoordinates()
+        +getCoordinatesById()
+    }
+    
+    class CoordinatesServiceImpl {
+        +getAllCoordinates()
+        +getCoordinatesById()
+        -convertToDTO()
     }
 }
 
@@ -78,13 +95,14 @@ package "DTO слой" {
     class VehicleDTO {
         -Integer id
         -String name
-        -Float x
-        -int y
+        -Long coordinatesId
+        -double x
+        -long y
         -Long creationDate
         -VehicleType type
         -int enginePower
-        -long numberOfWheels
-        -float capacity
+        -int numberOfWheels
+        -double capacity
         -long distanceTravelled
         -long fuelConsumption
         -FuelType fuelType
@@ -92,12 +110,13 @@ package "DTO слой" {
     
     class VehicleCreateDTO {
         -String name
-        -Float x
-        -int y
+        -Long coordinatesId
+        -Double x
+        -Long y
         -VehicleType type
         -int enginePower
-        -long numberOfWheels
-        -float capacity
+        -int numberOfWheels
+        -double capacity
         -long distanceTravelled
         -long fuelConsumption
         -FuelType fuelType
@@ -105,15 +124,21 @@ package "DTO слой" {
     
     class VehicleUpdateDTO {
         -String name
-        -Float x
-        -Integer y
+        -Double x
+        -Long y
         -VehicleType type
         -Integer enginePower
-        -Long numberOfWheels
-        -Float capacity
+        -Integer numberOfWheels
+        -Double capacity
         -Long distanceTravelled
         -Long fuelConsumption
         -FuelType fuelType
+    }
+    
+    class CoordinatesDTO {
+        -Long id
+        -double x
+        -long y
     }
     
     class PaginatedResponse {
@@ -164,6 +189,22 @@ package "Уровень доступа к данным" {
         +findWithFilters()
         +countWithFilters()
     }
+    
+    interface CoordinatesDAO {
+        +save()
+        +findById()
+        +findByXAndY()
+        +findAll()
+        +count()
+    }
+    
+    class CoordinatesDAOImpl {
+        +save()
+        +findById()
+        +findByXAndY()
+        +findAll()
+        +count()
+    }
 }
 
 package "Уровень JPA/Entity" {
@@ -174,17 +215,17 @@ package "Уровень JPA/Entity" {
         -Date creationDate
         -VehicleType type
         -int enginePower
-        -long numberOfWheels
-        -float capacity
+        -int numberOfWheels
+        -double capacity
         -long distanceTravelled
         -long fuelConsumption
         -FuelType fuelType
     }
     
     class Coordinates {
-        -int id
-        -Float x
-        -int y
+        -Long id
+        -double x
+        -long y
     }
     
     enum VehicleType {
@@ -251,6 +292,7 @@ package "База данных" {
 
 ' Связи Frontend → Backend
 Frontend --> VehicleController : HTTP REST
+Frontend --> CoordinatesController : HTTP REST
 WSClient --> VehicleWebSocket : WebSocket
 
 ' Связи Controller → Service
@@ -261,16 +303,29 @@ VehicleController --> VehicleUpdateDTO : uses
 VehicleController --> PaginatedResponse : uses
 VehicleController --> ErrorResponse : uses
 
+CoordinatesController --> CoordinatesService : @Inject
+CoordinatesController --> CoordinatesDTO : uses
+CoordinatesController --> ErrorResponse : uses
+
 ' Связи Service → DAO
 VehicleService <|.. VehicleServiceImpl : implements
 VehicleServiceImpl --> VehicleDAO : @Inject
+VehicleServiceImpl --> CoordinatesDAO : @Inject
 VehicleServiceImpl --> VehicleWebSocket : notify
 VehicleServiceImpl --> VehicleDTO : converts to
+
+CoordinatesService <|.. CoordinatesServiceImpl : implements
+CoordinatesServiceImpl --> CoordinatesDAO : @Inject
+CoordinatesServiceImpl --> CoordinatesDTO : converts to
 
 ' Связи DAO → Entity
 VehicleDAO <|.. VehicleDAOImpl : implements
 VehicleDAOImpl --> HibernateUtil : @Inject
 VehicleDAOImpl --> Vehicle : uses
+
+CoordinatesDAO <|.. CoordinatesDAOImpl : implements
+CoordinatesDAOImpl --> HibernateUtil : @Inject
+CoordinatesDAOImpl --> Coordinates : uses
 
 ' Связи Entity
 Vehicle --> Coordinates : has
@@ -288,18 +343,32 @@ DB_Vehicle --> DB_Coordinates : FK coordinates_id
 
 ' JAX-RS Application
 JaxRsApplication --> VehicleController : registers
+JaxRsApplication --> CoordinatesController : registers
 JaxRsApplication --> CorsFilter : registers
 
 note right of VehicleServiceImpl
 @Stateless
 @Inject VehicleDAO
-@Inject VehicleWebSocket
+@Inject CoordinatesDAO
 
 Sends real-time notifications
 after create/update/delete
 end note
 
+note right of CoordinatesServiceImpl
+@Stateless
+@Inject CoordinatesDAO
+end note
+
 note right of VehicleDAOImpl
+@Stateless
+@Inject HibernateUtil
+
+Manual transaction management
+using Hibernate Session API
+end note
+
+note right of CoordinatesDAOImpl
 @Stateless
 @Inject HibernateUtil
 
@@ -334,4 +403,3 @@ hibernate.cfg.xml
 end note
 
 @enduml
-
