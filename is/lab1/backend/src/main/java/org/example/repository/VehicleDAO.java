@@ -45,9 +45,30 @@ public interface VehicleDAO {
     Vehicle update(Vehicle vehicle);
     
     /**
+     * Обновить Vehicle с пессимистической блокировкой в одной транзакции
+     * @param id ID объекта
+     * @param updater функция обновления полей
+     * @return обновлённый Vehicle
+     */
+    Vehicle updateWithLock(Integer id, java.util.function.Consumer<Vehicle> updater);
+    
+    /**
      * Удалить Vehicle по ID
      */
     void deleteById(Integer id);
+    
+    /**
+     * Удалить Vehicle с пессимистической блокировкой в одной транзакции
+     */
+    void deleteByIdWithLock(Integer id);
+    
+    /**
+     * Проверить уникальность и сохранить Vehicle в одной транзакции
+     * @param vehicle объект для сохранения
+     * @param uniquenessChecker функция проверки уникальности
+     * @return сохранённый Vehicle
+     */
+    Vehicle saveWithUniquenessCheck(Vehicle vehicle, java.util.function.Consumer<Vehicle> uniquenessChecker);
     
     /**
      * Найти Vehicle с максимальным значением capacity
@@ -85,6 +106,16 @@ public interface VehicleDAO {
      * Подсчет с фильтрацией
      */
     long countWithFilters(String filterField, String filterValue);
+    
+    /**
+     * Проверить уникальность name + type
+     */
+    boolean existsByNameAndType(String name, String type, Integer excludeId);
+    
+    /**
+     * Проверить уникальность enginePower + capacity + fuelType
+     */
+    boolean existsByTechnicalConfig(int enginePower, double capacity, String fuelType, Integer excludeId);
 }
 
 

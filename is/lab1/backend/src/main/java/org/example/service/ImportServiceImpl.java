@@ -11,6 +11,7 @@ import org.example.dto.VehicleImportDTO;
 import org.example.entity.*;
 import org.example.repository.ImportOperationDAO;
 import org.example.repository.UserDAO;
+import org.example.websocket.VehicleWebSocket;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -35,9 +36,6 @@ public class ImportServiceImpl implements ImportService {
 
     @Inject
     private ImportOperationDAO importOperationDAO;
-
-    @Inject
-    private UniquenessService uniquenessService;
 
     @Override
     @Logged
@@ -76,8 +74,11 @@ public class ImportServiceImpl implements ImportService {
                 // Валидация данных
                 validateImportDTO(dto, i);
 
-                // Проверка ограничений уникальности (на программном уровне)
-                uniquenessService.validateUniqueness(dto);
+                // Проверка ограничений уникальности в той же сессии (на программном уровне)
+                String type = dto.getType() != null ? dto.getType().toString() : null;
+                String fuelType = dto.getFuelType() != null ? dto.getFuelType().toString() : null;
+                checkUniquenessInSession(session, dto.getName(), type, 
+                                         dto.getEnginePower(), dto.getCapacity(), fuelType, i);
 
                 // Создание или получение координат
                 Coordinates coordinates = getOrCreateCoordinates(session, dto.getX(), dto.getY());
@@ -111,6 +112,9 @@ public class ImportServiceImpl implements ImportService {
 
             LOGGER.info("Импорт успешно завершен. Добавлено объектов: " + addedCount);
 
+            // Уведомляем всех клиентов об успешном импорте
+            VehicleWebSocket.notifyImportCompleted(operationId, "SUCCESS", addedCount);
+
             return new ImportResultDTO(operationId, "SUCCESS", addedCount, null);
 
         } catch (Exception e) {
@@ -126,6 +130,9 @@ public class ImportServiceImpl implements ImportService {
             operation.setErrorMessage(e.getMessage());
             operation.setAddedCount(0);
             importOperationDAO.update(operation);
+
+            // Уведомляем всех клиентов о неуспешном импорте
+            VehicleWebSocket.notifyImportCompleted(operationId, "FAILED", 0);
 
             return new ImportResultDTO(operationId, "FAILED", 0, e.getMessage());
 
@@ -219,6 +226,49 @@ public class ImportServiceImpl implements ImportService {
         Coordinates coords = new Coordinates(x, y);
         session.persist(coords);
         return coords;
+    }
+
+    /**
+     * Проверка уникальности в рамках текущей сессии
+     */
+    private void checkUniquenessInSession(Session session, String name, String type,
+                                          int enginePower, double capacity, String fuelType, int index) {
+        String prefix = "Объект #" + (index + 1) + ": ";
+        
+        // Проверка уникальности name + type
+        List<Vehicle> byName = session.createQuery(
+                "FROM Vehicle v WHERE v.name = :name", Vehicle.class)
+                .setParameter("name", name)
+                .getResultList();
+        
+        for (Vehicle v : byName) {
+            String vehicleType = v.getType() != null ? v.getType().toString() : null;
+            if ((type == null && vehicleType == null) || 
+                (type != null && type.equals(vehicleType))) {
+                throw new IllegalArgumentException(prefix + 
+                    "Нарушение уникальности: Vehicle с именем '" + name + 
+                    "' и типом '" + type + "' уже существует");
+            }
+        }
+        
+        // Проверка уникальности технической конфигурации
+        List<Vehicle> byConfig = session.createQuery(
+                "FROM Vehicle v WHERE v.enginePower = :enginePower AND v.capacity = :capacity", 
+                Vehicle.class)
+                .setParameter("enginePower", enginePower)
+                .setParameter("capacity", capacity)
+                .getResultList();
+        
+        for (Vehicle v : byConfig) {
+            String vehicleFuelType = v.getFuelType() != null ? v.getFuelType().toString() : null;
+            if ((fuelType == null && vehicleFuelType == null) || 
+                (fuelType != null && fuelType.equals(vehicleFuelType))) {
+                throw new IllegalArgumentException(prefix + 
+                    "Нарушение уникальности: Vehicle с техническими характеристиками " +
+                    "(enginePower=" + enginePower + ", capacity=" + capacity + 
+                    ", fuelType=" + fuelType + ") уже существует");
+            }
+        }
     }
 
     /**

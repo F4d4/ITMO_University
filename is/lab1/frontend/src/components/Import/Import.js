@@ -13,15 +13,18 @@ const Import = () => {
   // Управление пользователем и ролью
   const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState('user');
+  
+  // Пагинация истории
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const loadHistory = useCallback(async () => {
     setLoading(true);
     try {
       const response = await importService.getHistory(username, isAdmin);
       setHistory(response.data);
-      setError(null);
     } catch (err) {
-      setError('Ошибка загрузки истории: ' + err.message);
+      console.error('Ошибка загрузки истории:', err.message);
     } finally {
       setLoading(false);
     }
@@ -29,6 +32,45 @@ const Import = () => {
 
   useEffect(() => {
     loadHistory();
+  }, [loadHistory]);
+
+  // WebSocket для real-time обновлений истории импорта
+  useEffect(() => {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/project/ws/vehicles`;
+    
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      console.log('WebSocket подключен для истории импорта');
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'IMPORT_COMPLETED') {
+          console.log('Получено уведомление об импорте:', data);
+          // Обновляем историю при получении уведомления об импорте
+          loadHistory();
+        }
+      } catch (e) {
+        console.error('Ошибка парсинга WebSocket сообщения:', e);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket ошибка:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket отключен');
+    };
+
+    return () => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    };
   }, [loadHistory]);
 
   const handleFileChange = (e) => {
@@ -72,9 +114,6 @@ const Import = () => {
       // Сброс input файла
       document.getElementById('file-input').value = '';
       
-      // Обновляем историю
-      await loadHistory();
-      
     } catch (err) {
       if (err instanceof SyntaxError) {
         setError('Некорректный формат JSON файла');
@@ -83,6 +122,8 @@ const Import = () => {
       }
     } finally {
       setImporting(false);
+      // Обновляем историю после любого результата (успех или ошибка)
+      await loadHistory();
     }
   };
 
@@ -106,6 +147,23 @@ const Import = () => {
     const statusInfo = statusMap[status] || { class: '', text: status };
     return <span className={`status-badge ${statusInfo.class}`}>{statusInfo.text}</span>;
   };
+
+  // Вычисление данных для текущей страницы
+  const totalPages = Math.ceil(history.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentHistory = history.slice(startIndex, endIndex);
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  // Сброс на первую страницу при смене пользователя
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [isAdmin]);
 
   return (
     <div className="import-container">
@@ -160,16 +218,16 @@ const Import = () => {
             <h4>Пример JSON формата:</h4>
             <pre>{`[
   {
-    "name": "Toyota Camry",
-    "x": 10.5,
-    "y": 200,
-    "type": "CAR",
-    "enginePower": 180,
-    "numberOfWheels": 4,
-    "capacity": 5.0,
-    "distanceTravelled": 50000,
-    "fuelConsumption": 8,
-    "fuelType": "GASOLINE"
+    "name": "Apache AH-64",
+    "x": 0.0,
+    "y": 0,
+    "type": "HELICOPTER",
+    "enginePower": 3000,
+    "numberOfWheels": 3,
+    "capacity": 2.0,
+    "distanceTravelled": 10000,
+    "fuelConsumption": 500,
+    "fuelType": "KEROSENE"
   }
 ]`}</pre>
           </div>
@@ -178,40 +236,84 @@ const Import = () => {
 
       <div className="history-section">
         <h3>📋 История импорта {isAdmin && <span className="admin-badge">(все операции)</span>}</h3>
-        
-        <button className="refresh-button" onClick={loadHistory} disabled={loading}>
-          {loading ? '⏳ Загрузка...' : '🔄 Обновить'}
-        </button>
 
-        {history.length === 0 ? (
+        {loading && <p className="loading-text">⏳ Загрузка...</p>}
+
+        {!loading && history.length === 0 && (
           <p className="no-history">История импорта пуста</p>
-        ) : (
-          <table className="history-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Статус</th>
-                <th>Пользователь</th>
-                <th>Добавлено</th>
-                <th>Дата</th>
-                <th>Ошибка</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((op) => (
-                <tr key={op.id}>
-                  <td>{op.id}</td>
-                  <td>{getStatusBadge(op.status)}</td>
-                  <td>{op.username}</td>
-                  <td>{op.status === 'SUCCESS' ? op.addedCount : '-'}</td>
-                  <td>{formatDate(op.createdAt)}</td>
-                  <td className="error-cell" title={op.errorMessage}>
-                    {op.errorMessage ? op.errorMessage.substring(0, 50) + '...' : '-'}
-                  </td>
+        )}
+
+        {!loading && history.length > 0 && (
+          <>
+            <table className="history-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Статус</th>
+                  <th>Пользователь</th>
+                  <th>Добавлено</th>
+                  <th>Дата</th>
+                  <th>Ошибка</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {currentHistory.map((op) => (
+                  <tr key={op.id}>
+                    <td>{op.id}</td>
+                    <td>{getStatusBadge(op.status)}</td>
+                    <td>{op.username}</td>
+                    <td>{op.status === 'SUCCESS' ? op.addedCount : '-'}</td>
+                    <td>{formatDate(op.createdAt)}</td>
+                    <td className="error-cell" title={op.errorMessage}>
+                      {op.errorMessage ? op.errorMessage.substring(0, 50) + '...' : '-'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {totalPages > 1 && (
+              <div className="pagination">
+                <button 
+                  className="pagination-btn"
+                  onClick={() => goToPage(1)}
+                  disabled={currentPage === 1}
+                >
+                  ««
+                </button>
+                <button 
+                  className="pagination-btn"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  «
+                </button>
+                
+                <span className="pagination-info">
+                  Страница {currentPage} из {totalPages}
+                </span>
+                
+                <button 
+                  className="pagination-btn"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  »
+                </button>
+                <button 
+                  className="pagination-btn"
+                  onClick={() => goToPage(totalPages)}
+                  disabled={currentPage === totalPages}
+                >
+                  »»
+                </button>
+              </div>
+            )}
+
+            <p className="history-count">
+              Показано {startIndex + 1}-{Math.min(endIndex, history.length)} из {history.length} записей
+            </p>
+          </>
         )}
       </div>
 

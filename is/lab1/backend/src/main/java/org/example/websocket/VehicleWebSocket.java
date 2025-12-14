@@ -87,5 +87,14 @@ public class VehicleWebSocket {
         String message = "{\"type\":\"UPDATED\",\"id\":" + vehicleId + "}";
         broadcast(message);
     }
+
+    /**
+     * Уведомить о завершении импорта
+     */
+    public static void notifyImportCompleted(Long operationId, String status, Integer addedCount) {
+        String message = "{\"type\":\"IMPORT_COMPLETED\",\"operationId\":" + operationId + 
+                         ",\"status\":\"" + status + "\",\"addedCount\":" + addedCount + "}";
+        broadcast(message);
+    }
 }
 

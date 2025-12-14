@@ -174,6 +174,148 @@ public class VehicleDAOImpl implements VehicleDAO {
     }
 
     @Override
+    public Vehicle updateWithLock(Integer id, java.util.function.Consumer<Vehicle> updater) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            
+            // Устанавливаем уровень изоляции SERIALIZABLE
+            session.doWork(connection -> {
+                connection.setTransactionIsolation(java.sql.Connection.TRANSACTION_SERIALIZABLE);
+            });
+            
+            // Получаем объект с пессимистической блокировкой (FOR UPDATE)
+            Vehicle vehicle = session.createQuery(
+                    "FROM Vehicle v WHERE v.id = :id", Vehicle.class)
+                    .setParameter("id", id)
+                    .setLockMode(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+                    .uniqueResult();
+            
+            if (vehicle == null) {
+                throw new IllegalArgumentException("Vehicle с ID " + id + " не найден");
+            }
+            
+            LOGGER.info("Получена блокировка для Vehicle ID: " + id);
+            
+            // Применяем обновления
+            updater.accept(vehicle);
+            
+            // Сохраняем изменения
+            session.merge(vehicle);
+            session.flush();
+            
+            tx.commit();
+            LOGGER.info("Vehicle успешно обновлен с блокировкой, ID: " + id);
+            return vehicle;
+        } catch (IllegalArgumentException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            LOGGER.severe("Ошибка при обновлении Vehicle с блокировкой: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Не удалось обновить Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public void deleteByIdWithLock(Integer id) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            
+            // Получаем объект с пессимистической блокировкой
+            Vehicle vehicle = session.createQuery(
+                    "FROM Vehicle v WHERE v.id = :id", Vehicle.class)
+                    .setParameter("id", id)
+                    .setLockMode(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+                    .uniqueResult();
+            
+            if (vehicle == null) {
+                throw new IllegalArgumentException("Vehicle с ID " + id + " не найден");
+            }
+            
+            LOGGER.info("Получена блокировка для удаления Vehicle ID: " + id);
+            
+            session.remove(vehicle);
+            session.flush();
+            
+            tx.commit();
+            LOGGER.info("Vehicle успешно удален с блокировкой, ID: " + id);
+        } catch (IllegalArgumentException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            LOGGER.severe("Ошибка при удалении Vehicle с блокировкой: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Не удалось удалить Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public Vehicle saveWithUniquenessCheck(Vehicle vehicle, java.util.function.Consumer<Vehicle> uniquenessChecker) {
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            
+            // Устанавливаем уровень изоляции SERIALIZABLE для предотвращения race condition
+            session.doWork(connection -> {
+                connection.setTransactionIsolation(java.sql.Connection.TRANSACTION_SERIALIZABLE);
+            });
+            
+            // Проверяем уникальность в рамках этой же транзакции
+            uniquenessChecker.accept(vehicle);
+            
+            // Сохраняем объект
+            session.persist(vehicle);
+            session.flush();
+            
+            tx.commit();
+            LOGGER.info("Vehicle успешно сохранен с проверкой уникальности, ID: " + vehicle.getId());
+            return vehicle;
+        } catch (IllegalArgumentException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            LOGGER.severe("Ошибка при сохранении Vehicle с проверкой уникальности: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Не удалось сохранить Vehicle", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
     public void deleteById(Integer id) {
         Session session = null;
         Transaction tx = null;
@@ -492,6 +634,84 @@ public class VehicleDAOImpl implements VehicleDAO {
             LOGGER.severe("Ошибка при подсчете Vehicle с фильтрами: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Не удалось подсчитать Vehicle с фильтрами: " + e.getMessage(), e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public boolean existsByNameAndType(String name, String type, Integer excludeId) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            
+            // Устанавливаем SERIALIZABLE для предотвращения phantom reads
+            session.doWork(connection -> {
+                connection.setTransactionIsolation(java.sql.Connection.TRANSACTION_SERIALIZABLE);
+            });
+            
+            Query<Vehicle> query = session.createQuery(
+                    "FROM Vehicle v WHERE v.name = :name", Vehicle.class);
+            query.setParameter("name", name);
+            
+            List<Vehicle> results = query.getResultList();
+            
+            // Фильтруем по типу и excludeId в Java
+            for (Vehicle v : results) {
+                if (excludeId != null && excludeId.equals(v.getId())) {
+                    continue;
+                }
+                
+                String vehicleType = v.getType() != null ? v.getType().toString() : null;
+                if ((type == null && vehicleType == null) || 
+                    (type != null && type.equals(vehicleType))) {
+                    return true;
+                }
+            }
+            
+            return false;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public boolean existsByTechnicalConfig(int enginePower, double capacity, String fuelType, Integer excludeId) {
+        Session session = null;
+        try {
+            session = hibernateUtil.getSessionFactory().openSession();
+            
+            // Устанавливаем SERIALIZABLE для предотвращения phantom reads
+            session.doWork(connection -> {
+                connection.setTransactionIsolation(java.sql.Connection.TRANSACTION_SERIALIZABLE);
+            });
+            
+            Query<Vehicle> query = session.createQuery(
+                    "FROM Vehicle v WHERE v.enginePower = :enginePower AND v.capacity = :capacity", 
+                    Vehicle.class);
+            query.setParameter("enginePower", enginePower);
+            query.setParameter("capacity", capacity);
+            
+            List<Vehicle> results = query.getResultList();
+            
+            // Фильтруем по fuelType и excludeId в Java
+            for (Vehicle v : results) {
+                if (excludeId != null && excludeId.equals(v.getId())) {
+                    continue;
+                }
+                
+                String vehicleFuelType = v.getFuelType() != null ? v.getFuelType().toString() : null;
+                if ((fuelType == null && vehicleFuelType == null) || 
+                    (fuelType != null && fuelType.equals(vehicleFuelType))) {
+                    return true;
+                }
+            }
+            
+            return false;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
