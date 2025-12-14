@@ -1,6 +1,6 @@
 @startuml
 
-title Архитектура приложения Vehicle Management
+title Архитектура приложения Vehicle Management (с импортом и AOP)
 
 skinparam packageStyle rectangle
 skinparam linetype ortho
@@ -12,6 +12,7 @@ package "Уровень представления" {
         +VehicleEdit
         +VehicleDetails
         +SpecialOperations
+        +Import
     }
     
     class WSClient {
@@ -41,8 +42,32 @@ package "Уровень REST API" {
         +getCoordinatesById()
     }
     
+    class ImportController {
+        +importVehicles()
+        +getImportHistory()
+    }
+    
     class JaxRsApplication {
         +configure()
+    }
+}
+
+package "AOP (Aspect-Oriented Programming)" {
+    annotation ImportLock {
+        +value(): String
+    }
+    
+    annotation Logged {
+    }
+    
+    class ImportLockInterceptor {
+        -locks: ConcurrentHashMap
+        +intercept()
+        -getLock()
+    }
+    
+    class LoggingInterceptor {
+        +logMethod()
     }
 }
 
@@ -88,6 +113,29 @@ package "Уровень бизнес-логики" {
         +getAllCoordinates()
         +getCoordinatesById()
         -convertToDTO()
+    }
+    
+    interface ImportService {
+        +importVehicles()
+        +getImportHistory()
+    }
+    
+    class ImportServiceImpl {
+        +importVehicles()
+        +getImportHistory()
+        -validateImportDTO()
+        -checkUniquenessInSession()
+        -getOrCreateCoordinates()
+    }
+    
+    interface UniquenessService {
+        +checkNameTypeUniqueness()
+        +checkTechnicalConfigUniqueness()
+    }
+    
+    class UniquenessServiceImpl {
+        +checkNameTypeUniqueness()
+        +checkTechnicalConfigUniqueness()
     }
 }
 
@@ -135,6 +183,35 @@ package "DTO слой" {
         -FuelType fuelType
     }
     
+    class VehicleImportDTO {
+        -String name
+        -Double x
+        -Long y
+        -VehicleType type
+        -Integer enginePower
+        -Integer numberOfWheels
+        -Double capacity
+        -Long distanceTravelled
+        -Long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class ImportOperationDTO {
+        -Long id
+        -String status
+        -String username
+        -Integer addedCount
+        -String errorMessage
+        -Long createdAt
+    }
+    
+    class ImportResultDTO {
+        -Long operationId
+        -String status
+        -Integer addedCount
+        -String errorMessage
+    }
+    
     class CoordinatesDTO {
         -Long id
         -double x
@@ -161,6 +238,7 @@ package "Уровень доступа к данным" {
     interface VehicleDAO {
         +save()
         +findById()
+        +findByIdWithLock()
         +findAll()
         +count()
         +update()
@@ -172,11 +250,14 @@ package "Уровень доступа к данным" {
         +resetDistanceTravelled()
         +findWithFilters()
         +countWithFilters()
+        +findByNameAndType()
+        +findByEnginePowerCapacityAndFuelType()
     }
     
     class VehicleDAOImpl {
         +save()
         +findById()
+        +findByIdWithLock()
         +findAll()
         +count()
         +update()
@@ -188,6 +269,8 @@ package "Уровень доступа к данным" {
         +resetDistanceTravelled()
         +findWithFilters()
         +countWithFilters()
+        +findByNameAndType()
+        +findByEnginePowerCapacityAndFuelType()
     }
     
     interface CoordinatesDAO {
@@ -204,6 +287,36 @@ package "Уровень доступа к данным" {
         +findByXAndY()
         +findAll()
         +count()
+    }
+    
+    interface UserDAO {
+        +save()
+        +findById()
+        +findByUsername()
+        +findAll()
+    }
+    
+    class UserDAOImpl {
+        +save()
+        +findById()
+        +findByUsername()
+        +findAll()
+    }
+    
+    interface ImportOperationDAO {
+        +save()
+        +findById()
+        +findAll()
+        +findByUserId()
+        +update()
+    }
+    
+    class ImportOperationDAOImpl {
+        +save()
+        +findById()
+        +findAll()
+        +findByUserId()
+        +update()
     }
 }
 
@@ -228,6 +341,21 @@ package "Уровень Entity" {
         -long y
     }
     
+    class User {
+        -Long id
+        -String username
+        -boolean admin
+    }
+    
+    class ImportOperation {
+        -Long id
+        -ImportStatus status
+        -User user
+        -Integer addedCount
+        -String errorMessage
+        -Date createdAt
+    }
+    
     enum VehicleType {
         CAR
         HELICOPTER
@@ -240,6 +368,12 @@ package "Уровень Entity" {
         ELECTRICITY
         DIESEL
         ALCOHOL
+    }
+    
+    enum ImportStatus {
+        IN_PROGRESS
+        SUCCESS
+        FAILED
     }
 }
 
@@ -265,6 +399,7 @@ package "WebSocket" {
         +notifyVehicleDeleted()
         +notifyVehicleCreated()
         +notifyVehicleUpdated()
+        +notifyImportCompleted()
     }
 }
 
@@ -288,11 +423,27 @@ package "База данных" {
         x
         y
     }
+    
+    class DB_AppUsers {
+        id (PK)
+        username (UNIQUE)
+        is_admin
+    }
+    
+    class DB_ImportOperations {
+        id (PK)
+        status
+        user_id (FK)
+        added_count
+        error_message
+        created_at
+    }
 }
 
 ' Связи Frontend → Backend
 Frontend --> VehicleController : HTTP REST
 Frontend --> CoordinatesController : HTTP REST
+Frontend --> ImportController : HTTP REST
 WSClient --> VehicleWebSocket : WebSocket
 
 ' Связи Controller → Service
@@ -307,16 +458,40 @@ CoordinatesController --> CoordinatesService : @Inject
 CoordinatesController --> CoordinatesDTO : uses
 CoordinatesController --> ErrorResponse : uses
 
+ImportController --> ImportService : @Inject
+ImportController --> VehicleImportDTO : uses
+ImportController --> ImportResultDTO : uses
+ImportController --> ImportOperationDTO : uses
+
 ' Связи Service → DAO
 VehicleService <|.. VehicleServiceImpl : implements
 VehicleServiceImpl --> VehicleDAO : @Inject
 VehicleServiceImpl --> CoordinatesDAO : @Inject
+VehicleServiceImpl --> UniquenessService : @Inject
 VehicleServiceImpl --> VehicleWebSocket : notify
 VehicleServiceImpl --> VehicleDTO : converts to
 
 CoordinatesService <|.. CoordinatesServiceImpl : implements
 CoordinatesServiceImpl --> CoordinatesDAO : @Inject
 CoordinatesServiceImpl --> CoordinatesDTO : converts to
+
+ImportService <|.. ImportServiceImpl : implements
+ImportServiceImpl --> VehicleDAO : @Inject
+ImportServiceImpl --> CoordinatesDAO : @Inject
+ImportServiceImpl --> UserDAO : @Inject
+ImportServiceImpl --> ImportOperationDAO : @Inject
+ImportServiceImpl --> HibernateUtil : @Inject
+ImportServiceImpl --> VehicleWebSocket : notify
+ImportServiceImpl --> ImportResultDTO : returns
+
+UniquenessService <|.. UniquenessServiceImpl : implements
+UniquenessServiceImpl --> VehicleDAO : @Inject
+
+' AOP связи
+ImportLockInterceptor --> ImportLock : intercepts
+LoggingInterceptor --> Logged : intercepts
+ImportServiceImpl --> ImportLock : @ImportLock
+ImportServiceImpl --> Logged : @Logged
 
 ' Связи DAO → Entity
 VehicleDAO <|.. VehicleDAOImpl : implements
@@ -327,62 +502,123 @@ CoordinatesDAO <|.. CoordinatesDAOImpl : implements
 CoordinatesDAOImpl --> HibernateUtil : @Inject
 CoordinatesDAOImpl --> Coordinates : uses
 
+UserDAO <|.. UserDAOImpl : implements
+UserDAOImpl --> HibernateUtil : @Inject
+UserDAOImpl --> User : uses
+
+ImportOperationDAO <|.. ImportOperationDAOImpl : implements
+ImportOperationDAOImpl --> HibernateUtil : @Inject
+ImportOperationDAOImpl --> ImportOperation : uses
+
 ' Связи Entity
 Vehicle --> Coordinates : has
 Vehicle --> VehicleType : uses
 Vehicle --> FuelType : uses
+ImportOperation --> User : belongs to
+ImportOperation --> ImportStatus : uses
 
 ' Связи Hibernate → Database
 HibernateUtil --> Vehicle : maps
 HibernateUtil --> Coordinates : maps
+HibernateUtil --> User : maps
+HibernateUtil --> ImportOperation : maps
 Vehicle --> DB_Vehicle : persists to
 Coordinates --> DB_Coordinates : persists to
+User --> DB_AppUsers : persists to
+ImportOperation --> DB_ImportOperations : persists to
 
 ' Связь между таблицами БД
 DB_Vehicle --> DB_Coordinates : FK coordinates_id
+DB_ImportOperations --> DB_AppUsers : FK user_id
 
 ' JAX-RS Application
 JaxRsApplication --> VehicleController : registers
 JaxRsApplication --> CoordinatesController : registers
+JaxRsApplication --> ImportController : registers
 JaxRsApplication --> CorsFilter : registers
 
 note right of VehicleServiceImpl
 @Stateless
 @Inject VehicleDAO
 @Inject CoordinatesDAO
+@Inject UniquenessService
 
-Sends real-time notifications
-after create/update/delete
+Программные ограничения:
+- Name + Type уникальны
+- EnginePower + Capacity + FuelType уникальны
+
+Пессимистическая блокировка:
+- findByIdWithLock() для update/delete
 end note
 
-note right of CoordinatesServiceImpl
+note right of ImportServiceImpl
 @Stateless
-@Inject CoordinatesDAO
+@Inject VehicleDAO, CoordinatesDAO
+@Inject UserDAO, ImportOperationDAO
+@Inject HibernateUtil
+
+@ImportLock - пессимистическая блокировка
+@Logged - AOP логирование
+
+Транзакция SERIALIZABLE:
+- Атомарный импорт
+- Rollback при любой ошибке
+end note
+
+note right of UniquenessServiceImpl
+@Stateless
+@Inject VehicleDAO
+
+Программные ограничения уникальности:
+1. Name + Type
+2. EnginePower + Capacity + FuelType
+
+Проверяется при создании/обновлении
+end note
+
+note right of ImportLockInterceptor
+@Interceptor
+@Priority(Interceptor.Priority.APPLICATION)
+
+Пессимистическая блокировка:
+- ReentrantLock для каждого ключа
+- ConcurrentHashMap для хранения
+- Последовательное выполнение импортов
 end note
 
 note right of VehicleDAOImpl
 @Stateless
 @Inject HibernateUtil
 
-Manual transaction management
-using Hibernate Session API
-end note
+Новые методы:
+- findByIdWithLock() - PESSIMISTIC_WRITE
+- findByNameAndType() - проверка уникальности
+- findByEnginePowerCapacityAndFuelType()
 
-note right of CoordinatesDAOImpl
-@Stateless
-@Inject HibernateUtil
-
-Manual transaction management
-using Hibernate Session API
+Изоляция: SERIALIZABLE
 end note
 
 note right of Vehicle
 @Entity
 @Table(name = "vehicle")
 
+Программные ограничения:
+- name + type уникальны
+- enginePower + capacity + fuelType уникальны
+
 Mapped using XML:
 Vehicle.hbm.xml
-Coordinates.hbm.xml
+end note
+
+note right of ImportOperation
+@Entity
+@Table(name = "import_operations")
+
+Связь с User (many-to-one)
+Статус: IN_PROGRESS, SUCCESS, FAILED
+
+Mapped using XML:
+ImportOperation.hbm.xml
 end note
 
 note right of VehicleWebSocket
@@ -392,14 +628,32 @@ Broadcasts real-time updates:
 - CREATED
 - UPDATED
 - DELETED
+- IMPORT_COMPLETED
 end note
 
 note right of HibernateUtil
 @ApplicationScoped
 SessionFactory management
 
-Configuration from
-hibernate.cfg.xml
+Mapped entities:
+- Vehicle.hbm.xml
+- Coordinates.hbm.xml
+- AppUser.hbm.xml
+- ImportOperation.hbm.xml
+end note
+
+note right of Frontend
+React компоненты:
+- VehicleList (таблица с пагинацией)
+- VehicleCreate (форма создания)
+- VehicleEdit (форма редактирования)
+- VehicleDetails (просмотр)
+- SpecialOperations (доп. операции)
+- Import (импорт + история + роли)
+
+WebSocket для real-time обновлений
+Переключение user/admin
 end note
 
 @enduml
+
