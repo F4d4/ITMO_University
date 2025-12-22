@@ -9,11 +9,11 @@ const Import = () => {
   const [importing, setImporting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  
+
   // Управление пользователем и ролью
   const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState('user');
-  
+
   // Пагинация истории
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -38,7 +38,7 @@ const Import = () => {
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${protocol}//${window.location.host}/project/ws/vehicles`;
-    
+
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
@@ -97,29 +97,32 @@ const Import = () => {
     try {
       const content = await file.text();
       const data = JSON.parse(content);
-      
+
       if (!Array.isArray(data)) {
         throw new Error('JSON должен содержать массив объектов');
       }
 
       const response = await importService.importVehicles(data, username, isAdmin);
-      
+
       if (response.data.status === 'SUCCESS') {
         setSuccess(`Импорт успешно завершен! Добавлено объектов: ${response.data.addedCount}`);
       } else {
         setError(`Ошибка импорта: ${response.data.errorMessage}`);
       }
-      
+
       setFile(null);
       // Сброс input файла
       document.getElementById('file-input').value = '';
-      
+
     } catch (err) {
       if (err instanceof SyntaxError) {
         setError('Некорректный формат JSON файла');
       } else {
         setError('Ошибка импорта: ' + err.message);
       }
+      // Сброс файла при ошибке, чтобы можно было выбрать исправленный файл
+      setFile(null);
+      document.getElementById('file-input').value = '';
     } finally {
       setImporting(false);
       // Обновляем историю после любого результата (успех или ошибка)
@@ -166,57 +169,57 @@ const Import = () => {
   }, [isAdmin]);
 
   return (
-    <div className="import-container">
-      <div className="import-header">
-        <h2>📥 Импорт данных</h2>
-        
-        <div className="role-switcher">
-          <span className="role-label">Текущий пользователь:</span>
-          <button 
-            className={`role-button ${isAdmin ? 'admin' : 'user'}`}
-            onClick={toggleRole}
-          >
-            {isAdmin ? '👑 Администратор' : '👤 Пользователь'}
-          </button>
-          <span className="username-display">({username})</span>
-        </div>
-      </div>
+      <div className="import-container">
+        <div className="import-header">
+          <h2>📥 Импорт данных</h2>
 
-      <div className="import-section">
-        <div className="import-card">
-          <h3>📁 Загрузка файла</h3>
-          <p className="import-description">
-            Выберите JSON файл с массивом объектов Vehicle для импорта.
-            Все объекты будут добавлены в рамках одной транзакции.
-          </p>
-          
-          <div className="file-upload-area">
-            <input
-              id="file-input"
-              type="file"
-              accept=".json,application/json"
-              onChange={handleFileChange}
-              className="file-input"
-            />
-            <label htmlFor="file-input" className="file-label">
-              {file ? `📄 ${file.name}` : '📎 Выберите JSON файл'}
-            </label>
+          <div className="role-switcher">
+            <span className="role-label">Текущий пользователь:</span>
+            <button
+                className={`role-button ${isAdmin ? 'admin' : 'user'}`}
+                onClick={toggleRole}
+            >
+              {isAdmin ? '👑 Администратор' : '👤 Пользователь'}
+            </button>
+            <span className="username-display">({username})</span>
           </div>
+        </div>
 
-          <button 
-            className="import-button"
-            onClick={handleImport}
-            disabled={!file || importing}
-          >
-            {importing ? '⏳ Импорт...' : '🚀 Импортировать'}
-          </button>
+        <div className="import-section">
+          <div className="import-card">
+            <h3>📁 Загрузка файла</h3>
+            <p className="import-description">
+              Выберите JSON файл с массивом объектов Vehicle для импорта.
+              Все объекты будут добавлены в рамках одной транзакции.
+            </p>
 
-          {error && <div className="alert alert-error">❌ {error}</div>}
-          {success && <div className="alert alert-success">✅ {success}</div>}
+            <div className="file-upload-area">
+              <input
+                  id="file-input"
+                  type="file"
+                  accept=".json,application/json"
+                  onChange={handleFileChange}
+                  className="file-input"
+              />
+              <label htmlFor="file-input" className="file-label">
+                {file ? `📄 ${file.name}` : '📎 Выберите JSON файл'}
+              </label>
+            </div>
 
-          <div className="json-example">
-            <h4>Пример JSON формата:</h4>
-            <pre>{`[
+            <button
+                className="import-button"
+                onClick={handleImport}
+                disabled={!file || importing}
+            >
+              {importing ? '⏳ Импорт...' : '🚀 Импортировать'}
+            </button>
+
+            {error && <div className="alert alert-error">❌ {error}</div>}
+            {success && <div className="alert alert-success">✅ {success}</div>}
+
+            <div className="json-example">
+              <h4>Пример JSON формата:</h4>
+              <pre>{`[
   {
     "name": "Apache AH-64",
     "x": 0.0,
@@ -230,113 +233,113 @@ const Import = () => {
     "fuelType": "KEROSENE"
   }
 ]`}</pre>
+            </div>
+          </div>
+        </div>
+
+        <div className="history-section">
+          <h3>📋 История импорта {isAdmin && <span className="admin-badge">(все операции)</span>}</h3>
+
+          {loading && <p className="loading-text">⏳ Загрузка...</p>}
+
+          {!loading && history.length === 0 && (
+              <p className="no-history">История импорта пуста</p>
+          )}
+
+          {!loading && history.length > 0 && (
+              <>
+                <table className="history-table">
+                  <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Статус</th>
+                    <th>Пользователь</th>
+                    <th>Добавлено</th>
+                    <th>Дата</th>
+                    <th>Ошибка</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {currentHistory.map((op) => (
+                      <tr key={op.id}>
+                        <td>{op.id}</td>
+                        <td>{getStatusBadge(op.status)}</td>
+                        <td>{op.username}</td>
+                        <td>{op.status === 'SUCCESS' ? op.addedCount : '-'}</td>
+                        <td>{formatDate(op.createdAt)}</td>
+                        <td className="error-cell" title={op.errorMessage}>
+                          {op.errorMessage ? op.errorMessage.substring(0, 50) + '...' : '-'}
+                        </td>
+                      </tr>
+                  ))}
+                  </tbody>
+                </table>
+
+                {totalPages > 1 && (
+                    <div className="pagination">
+                      <button
+                          className="pagination-btn"
+                          onClick={() => goToPage(1)}
+                          disabled={currentPage === 1}
+                      >
+                        ««
+                      </button>
+                      <button
+                          className="pagination-btn"
+                          onClick={() => goToPage(currentPage - 1)}
+                          disabled={currentPage === 1}
+                      >
+                        «
+                      </button>
+
+                      <span className="pagination-info">
+                  Страница {currentPage} из {totalPages}
+                </span>
+
+                      <button
+                          className="pagination-btn"
+                          onClick={() => goToPage(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                      >
+                        »
+                      </button>
+                      <button
+                          className="pagination-btn"
+                          onClick={() => goToPage(totalPages)}
+                          disabled={currentPage === totalPages}
+                      >
+                        »»
+                      </button>
+                    </div>
+                )}
+
+                <p className="history-count">
+                  Показано {startIndex + 1}-{Math.min(endIndex, history.length)} из {history.length} записей
+                </p>
+              </>
+          )}
+        </div>
+
+        <div className="info-section">
+          <h3>ℹ️ Информация об ограничениях</h3>
+          <div className="constraints-info">
+            <h4>Ограничения уникальности (проверяются на программном уровне):</h4>
+            <ul>
+              <li><strong>Name + Type:</strong> Нельзя создать два транспортных средства с одинаковым названием и типом</li>
+              <li><strong>EnginePower + Capacity + FuelType:</strong> Уникальная техническая конфигурация транспортного средства</li>
+            </ul>
+
+            <h4>Ограничения полей:</h4>
+            <ul>
+              <li><strong>name:</strong> не может быть пустым</li>
+              <li><strong>x, y:</strong> обязательные (y ≤ 621)</li>
+              <li><strong>enginePower, numberOfWheels, fuelConsumption:</strong> должны быть больше 0</li>
+              <li><strong>capacity:</strong> должна быть больше 0</li>
+              <li><strong>distanceTravelled:</strong> не может быть отрицательным</li>
+            </ul>
           </div>
         </div>
       </div>
-
-      <div className="history-section">
-        <h3>📋 История импорта {isAdmin && <span className="admin-badge">(все операции)</span>}</h3>
-
-        {loading && <p className="loading-text">⏳ Загрузка...</p>}
-
-        {!loading && history.length === 0 && (
-          <p className="no-history">История импорта пуста</p>
-        )}
-
-        {!loading && history.length > 0 && (
-          <>
-            <table className="history-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Статус</th>
-                  <th>Пользователь</th>
-                  <th>Добавлено</th>
-                  <th>Дата</th>
-                  <th>Ошибка</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentHistory.map((op) => (
-                  <tr key={op.id}>
-                    <td>{op.id}</td>
-                    <td>{getStatusBadge(op.status)}</td>
-                    <td>{op.username}</td>
-                    <td>{op.status === 'SUCCESS' ? op.addedCount : '-'}</td>
-                    <td>{formatDate(op.createdAt)}</td>
-                    <td className="error-cell" title={op.errorMessage}>
-                      {op.errorMessage ? op.errorMessage.substring(0, 50) + '...' : '-'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {totalPages > 1 && (
-              <div className="pagination">
-                <button 
-                  className="pagination-btn"
-                  onClick={() => goToPage(1)}
-                  disabled={currentPage === 1}
-                >
-                  ««
-                </button>
-                <button 
-                  className="pagination-btn"
-                  onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  «
-                </button>
-                
-                <span className="pagination-info">
-                  Страница {currentPage} из {totalPages}
-                </span>
-                
-                <button 
-                  className="pagination-btn"
-                  onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  »
-                </button>
-                <button 
-                  className="pagination-btn"
-                  onClick={() => goToPage(totalPages)}
-                  disabled={currentPage === totalPages}
-                >
-                  »»
-                </button>
-              </div>
-            )}
-
-            <p className="history-count">
-              Показано {startIndex + 1}-{Math.min(endIndex, history.length)} из {history.length} записей
-            </p>
-          </>
-        )}
-      </div>
-
-      <div className="info-section">
-        <h3>ℹ️ Информация об ограничениях</h3>
-        <div className="constraints-info">
-          <h4>Ограничения уникальности (проверяются на программном уровне):</h4>
-          <ul>
-            <li><strong>Name + Type:</strong> Нельзя создать два транспортных средства с одинаковым названием и типом</li>
-            <li><strong>EnginePower + Capacity + FuelType:</strong> Уникальная техническая конфигурация транспортного средства</li>
-          </ul>
-          
-          <h4>Ограничения полей:</h4>
-          <ul>
-            <li><strong>name:</strong> не может быть пустым</li>
-            <li><strong>x, y:</strong> обязательные (y ≤ 621)</li>
-            <li><strong>enginePower, numberOfWheels, fuelConsumption:</strong> должны быть больше 0</li>
-            <li><strong>capacity:</strong> должна быть больше 0</li>
-            <li><strong>distanceTravelled:</strong> не может быть отрицательным</li>
-          </ul>
-        </div>
-      </div>
-    </div>
   );
 };
 
