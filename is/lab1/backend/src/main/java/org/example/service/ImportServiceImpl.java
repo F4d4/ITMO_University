@@ -102,7 +102,6 @@ public class ImportServiceImpl implements ImportService {
                 LOGGER.info("Импортирован Vehicle #" + (i + 1) + ": " + dto.getName());
             }
 
-            session.flush();
             tx.commit();
 
             // Обновляем статус операции

@@ -32,7 +32,6 @@ public class CoordinatesDAOImpl implements CoordinatesDAO {
             tx = session.beginTransaction();
             
             session.persist(coordinates);
-            session.flush();
             
             tx.commit();
             LOGGER.info("Coordinates успешно сохранены с ID: " + coordinates.getId());

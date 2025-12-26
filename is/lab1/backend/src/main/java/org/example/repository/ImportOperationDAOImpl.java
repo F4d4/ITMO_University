@@ -32,7 +32,6 @@ public class ImportOperationDAOImpl implements ImportOperationDAO {
             tx = session.beginTransaction();
             
             session.persist(operation);
-            session.flush();
             
             tx.commit();
             LOGGER.info("ImportOperation сохранена с ID: " + operation.getId());
@@ -59,7 +58,6 @@ public class ImportOperationDAOImpl implements ImportOperationDAO {
             tx = session.beginTransaction();
             
             ImportOperation merged = session.merge(operation);
-            session.flush();
             
             tx.commit();
             LOGGER.info("ImportOperation обновлена с ID: " + operation.getId());

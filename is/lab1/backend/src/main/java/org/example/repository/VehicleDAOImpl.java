@@ -34,7 +34,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             tx = session.beginTransaction();
             
             session.persist(vehicle);
-            session.flush(); // Принудительно сохранить в БД
             
             tx.commit();
             LOGGER.info("Vehicle успешно сохранен с ID: " + vehicle.getId());
@@ -154,7 +153,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             tx = session.beginTransaction();
             
             Vehicle merged = session.merge(vehicle);
-            session.flush();
             
             tx.commit();
             LOGGER.info("Vehicle успешно обновлен с ID: " + vehicle.getId());
@@ -204,7 +202,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             
             // Сохраняем изменения
             session.merge(vehicle);
-            session.flush();
             
             tx.commit();
             LOGGER.info("Vehicle успешно обновлен с блокировкой, ID: " + id);
@@ -250,7 +247,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             LOGGER.info("Получена блокировка для удаления Vehicle ID: " + id);
             
             session.remove(vehicle);
-            session.flush();
             
             tx.commit();
             LOGGER.info("Vehicle успешно удален с блокировкой, ID: " + id);
@@ -291,7 +287,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             
             // Сохраняем объект
             session.persist(vehicle);
-            session.flush();
             
             tx.commit();
             LOGGER.info("Vehicle успешно сохранен с проверкой уникальности, ID: " + vehicle.getId());
@@ -326,7 +321,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             Vehicle vehicle = session.get(Vehicle.class, id);
             if (vehicle != null) {
                 session.remove(vehicle);
-                session.flush();
                 tx.commit();
                 LOGGER.info("Vehicle успешно удален с ID: " + id);
             } else {
@@ -443,7 +437,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             if (vehicle != null) {
                 vehicle.setDistanceTravelled(0);
                 session.merge(vehicle);
-                session.flush();
                 tx.commit();
                 LOGGER.info("Пробег успешно скручен для Vehicle с ID: " + id);
             } else {

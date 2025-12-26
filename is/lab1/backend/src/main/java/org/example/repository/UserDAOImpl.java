@@ -32,7 +32,6 @@ public class UserDAOImpl implements UserDAO {
             tx = session.beginTransaction();
             
             session.persist(user);
-            session.flush();
             
             tx.commit();
             LOGGER.info("User сохранен с ID: " + user.getId());
@@ -121,7 +120,6 @@ public class UserDAOImpl implements UserDAO {
             if (results.isEmpty()) {
                 user = new User(username, isAdmin);
                 session.persist(user);
-                session.flush();
                 LOGGER.info("Создан новый User: " + username + " (admin=" + isAdmin + ")");
             } else {
                 user = results.get(0);
@@ -129,7 +127,6 @@ public class UserDAOImpl implements UserDAO {
                 if (user.isAdmin() != isAdmin) {
                     user.setAdmin(isAdmin);
                     session.merge(user);
-                    session.flush();
                     LOGGER.info("Обновлена роль User: " + username + " (admin=" + isAdmin + ")");
                 }
             }
