@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+        xsi:schemaLocation="
+            http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+            http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+
+    <!-- 
+        Конфигурация Ehcache для L2 кэша Hibernate
+        
+        Параметры кэша:
+        - heap: хранение в куче JVM (быстрый доступ, ограничен памятью)
+        - offheap: хранение вне кучи JVM (больше памяти, немного медленнее)
+        - disk: хранение на диске (большой объем, самый медленный)
+        
+        Стратегии вытеснения:
+        - LRU (Least Recently Used) - вытесняются давно не использованные элементы
+        - LFU (Least Frequently Used) - вытесняются редко используемые элементы
+        - FIFO (First In First Out) - вытесняются элементы в порядке добавления
+    -->
+
+    <!-- Политика управления ресурсами по умолчанию -->
+    <service>
+        <jsr107:defaults enable-management="true" enable-statistics="true"/>
+    </service>
+
+    <!-- Кэш по умолчанию для всех сущностей -->
+    <cache-template name="default">
+        <expiry>
+            <ttl unit="minutes">10</ttl>
+        </expiry>
+        <resources>
+            <!-- Хранение в heap памяти: до 1000 объектов -->
+            <heap unit="entries">1000</heap>
+            <!-- Хранение вне heap: до 10 MB -->
+            <offheap unit="MB">10</offheap>
+        </resources>
+    </cache-template>
+
+    <!-- Кэш для сущности Vehicle -->
+    <cache alias="org.example.entity.Vehicle" uses-template="default">
+        <expiry>
+            <!-- TTL (Time To Live) - время жизни элемента в кэше -->
+            <ttl unit="minutes">15</ttl>
+        </expiry>
+        <resources>
+            <!-- Максимум 2000 объектов в heap памяти -->
+            <heap unit="entries">2000</heap>
+            <!-- До 20 MB вне heap памяти -->
+            <offheap unit="MB">20</offheap>
+        </resources>
+    </cache>
+
+    <!-- Кэш для сущности Coordinates -->
+    <cache alias="org.example.entity.Coordinates" uses-template="default">
+        <expiry>
+            <ttl unit="minutes">20</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">500</heap>
+            <offheap unit="MB">5</offheap>
+        </resources>
+    </cache>
+
+    <!-- Кэш для сущности User -->
+    <cache alias="org.example.entity.User" uses-template="default">
+        <expiry>
+            <!-- Длительное время жизни для пользователей -->
+            <ttl unit="hours">1</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">100</heap>
+            <offheap unit="MB">2</offheap>
+        </resources>
+    </cache>
+
+    <!-- Кэш для сущности ImportOperation -->
+    <cache alias="org.example.entity.ImportOperation" uses-template="default">
+        <expiry>
+            <ttl unit="minutes">30</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">500</heap>
+            <offheap unit="MB">10</offheap>
+        </resources>
+    </cache>
+
+    <!-- Кэш для коллекций (связи между сущностями) -->
+    <cache alias="org.example.entity.Vehicle.coordinates" uses-template="default">
+        <expiry>
+            <ttl unit="minutes">15</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1000</heap>
+            <offheap unit="MB">5</offheap>
+        </resources>
+    </cache>
+
+    <!-- Кэш для запросов (query cache) -->
+    <cache alias="default-query-results-region" uses-template="default">
+        <expiry>
+            <!-- Короткое время жизни для результатов запросов -->
+            <ttl unit="minutes">5</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">500</heap>
+            <offheap unit="MB">10</offheap>
+        </resources>
+    </cache>
+
+    <!-- Кэш для временных меток обновления (update timestamps) -->
+    <cache alias="default-update-timestamps-region">
+        <expiry>
+            <!-- Временные метки хранятся долго -->
+            <ttl unit="hours">1</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">5000</heap>
+        </resources>
+    </cache>
+
+</config>

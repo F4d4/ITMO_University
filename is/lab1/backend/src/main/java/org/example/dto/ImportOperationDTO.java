@@ -12,6 +12,7 @@ public class ImportOperationDTO implements Serializable {
     private String username;
     private Integer addedCount;
     private String errorMessage;
+    private String fileName;
     private Long createdAt;
 
     public ImportOperationDTO() {}
@@ -54,6 +55,14 @@ public class ImportOperationDTO implements Serializable {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public Long getCreatedAt() {

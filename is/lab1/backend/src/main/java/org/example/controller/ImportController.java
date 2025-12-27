@@ -4,9 +4,12 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
 import org.example.dto.*;
 import org.example.service.ImportService;
+import org.example.service.MinioService;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,6 +25,9 @@ public class ImportController {
 
     @Inject
     private ImportService importService;
+
+    @Inject
+    private MinioService minioService;
 
     /**
      * Импорт Vehicle из JSON
@@ -94,6 +100,58 @@ public class ImportController {
             LOGGER.severe("Ошибка при получении истории импорта: " + e.getMessage());
             ErrorResponse error = new ErrorResponse(500, "Internal Server Error",
                     "Ошибка при получении истории: " + e.getMessage(), "/api/import/history");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
+        }
+    }
+
+    /**
+     * Скачать файл импорта из MinIO
+     * GET /api/import/download/{fileName}
+     */
+    @GET
+    @Path("/download/{fileName}")
+    @Produces("application/json")
+    public Response downloadFile(@PathParam("fileName") String fileName) {
+        try {
+            LOGGER.info("Запрос на скачивание файла: " + fileName);
+            
+            if (fileName == null || fileName.trim().isEmpty()) {
+                ErrorResponse error = new ErrorResponse(400, "Bad Request",
+                        "Имя файла не указано", "/api/import/download/" + fileName);
+                return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+            }
+
+            // Проверяем существование файла
+            if (!minioService.fileExists(fileName)) {
+                ErrorResponse error = new ErrorResponse(404, "Not Found",
+                        "Файл не найден: " + fileName, "/api/import/download/" + fileName);
+                return Response.status(Response.Status.NOT_FOUND).entity(error).build();
+            }
+
+            // Получаем файл из MinIO
+            InputStream fileStream = minioService.downloadFile(fileName);
+
+            // Создаем streaming output для отправки файла
+            StreamingOutput output = outputStream -> {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = fileStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                fileStream.close();
+            };
+
+            return Response.ok(output)
+                    .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                    .type("application/json")
+                    .build();
+
+        } catch (Exception e) {
+            LOGGER.severe("Ошибка при скачивании файла: " + e.getMessage());
+            e.printStackTrace();
+            ErrorResponse error = new ErrorResponse(500, "Internal Server Error",
+                    "Ошибка при скачивании файла: " + e.getMessage(), 
+                    "/api/import/download/" + fileName);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         }
     }

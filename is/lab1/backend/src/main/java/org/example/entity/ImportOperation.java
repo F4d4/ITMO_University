@@ -14,6 +14,7 @@ public class ImportOperation implements Serializable {
     private User user;
     private Integer addedCount; // Число добавленных объектов (только для успешных операций)
     private String errorMessage; // Сообщение об ошибке (для неудачных операций)
+    private String fileName; // Имя файла в MinIO
     private Date createdAt;
 
     public ImportOperation() {
@@ -59,6 +60,14 @@ public class ImportOperation implements Serializable {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public Date getCreatedAt() {

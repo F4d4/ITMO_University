@@ -6,6 +6,9 @@
 <hibernate-mapping package="org.example.entity">
 
     <class name="Vehicle" table="vehicle">
+        
+        <!-- Enable L2 cache for this entity -->
+        <cache usage="read-write" region="org.example.entity.Vehicle"/>
 
         <id name="id" column="id" type="java.lang.Integer">
             <generator class="identity"/>

@@ -21,8 +21,26 @@ dependencies {
     implementation 'org.hibernate.orm:hibernate-core:6.2.7.Final'
     compileOnly 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.postgresql:postgresql:42.7.6'
-    implementation 'org.hibernate.orm:hibernate-c3p0:6.2.7.Final'
     
+    // Apache Commons DBCP2 для Connection Pool
+    implementation 'org.apache.commons:commons-dbcp2:2.11.0'
+    implementation 'org.apache.commons:commons-pool2:2.11.1'
+    
+    // Ehcache для L2 Cache
+    implementation 'org.hibernate.orm:hibernate-jcache:6.2.7.Final'
+    implementation 'org.ehcache:ehcache:3.10.8:jakarta'
+    
+    // MinIO SDK для работы с S3-хранилищем
+    implementation 'io.minio:minio:8.5.7'
+    
+    // OkHttp (зависимость для MinIO)
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    
+    // Jackson для сериализации JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
+    
+    // CDI Interceptors (для Jakarta EE)
+    compileOnly 'jakarta.interceptor:jakarta.interceptor-api:2.1.0'
     
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'

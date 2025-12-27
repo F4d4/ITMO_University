@@ -256,6 +256,7 @@ const Import = () => {
                     <th>Пользователь</th>
                     <th>Добавлено</th>
                     <th>Дата</th>
+                    <th>Файл</th>
                     <th>Ошибка</th>
                   </tr>
                   </thead>
@@ -267,6 +268,18 @@ const Import = () => {
                         <td>{op.username}</td>
                         <td>{op.status === 'SUCCESS' ? op.addedCount : '-'}</td>
                         <td>{formatDate(op.createdAt)}</td>
+                        <td>
+                          {op.fileName ? (
+                            <a 
+                              href={`/project/api/import/download/${op.fileName}`}
+                              className="download-link"
+                              download
+                              title="Скачать файл импорта"
+                            >
+                              📥 Скачать
+                            </a>
+                          ) : '-'}
+                        </td>
                         <td className="error-cell" title={op.errorMessage}>
                           {op.errorMessage ? op.errorMessage.substring(0, 50) + '...' : '-'}
                         </td>

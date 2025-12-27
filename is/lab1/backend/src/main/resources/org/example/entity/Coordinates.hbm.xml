@@ -7,6 +7,9 @@
     
     <class name="Coordinates" table="coordinates">
         
+        <!-- Enable L2 cache for this entity -->
+        <cache usage="read-write" region="org.example.entity.Coordinates"/>
+        
         <!-- Primary Key -->
         <id name="id" column="id" type="java.lang.Long">
             <generator class="identity"/>

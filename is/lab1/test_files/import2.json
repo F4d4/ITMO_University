@@ -1,14 +1,14 @@
 [
   {
-    "name": "AudiLUX",
-    "x": 32.0,
-    "y": 123,
-    "type": "CAR",
-    "enginePower": 14,
-    "numberOfWheels": 6,
-    "capacity": 84.0,
-    "distanceTravelled": 500,
-    "fuelConsumption": 255,
+    "name": "Phora",
+    "x": 74.0,
+    "y": 152,
+    "type": "BOAT",
+    "enginePower": 4,
+    "numberOfWheels": 53,
+    "capacity": 19.0,
+    "distanceTravelled": 42,
+    "fuelConsumption": 67,
     "fuelType": "DIESEL"
   }
 ]

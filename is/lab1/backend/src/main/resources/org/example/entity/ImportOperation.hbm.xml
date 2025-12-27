@@ -5,6 +5,9 @@
 
 <hibernate-mapping>
     <class name="org.example.entity.ImportOperation" table="import_operations">
+        
+        <!-- Enable L2 cache for this entity -->
+        <cache usage="read-write" region="org.example.entity.ImportOperation"/>
         <id name="id" type="long">
             <column name="id"/>
             <generator class="identity"/>
@@ -28,6 +31,10 @@
         
         <property name="errorMessage" type="string">
             <column name="error_message" length="2000"/>
+        </property>
+        
+        <property name="fileName" type="string">
+            <column name="file_name" length="500"/>
         </property>
         
         <property name="createdAt" type="timestamp">

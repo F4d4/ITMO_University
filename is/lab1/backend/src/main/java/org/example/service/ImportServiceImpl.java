@@ -1,7 +1,9 @@
 package org.example.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import org.example.aop.CacheStatistics;
 import org.example.aop.ImportLock;
 import org.example.aop.Logged;
 import org.example.config.HibernateUtil;
@@ -13,7 +15,6 @@ import org.example.repository.ImportOperationDAO;
 import org.example.repository.UserDAO;
 import org.example.websocket.VehicleWebSocket;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Реализация сервиса импорта с AOP и пессимистическими блокировками
+ * Реализация сервиса импорта с распределенной транзакцией (2PC) и L2 кэшем
  */
 @Stateless
 public class ImportServiceImpl implements ImportService {
@@ -37,11 +38,18 @@ public class ImportServiceImpl implements ImportService {
     @Inject
     private ImportOperationDAO importOperationDAO;
 
+    @Inject
+    private MinioService minioService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     @Logged
     @ImportLock("vehicle-import")
+    @CacheStatistics(enabled = true) // Включаем логирование статистики кэша
     public ImportResultDTO importVehicles(List<VehicleImportDTO> vehicles, String username, boolean isAdmin) {
-        LOGGER.info("Начало импорта " + vehicles.size() + " объектов пользователем " + username);
+        LOGGER.info("=== Начало распределенной транзакции импорта ===");
+        LOGGER.info("Количество объектов: " + vehicles.size() + ", Пользователь: " + username);
 
         // Получаем или создаем пользователя
         User user = userDAO.getOrCreateUser(username, isAdmin);
@@ -54,19 +62,30 @@ public class ImportServiceImpl implements ImportService {
 
         Long operationId = operation.getId();
 
-        Session session = null;
-        Transaction tx = null;
+        // Создаем координатор распределенной транзакции
+        DistributedTransactionCoordinator coordinator = new DistributedTransactionCoordinator(minioService);
 
         try {
-            session = hibernateUtil.getSessionFactory().openSession();
-            tx = session.beginTransaction();
+            // Подготавливаем JSON файл для загрузки в MinIO
+            String jsonContent = objectMapper.writeValueAsString(vehicles);
+            
+            LOGGER.info("[2PC] Фаза 1: PREPARE");
+            
+            // ФАЗА 1a: Подготовка MinIO
+            coordinator.prepareMinIO(jsonContent, "import-" + operationId + ".json");
+            
+            // ФАЗА 1b: Подготовка БД (открываем транзакцию)
+            Session session = hibernateUtil.getSessionFactory().openSession();
+            coordinator.prepareDatabase(session);
 
-            // Устанавливаем уровень изоляции SERIALIZABLE для предотвращения гонок
-            session.doWork(connection -> {
-                connection.setTransactionIsolation(java.sql.Connection.TRANSACTION_SERIALIZABLE);
-            });
+            // Проверяем готовность обоих участников
+            if (!coordinator.canCommit()) {
+                throw new Exception("Участники транзакции не готовы к коммиту");
+            }
 
+            // Выполняем бизнес-логику в рамках подготовленной транзакции
             int addedCount = 0;
+            Session dbSession = coordinator.getDbSession();
 
             for (int i = 0; i < vehicles.size(); i++) {
                 VehicleImportDTO dto = vehicles.get(i);
@@ -74,14 +93,14 @@ public class ImportServiceImpl implements ImportService {
                 // Валидация данных
                 validateImportDTO(dto, i);
 
-                // Проверка ограничений уникальности в той же сессии (на программном уровне)
+                // Проверка ограничений уникальности
                 String type = dto.getType() != null ? dto.getType().toString() : null;
                 String fuelType = dto.getFuelType() != null ? dto.getFuelType().toString() : null;
-                checkUniquenessInSession(session, dto.getName(), type, 
+                checkUniquenessInSession(dbSession, dto.getName(), type, 
                                          dto.getEnginePower(), dto.getCapacity(), fuelType, i);
 
                 // Создание или получение координат
-                Coordinates coordinates = getOrCreateCoordinates(session, dto.getX(), dto.getY());
+                Coordinates coordinates = getOrCreateCoordinates(dbSession, dto.getX(), dto.getY());
 
                 // Создание Vehicle
                 Vehicle vehicle = new Vehicle();
@@ -96,54 +115,66 @@ public class ImportServiceImpl implements ImportService {
                 vehicle.setFuelConsumption(dto.getFuelConsumption());
                 vehicle.setFuelType(dto.getFuelType());
 
-                session.persist(vehicle);
+                dbSession.persist(vehicle);
                 addedCount++;
 
                 LOGGER.info("Импортирован Vehicle #" + (i + 1) + ": " + dto.getName());
             }
 
-            tx.commit();
+            LOGGER.info("[2PC] Фаза 2: COMMIT");
+            
+            // ФАЗА 2a: Коммит БД
+            coordinator.commitDatabase();
+            LOGGER.info("[2PC] БД успешно зафиксирована");
+            
+            // ФАЗА 2b: Коммит MinIO (загрузка файла)
+            coordinator.commitMinIO();
+            LOGGER.info("[2PC] MinIO успешно зафиксирован");
 
-            // Обновляем статус операции
+            // Обновляем операцию импорта
             operation.setStatus(ImportStatus.SUCCESS);
             operation.setAddedCount(addedCount);
+            operation.setFileName(coordinator.getMinioFileName());
             importOperationDAO.update(operation);
 
-            LOGGER.info("Импорт успешно завершен. Добавлено объектов: " + addedCount);
+            LOGGER.info("=== Распределенная транзакция успешно завершена ===");
+            LOGGER.info("Добавлено объектов: " + addedCount);
+            LOGGER.info("Файл сохранен в MinIO: " + coordinator.getMinioFileName());
 
-            // Уведомляем всех клиентов об успешном импорте
+            // Уведомляем клиентов
             VehicleWebSocket.notifyImportCompleted(operationId, "SUCCESS", addedCount);
 
             return new ImportResultDTO(operationId, "SUCCESS", addedCount, null);
 
         } catch (Exception e) {
-            LOGGER.severe("Ошибка при импорте: " + e.getMessage());
+            LOGGER.severe("=== ОШИБКА в распределенной транзакции ===");
+            LOGGER.severe("Причина: " + e.getMessage());
+            e.printStackTrace();
 
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-                LOGGER.info("Транзакция откачена - ни один объект не был сохранен");
-            }
+            // ОТКАТ ТРАНЗАКЦИИ
+            LOGGER.warning("[2PC] Выполняется полный откат транзакции");
+            coordinator.rollbackAll();
 
             // Обновляем статус операции
             operation.setStatus(ImportStatus.FAILED);
             operation.setErrorMessage(e.getMessage());
             operation.setAddedCount(0);
+            operation.setFileName(null);
             importOperationDAO.update(operation);
 
-            // Уведомляем всех клиентов о неуспешном импорте
+            // Уведомляем клиентов
             VehicleWebSocket.notifyImportCompleted(operationId, "FAILED", 0);
 
             return new ImportResultDTO(operationId, "FAILED", 0, e.getMessage());
 
         } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
+            coordinator.close();
         }
     }
 
     @Override
     @Logged
+    @CacheStatistics(enabled = true) // Включаем логирование статистики кэша
     public List<ImportOperationDTO> getImportHistory(String username, boolean isAdmin) {
         LOGGER.info("Запрос истории импорта. User: " + username + ", isAdmin: " + isAdmin);
 
@@ -280,6 +311,7 @@ public class ImportServiceImpl implements ImportService {
         dto.setUsername(operation.getUser().getUsername());
         dto.setAddedCount(operation.getAddedCount());
         dto.setErrorMessage(operation.getErrorMessage());
+        dto.setFileName(operation.getFileName());
         dto.setCreatedAt(operation.getCreatedAt() != null ? operation.getCreatedAt().getTime() : null);
         return dto;
     }

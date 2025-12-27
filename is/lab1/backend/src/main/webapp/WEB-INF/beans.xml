@@ -10,6 +10,7 @@
     <interceptors>
         <class>org.example.aop.LoggingInterceptor</class>
         <class>org.example.aop.ImportLockInterceptor</class>
+        <class>org.example.aop.CacheStatisticsInterceptor</class>
     </interceptors>
 </beans>
 

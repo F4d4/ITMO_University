@@ -4,8 +4,9 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name="org.example.entity.User" table="app_users">
-        <id name="id" type="long">
+    <class name="org.example.entity.User" table="app_users">        
+        <!-- Enable L2 cache for this entity -->
+        <cache usage="read-write" region="org.example.entity.User"/>        <id name="id" type="long">
             <column name="id"/>
             <generator class="identity"/>
         </id>

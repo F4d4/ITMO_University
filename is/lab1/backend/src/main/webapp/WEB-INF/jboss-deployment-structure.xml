@@ -18,6 +18,9 @@
             <!-- Only Jakarta APIs that we need -->
             <module name="jakarta.validation.api"/>
             <module name="jakarta.transaction.api"/>
+            <!-- JDK internal modules for Ehcache and other libraries -->
+            <module name="jdk.unsupported" export="true"/>
+            <module name="java.sql"/>
         </dependencies>
     </deployment>
 </jboss-deployment-structure>
