@@ -113,11 +113,14 @@ public class VehicleDAOImpl implements VehicleDAO {
                     "FROM Vehicle v ORDER BY v.id", Vehicle.class);
             query.setFirstResult(page * size);
             query.setMaxResults(size);
+            // Включаем query cache для кэширования результатов запроса
+            query.setCacheable(true);
+            query.setCacheRegion("vehicle-list-cache");
             return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при получении списка Vehicle: " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException("Не удалось получить список Vehicle", e);
+            throw new RuntimeException("Не удалось получить список Vehicle. Проверьте подключение к базе данных", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -132,6 +135,9 @@ public class VehicleDAOImpl implements VehicleDAO {
             session = hibernateUtil.getSessionFactory().openSession();
             Query<Long> query = session.createQuery(
                     "SELECT COUNT(v) FROM Vehicle v", Long.class);
+            // Включаем кэширование для запроса подсчета
+            query.setCacheable(true);
+            query.setCacheRegion("vehicle-count-cache");
             return query.getSingleResult();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при подсчете Vehicle: " + e.getMessage());
@@ -371,6 +377,8 @@ public class VehicleDAOImpl implements VehicleDAO {
                     "FROM Vehicle v WHERE v.name LIKE :prefix",
                     Vehicle.class);
             query.setParameter("prefix", prefix + "%");
+            query.setCacheable(true);
+            query.setCacheRegion("vehicle-query-cache");
             return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle по префиксу имени: " + e.getMessage());
@@ -392,6 +400,8 @@ public class VehicleDAOImpl implements VehicleDAO {
                     "FROM Vehicle v WHERE v.fuelConsumption > :consumption",
                     Vehicle.class);
             query.setParameter("consumption", fuelConsumption);
+            query.setCacheable(true);
+            query.setCacheRegion("vehicle-query-cache");
             return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle по fuelConsumption: " + e.getMessage());
@@ -413,6 +423,8 @@ public class VehicleDAOImpl implements VehicleDAO {
                     "FROM Vehicle v WHERE v.type = :type",
                     Vehicle.class);
             query.setParameter("type", type);
+            query.setCacheable(true);
+            query.setCacheRegion("vehicle-query-cache");
             return query.getResultList();
         } catch (Exception e) {
             LOGGER.severe("Ошибка при поиске Vehicle по типу: " + e.getMessage());
@@ -549,6 +561,8 @@ public class VehicleDAOImpl implements VehicleDAO {
 
                 query.setFirstResult(page * size);
                 query.setMaxResults(size);
+                query.setCacheable(true);
+                query.setCacheRegion("vehicle-filter-cache");
 
                 List<Vehicle> results = query.getResultList();
                 LOGGER.info("Found " + results.size() + " vehicles via HQL");
@@ -617,6 +631,10 @@ public class VehicleDAOImpl implements VehicleDAO {
                 if (hasFilter) {
                     query.setParameter("filterValue", "%" + filterValue + "%");
                 }
+
+                // Включаем кэширование для запроса подсчета с фильтрами
+                query.setCacheable(true);
+                query.setCacheRegion("vehicle-count-cache");
 
                 long count = query.getSingleResult();
                 LOGGER.info("Count result via HQL: " + count);

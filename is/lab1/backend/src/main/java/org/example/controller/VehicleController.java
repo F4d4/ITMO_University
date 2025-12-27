@@ -114,7 +114,7 @@ public class VehicleController {
             LOGGER.severe("Ошибка при получении списка Vehicle: " + e.getMessage());
             e.printStackTrace();
             ErrorResponse error = new ErrorResponse(500, "Internal Server Error",
-                    "Не удалось получить список Vehicle: " + e.getMessage(), "/api/vehicles");
+                    e.getMessage() != null ? e.getMessage() : "Не удалось получить список Vehicle", "/api/vehicles");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(error).build();
         }
     }
