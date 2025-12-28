@@ -23,9 +23,9 @@ public class DBCP2ConnectionProvider implements ConnectionProvider {
             
             // Основные параметры подключения
             dataSource.setDriverClassName("org.postgresql.Driver");
-            dataSource.setUrl("jdbc:postgresql://localhost:5432/test");
-            dataSource.setUsername("postgres");
-            dataSource.setPassword("KosPrav1979");
+            dataSource.setUrl("jdbc:postgresql://pg:5432/studs");
+            dataSource.setUsername("s408367");
+            dataSource.setPassword("QpjZpMmemnlctw7E");
             
             // Параметры пула DBCP2
             dataSource.setInitialSize(5);

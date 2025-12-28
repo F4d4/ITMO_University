@@ -22,7 +22,7 @@ public class MinioService {
     private static final Logger LOGGER = Logger.getLogger(MinioService.class.getName());
 
     // Конфигурация MinIO
-    private static final String MINIO_URL = "http://127.0.0.1:9000";
+    private static final String MINIO_URL = "http://127.0.0.1:8378";
     private static final String ACCESS_KEY = "minio";
     private static final String SECRET_KEY = "minio12345";
     private static final String BUCKET_NAME = "imports";
