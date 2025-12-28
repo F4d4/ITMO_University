@@ -40,14 +40,8 @@
         <!-- ИЗМЕНЕНО: Использовать JDBC транзакции вместо JTA -->
         <property name="hibernate.transaction.coordinator_class">jdbc</property>
         
-        <!-- Connection pool settings using Apache Commons DBCP2 -->
-        <!-- Hibernate 6 использует встроенный connection provider -->
-        <property name="hibernate.connection.pool_size">20</property>
-        
-        <!-- DBCP2 DataSource настройки (для продакшена лучше использовать JNDI) -->
-        <!-- Для development используем базовый пул Hibernate с оптимизированными параметрами -->
-        <property name="hibernate.connection.autocommit">false</property>
-        <property name="hibernate.connection.isolation">2</property>
+        <!-- Apache Commons DBCP2 Connection Provider -->
+        <property name="hibernate.connection.provider_class">org.example.config.DBCP2ConnectionProvider</property>
         
         <!-- Mapping files -->
         <mapping resource="org/example/entity/Coordinates.hbm.xml"/>

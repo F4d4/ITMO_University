@@ -28,16 +28,16 @@ public class HibernateUtil {
     @PostConstruct
     public void init() {
         try {
-            LOGGER.info("Инициализация Hibernate SessionFactory...");
+            LOGGER.info("Инициализация Hibernate SessionFactory с DBCP2...");
 
-            // Простая инициализация через hibernate.cfg.xml
-            // Аналогично standalonetest проекту
+            // Создаем конфигурацию Hibernate
             Configuration configuration = new Configuration();
             configuration.configure(); // Читает hibernate.cfg.xml из classpath
 
             sessionFactory = configuration.buildSessionFactory();
 
-            LOGGER.info("Hibernate SessionFactory успешно инициализирована");
+            LOGGER.info("Hibernate SessionFactory успешно инициализирована с DBCP2");
+            LOGGER.info("DBCP2 Pool: initialSize=5, maxTotal=20, maxIdle=10, minIdle=5");
 
         } catch (Exception e) {
             LOGGER.severe("Ошибка при инициализации Hibernate SessionFactory: " + e.getMessage());

@@ -1,14 +1,14 @@
 [
   {
-    "name": "Phora",
-    "x": 74.0,
-    "y": 152,
+    "name": "Difjfj",
+    "x": 362.0,
+    "y": 21,
     "type": "BOAT",
-    "enginePower": 4,
-    "numberOfWheels": 53,
-    "capacity": 19.0,
-    "distanceTravelled": 42,
-    "fuelConsumption": 67,
+    "enginePower": 25,
+    "numberOfWheels": 8,
+    "capacity": 59.0,
+    "distanceTravelled": 14,
+    "fuelConsumption": 37,
     "fuelType": "DIESEL"
   }
 ]
