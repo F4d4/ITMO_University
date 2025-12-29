@@ -1,0 +1,842 @@
+@startuml
+
+title Архитектура приложения Vehicle Management (с 2PC, MinIO, L2 Cache, DBCP2)
+
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+package "Уровень представления" {
+    class Frontend {
+        +VehicleList
+        +VehicleCreate
+        +VehicleEdit
+        +VehicleDetails
+        +SpecialOperations
+        +Import
+    }
+    
+    class WSClient {
+        +WebSocket connection
+        +onMessage()
+        +onOpen()
+        +onClose()
+    }
+}
+
+package "Уровень REST API" {
+    class VehicleController {
+        +createVehicle()
+        +getVehicleById()
+        +getAllVehicles()
+        +updateVehicle()
+        +deleteVehicle()
+        +getVehicleWithMaxCapacity()
+        +getVehiclesByNamePrefix()
+        +getVehiclesByFuelConsumption()
+        +getVehiclesByType()
+        +resetDistanceTravelled()
+    }
+    
+    class CoordinatesController {
+        +getAllCoordinates()
+        +getCoordinatesById()
+    }
+    
+    class ImportController {
+        +importVehicles()
+        +getImportHistory()
+        +downloadImportFile()
+    }
+    
+    class JaxRsApplication {
+        +configure()
+    }
+}
+
+package "AOP (Aspect-Oriented Programming)" {
+    annotation ImportLock {
+        +value(): String
+    }
+    
+    annotation Logged {
+    }
+    
+    annotation CacheStatistics {
+        +enabled(): boolean
+    }
+    
+    class ImportLockInterceptor {
+        -locks: ConcurrentHashMap
+        +intercept()
+        -getLock()
+    }
+    
+    class LoggingInterceptor {
+        +logMethod()
+    }
+    
+    class CacheStatisticsInterceptor {
+        -cacheStatisticsService: CacheStatisticsService
+        +logCacheStatistics()
+    }
+}
+
+package "Уровень бизнес-логики" {
+    interface VehicleService {
+        +createVehicle()
+        +getVehicleById()
+        +getAllVehicles()
+        +updateVehicle()
+        +deleteVehicle()
+        +getVehicleWithMaxCapacity()
+        +getVehiclesByNamePrefix()
+        +getVehiclesByFuelConsumption()
+        +getVehiclesByType()
+        +resetDistanceTravelled()
+        +getVehiclesWithFilters()
+    }
+    
+    class VehicleServiceImpl {
+        +createVehicle()
+        +getVehicleById()
+        +getAllVehicles()
+        +updateVehicle()
+        +deleteVehicle()
+        +getVehicleWithMaxCapacity()
+        +getVehiclesByNamePrefix()
+        +getVehiclesByFuelConsumption()
+        +getVehiclesByType()
+        +resetDistanceTravelled()
+        +getVehiclesWithFilters()
+        -getOrCreateCoordinates()
+        -convertToDTO()
+        -validateCreateDTO()
+        -validateUpdateDTO()
+    }
+    
+    interface CoordinatesService {
+        +getAllCoordinates()
+        +getCoordinatesById()
+    }
+    
+    class CoordinatesServiceImpl {
+        +getAllCoordinates()
+        +getCoordinatesById()
+        -convertToDTO()
+    }
+    
+    interface ImportService {
+        +importVehicles()
+        +getImportHistory()
+    }
+    
+    class ImportServiceImpl {
+        +importVehicles()
+        +getImportHistory()
+        -validateImportDTO()
+        -checkUniquenessInSession()
+        -getOrCreateCoordinates()
+    }
+    
+    interface UniquenessService {
+        +checkNameTypeUniqueness()
+        +checkTechnicalConfigUniqueness()
+    }
+    
+    class UniquenessServiceImpl {
+        +checkNameTypeUniqueness()
+        +checkTechnicalConfigUniqueness()
+    }
+    
+    class CacheStatisticsService {
+        -sessionFactory: SessionFactory
+        +logCacheStatistics()
+        +getCacheHits()
+        +getCacheMisses()
+        +getCachePuts()
+        -formatStatistics()
+    }
+    
+    class MinioService {
+        -minioClient: MinioClient
+        +uploadFile()
+        +downloadFile()
+        +deleteFile()
+        +fileExists()
+        -generateFileName()
+    }
+    
+    class DistributedTransactionCoordinator {
+        -transactionId: String
+        -dbSession: Session
+        -dbTransaction: Transaction
+        -minioFileName: String
+        -fileContent: String
+        -dbPrepared: boolean
+        -minioPrepared: boolean
+        -dbCommitted: boolean
+        -minioCommitted: boolean
+        +prepareDatabase()
+        +prepareMinIO()
+        +canCommit()
+        +commitDatabase()
+        +commitMinIO()
+        +rollbackDatabase()
+        +rollbackMinIO()
+        +rollbackAll()
+        +close()
+    }
+}
+
+package "DTO слой" {
+    class VehicleDTO {
+        -Integer id
+        -String name
+        -Long coordinatesId
+        -double x
+        -long y
+        -Long creationDate
+        -VehicleType type
+        -int enginePower
+        -int numberOfWheels
+        -double capacity
+        -long distanceTravelled
+        -long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class VehicleCreateDTO {
+        -String name
+        -Long coordinatesId
+        -Double x
+        -Long y
+        -VehicleType type
+        -int enginePower
+        -int numberOfWheels
+        -double capacity
+        -long distanceTravelled
+        -long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class VehicleUpdateDTO {
+        -String name
+        -Double x
+        -Long y
+        -VehicleType type
+        -Integer enginePower
+        -Integer numberOfWheels
+        -Double capacity
+        -Long distanceTravelled
+        -Long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class VehicleImportDTO {
+        -String name
+        -Double x
+        -Long y
+        -VehicleType type
+        -Integer enginePower
+        -Integer numberOfWheels
+        -Double capacity
+        -Long distanceTravelled
+        -Long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class ImportOperationDTO {
+        -Long id
+        -String status
+        -String username
+        -Integer addedCount
+        -String errorMessage
+        -String fileName
+        -Long createdAt
+    }
+    
+    class ImportResultDTO {
+        -Long operationId
+        -String status
+        -Integer addedCount
+        -String errorMessage
+    }
+    
+    class CoordinatesDTO {
+        -Long id
+        -double x
+        -long y
+    }
+    
+    class PaginatedResponse {
+        -List<T> content
+        -long totalElements
+        -int totalPages
+        -int currentPage
+        -int pageSize
+    }
+    
+    class ErrorResponse {
+        -int status
+        -String error
+        -String message
+        -String path
+    }
+}
+
+package "Уровень доступа к данным" {
+    interface VehicleDAO {
+        +save()
+        +findById()
+        +findByIdWithLock()
+        +findAll()
+        +count()
+        +update()
+        +deleteById()
+        +findByMaxCapacity()
+        +findByNameStartsWith()
+        +findByFuelConsumptionGreaterThan()
+        +findByType()
+        +resetDistanceTravelled()
+        +findWithFilters()
+        +countWithFilters()
+        +findByNameAndType()
+        +findByEnginePowerCapacityAndFuelType()
+    }
+    
+    class VehicleDAOImpl {
+        +save()
+        +findById()
+        +findByIdWithLock()
+        +findAll()
+        +count()
+        +update()
+        +deleteById()
+        +findByMaxCapacity()
+        +findByNameStartsWith()
+        +findByFuelConsumptionGreaterThan()
+        +findByType()
+        +resetDistanceTravelled()
+        +findWithFilters()
+        +countWithFilters()
+        +findByNameAndType()
+        +findByEnginePowerCapacityAndFuelType()
+    }
+    
+    interface CoordinatesDAO {
+        +save()
+        +findById()
+        +findByXAndY()
+        +findAll()
+        +count()
+    }
+    
+    class CoordinatesDAOImpl {
+        +save()
+        +findById()
+        +findByXAndY()
+        +findAll()
+        +count()
+    }
+    
+    interface UserDAO {
+        +save()
+        +findById()
+        +findByUsername()
+        +getOrCreateUser()
+        +findAll()
+    }
+    
+    class UserDAOImpl {
+        +save()
+        +findById()
+        +findByUsername()
+        +getOrCreateUser()
+        +findAll()
+    }
+    
+    interface ImportOperationDAO {
+        +save()
+        +findById()
+        +findAll()
+        +findByUserId()
+        +update()
+    }
+    
+    class ImportOperationDAOImpl {
+        +save()
+        +findById()
+        +findAll()
+        +findByUserId()
+        +update()
+    }
+}
+
+package "Уровень Entity" {
+    class Vehicle {
+        -Integer id
+        -String name
+        -Coordinates coordinates
+        -Date creationDate
+        -VehicleType type
+        -int enginePower
+        -int numberOfWheels
+        -double capacity
+        -long distanceTravelled
+        -long fuelConsumption
+        -FuelType fuelType
+    }
+    
+    class Coordinates {
+        -Long id
+        -double x
+        -long y
+    }
+    
+    class User {
+        -Long id
+        -String username
+        -boolean admin
+    }
+    
+    class ImportOperation {
+        -Long id
+        -ImportStatus status
+        -User user
+        -Integer addedCount
+        -String errorMessage
+        -String fileName
+        -Date createdAt
+    }
+    
+    enum VehicleType {
+        CAR
+        HELICOPTER
+        BOAT
+        HOVERBOARD
+    }
+    
+    enum FuelType {
+        KEROSENE
+        ELECTRICITY
+        DIESEL
+        ALCOHOL
+    }
+    
+    enum ImportStatus {
+        IN_PROGRESS
+        SUCCESS
+        FAILED
+    }
+}
+
+package "Конфигурация и Connection Pool" {
+    class HibernateUtil {
+        -SessionFactory sessionFactory
+        +getSessionFactory()
+        +shutdown()
+        -buildSessionFactory()
+    }
+    
+    class DBCP2ConnectionProvider {
+        -dataSource: BasicDataSource
+        +configure()
+        +getConnection()
+        +closeConnection()
+        +close()
+    }
+    
+    class CorsFilter {
+        +filter()
+    }
+}
+
+package "Кэширование (Ehcache)" {
+    class EhcacheProvider {
+        +CacheRegion
+    }
+    
+    class VehicleCache {
+        name: "org.example.entity.Vehicle"
+        maxEntriesLocalHeap: 1000
+        timeToLiveSeconds: 3600
+    }
+    
+    class CoordinatesCache {
+        name: "org.example.entity.Coordinates"
+        maxEntriesLocalHeap: 500
+        timeToLiveSeconds: 7200
+    }
+    
+    class QueryCache {
+        name: "query-cache"
+        maxEntriesLocalHeap: 100
+        timeToLiveSeconds: 600
+    }
+}
+
+package "WebSocket" {
+    class VehicleWebSocket {
+        +onOpen()
+        +onClose()
+        +onError()
+        +onMessage()
+        +broadcast()
+        +notifyVehicleDeleted()
+        +notifyVehicleCreated()
+        +notifyVehicleUpdated()
+        +notifyImportCompleted()
+    }
+}
+
+package "Файловое хранилище (MinIO/S3)" {
+    class MinIO {
+        endpoint: "http://127.0.0.1:9000"
+        bucket: "imports"
+        +putObject()
+        +getObject()
+        +removeObject()
+        +statObject()
+    }
+}
+
+package "База данных (PostgreSQL)" {
+    class DB_Vehicle {
+        id (PK)
+        name
+        coordinates_id (FK)
+        creation_date
+        type
+        engine_power
+        number_of_wheels
+        capacity
+        distance_travelled
+        fuel_consumption
+        fuel_type
+    }
+    
+    class DB_Coordinates {
+        id (PK)
+        x
+        y
+    }
+    
+    class DB_AppUsers {
+        id (PK)
+        username (UNIQUE)
+        is_admin
+    }
+    
+    class DB_ImportOperations {
+        id (PK)
+        status
+        user_id (FK)
+        added_count
+        error_message
+        file_name
+        created_at
+    }
+    
+    class ConnectionPool {
+        <<DBCP2>>
+        maxTotal: 20
+        maxIdle: 10
+        minIdle: 5
+        maxWaitMillis: 10000
+    }
+}
+
+' Связи Frontend → Backend
+Frontend --> VehicleController : HTTP REST
+Frontend --> CoordinatesController : HTTP REST
+Frontend --> ImportController : HTTP REST
+WSClient --> VehicleWebSocket : WebSocket
+
+' Связи Controller → Service
+VehicleController --> VehicleService : @Inject
+VehicleController --> VehicleDTO : uses
+VehicleController --> VehicleCreateDTO : uses
+VehicleController --> VehicleUpdateDTO : uses
+VehicleController --> PaginatedResponse : uses
+VehicleController --> ErrorResponse : uses
+
+CoordinatesController --> CoordinatesService : @Inject
+CoordinatesController --> CoordinatesDTO : uses
+CoordinatesController --> ErrorResponse : uses
+
+ImportController --> ImportService : @Inject
+ImportController --> MinioService : @Inject
+ImportController --> VehicleImportDTO : uses
+ImportController --> ImportResultDTO : uses
+ImportController --> ImportOperationDTO : uses
+
+' Связи Service → DAO и другие сервисы
+VehicleService <|.. VehicleServiceImpl : implements
+VehicleServiceImpl --> VehicleDAO : @Inject
+VehicleServiceImpl --> CoordinatesDAO : @Inject
+VehicleServiceImpl --> UniquenessService : @Inject
+VehicleServiceImpl --> VehicleWebSocket : notify
+VehicleServiceImpl --> VehicleDTO : converts to
+
+CoordinatesService <|.. CoordinatesServiceImpl : implements
+CoordinatesServiceImpl --> CoordinatesDAO : @Inject
+CoordinatesServiceImpl --> CoordinatesDTO : converts to
+
+ImportService <|.. ImportServiceImpl : implements
+ImportServiceImpl --> UserDAO : @Inject
+ImportServiceImpl --> ImportOperationDAO : @Inject
+ImportServiceImpl --> MinioService : @Inject
+ImportServiceImpl --> HibernateUtil : @Inject
+ImportServiceImpl --> DistributedTransactionCoordinator : creates
+ImportServiceImpl --> VehicleWebSocket : notify
+ImportServiceImpl --> ImportResultDTO : returns
+
+UniquenessService <|.. UniquenessServiceImpl : implements
+UniquenessServiceImpl --> VehicleDAO : @Inject
+
+' Распределенная транзакция (2PC)
+DistributedTransactionCoordinator --> MinioService : uses
+DistributedTransactionCoordinator --> HibernateUtil : uses Session
+DistributedTransactionCoordinator ..> MinIO : COMMIT/ROLLBACK
+
+' MinIO Service
+MinioService --> MinIO : MinioClient
+
+' AOP связи
+ImportLockInterceptor --> ImportLock : intercepts
+LoggingInterceptor --> Logged : intercepts
+CacheStatisticsInterceptor --> CacheStatistics : intercepts
+CacheStatisticsInterceptor --> CacheStatisticsService : @Inject
+
+ImportServiceImpl --> ImportLock : @ImportLock
+ImportServiceImpl --> Logged : @Logged
+ImportServiceImpl --> CacheStatistics : @CacheStatistics
+
+VehicleServiceImpl --> CacheStatistics : @CacheStatistics
+CoordinatesServiceImpl --> CacheStatistics : @CacheStatistics
+
+' Связи DAO → Entity
+VehicleDAO <|.. VehicleDAOImpl : implements
+VehicleDAOImpl --> HibernateUtil : @Inject
+VehicleDAOImpl --> Vehicle : uses
+
+CoordinatesDAO <|.. CoordinatesDAOImpl : implements
+CoordinatesDAOImpl --> HibernateUtil : @Inject
+CoordinatesDAOImpl --> Coordinates : uses
+
+UserDAO <|.. UserDAOImpl : implements
+UserDAOImpl --> HibernateUtil : @Inject
+UserDAOImpl --> User : uses
+
+ImportOperationDAO <|.. ImportOperationDAOImpl : implements
+ImportOperationDAOImpl --> HibernateUtil : @Inject
+ImportOperationDAOImpl --> ImportOperation : uses
+
+' Связи Entity
+Vehicle --> Coordinates : has
+Vehicle --> VehicleType : uses
+Vehicle --> FuelType : uses
+ImportOperation --> User : belongs to
+ImportOperation --> ImportStatus : uses
+
+' Hibernate, Connection Pool и Cache
+HibernateUtil --> DBCP2ConnectionProvider : uses
+HibernateUtil --> EhcacheProvider : L2 Cache
+HibernateUtil --> Vehicle : maps
+HibernateUtil --> Coordinates : maps
+HibernateUtil --> User : maps
+HibernateUtil --> ImportOperation : maps
+
+DBCP2ConnectionProvider --> ConnectionPool : manages
+ConnectionPool --> DB_Vehicle : connections
+ConnectionPool --> DB_Coordinates : connections
+ConnectionPool --> DB_AppUsers : connections
+ConnectionPool --> DB_ImportOperations : connections
+
+' Cache Statistics
+CacheStatisticsService --> HibernateUtil : SessionFactory
+CacheStatisticsService --> EhcacheProvider : reads stats
+
+' Entity → Cache → Database
+Vehicle --> VehicleCache : cached in L2
+Coordinates --> CoordinatesCache : cached in L2
+Vehicle --> DB_Vehicle : persists to
+Coordinates --> DB_Coordinates : persists to
+User --> DB_AppUsers : persists to
+ImportOperation --> DB_ImportOperations : persists to
+
+' Связь между таблицами БД
+DB_Vehicle --> DB_Coordinates : FK coordinates_id
+DB_ImportOperations --> DB_AppUsers : FK user_id
+
+' JAX-RS Application
+JaxRsApplication --> VehicleController : registers
+JaxRsApplication --> CoordinatesController : registers
+JaxRsApplication --> ImportController : registers
+JaxRsApplication --> CorsFilter : registers
+
+note right of DistributedTransactionCoordinator
+**Двухфазный коммит (2PC)**
+
+ФАЗА 1 - PREPARE:
+1. prepareDatabase() - открыть транзакцию БД
+   (SERIALIZABLE isolation)
+2. prepareMinIO() - валидировать файл,
+   сгенерировать имя
+3. canCommit() - проверка готовности
+
+ФАЗА 2 - COMMIT:
+1. commitDatabase() - commit БД
+2. commitMinIO() - загрузить файл в MinIO
+
+ROLLBACK при ошибке:
+- rollbackDatabase() - откат БД
+- rollbackMinIO() - удалить файл из MinIO
+
+Логирование: [TX:uuid] для отслеживания
+end note
+
+note right of ImportServiceImpl
+@Stateless
+@Inject: UserDAO, ImportOperationDAO
+@Inject: MinioService, HibernateUtil
+
+@ImportLock - блокировка импорта
+@Logged - AOP логирование
+@CacheStatistics - статистика L2 кэша
+
+Использует DistributedTransactionCoordinator
+для транзакционного импорта с сохранением
+файла в MinIO
+
+Rollback при отказе БД/MinIO/бизнес-логики
+end note
+
+note right of MinioService
+@Singleton
+
+Конфигурация:
+- URL: http://127.0.0.1:9000
+- ACCESS_KEY: minio
+- SECRET_KEY: minio12345
+- BUCKET: imports
+
+Операции:
+- uploadFile() - загрузить JSON
+- downloadFile() - скачать файл
+- deleteFile() - удалить (для rollback)
+- fileExists() - проверка существования
+
+Используется в 2PC координаторе
+end note
+
+note right of DBCP2ConnectionProvider
+**Apache Commons DBCP2**
+
+Параметры конфигурации:
+- maxTotal: 20 (макс. соединений)
+- maxIdle: 10 (макс. неактивных)
+- minIdle: 5 (мин. неактивных)
+- maxWaitMillis: 10000 (таймаут ожидания)
+- testOnBorrow: true (валидация)
+- validationQuery: "SELECT 1"
+
+Connection pooling для эффективного
+управления соединениями с PostgreSQL
+end note
+
+note right of EhcacheProvider
+**Ehcache - L2 Cache**
+
+Vehicle Cache:
+- maxEntriesLocalHeap: 1000
+- timeToLiveSeconds: 3600
+- strategy: READ_WRITE
+
+Coordinates Cache:
+- maxEntriesLocalHeap: 500
+- timeToLiveSeconds: 7200
+- strategy: READ_WRITE
+
+Query Cache:
+- maxEntriesLocalHeap: 100
+- timeToLiveSeconds: 600
+- enabled: true
+
+Снижает нагрузку на БД
+end note
+
+note right of CacheStatisticsInterceptor
+@Interceptor
+@Priority(APPLICATION)
+@CacheStatistics
+
+Перехватывает методы с @CacheStatistics
+и логирует статистику L2 кэша:
+- Cache Hits (попадания)
+- Cache Misses (промахи)
+- Cache Puts (добавления)
+- Hit Ratio (эффективность)
+
+AOP реализация для включения/отключения
+логирования статистики
+end note
+
+note right of MinIO
+**S3-совместимое хранилище**
+
+Bucket: imports
+Формат файлов: JSON
+
+Участвует в распределенной транзакции:
+- Prepare: валидация
+- Commit: загрузка файла
+- Rollback: удаление файла
+
+Файлы доступны для скачивания
+из истории импорта
+end note
+
+note right of VehicleWebSocket
+@ServerEndpoint("/ws/vehicles")
+
+Broadcasts real-time updates:
+- CREATED
+- UPDATED
+- DELETED
+- IMPORT_COMPLETED
+
+JSON формат сообщений
+end note
+
+note right of HibernateUtil
+@ApplicationScoped
+SessionFactory management
+
+Connection Provider: DBCP2
+L2 Cache Provider: Ehcache
+hibernate.cache.use_second_level_cache: true
+hibernate.cache.use_query_cache: true
+
+XML mappings:
+- Vehicle.hbm.xml
+- Coordinates.hbm.xml
+- AppUser.hbm.xml
+- ImportOperation.hbm.xml
+end note
+
+note right of Frontend
+React компоненты:
+- VehicleList (таблица с пагинацией)
+- VehicleCreate (форма создания)
+- VehicleEdit (форма редактирования)
+- VehicleDetails (просмотр)
+- SpecialOperations (операции)
+- Import (импорт + история + скачивание файлов)
+
+WebSocket для real-time обновлений
+Переключение user/admin ролей
+Скачивание импортированных файлов из MinIO
+end note
+
+@enduml

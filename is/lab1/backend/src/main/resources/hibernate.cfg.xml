@@ -35,10 +35,10 @@
         <!-- Generate statistics for cache monitoring -->
         <property name="hibernate.generate_statistics">true</property>
         
-        <!-- ИЗМЕНЕНО: Использовать thread-local сессии вместо JTA -->
+        <!--  thread-local сессии вместо JTA -->
         <property name="hibernate.current_session_context_class">thread</property>
         
-        <!-- ИЗМЕНЕНО: Использовать JDBC транзакции вместо JTA -->
+        <!--  JDBC транзакции вместо JTA -->
         <property name="hibernate.transaction.coordinator_class">jdbc</property>
         
         <!-- Apache Commons DBCP2 Connection Provider -->

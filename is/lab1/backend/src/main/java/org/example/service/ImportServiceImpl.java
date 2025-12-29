@@ -123,13 +123,13 @@ public class ImportServiceImpl implements ImportService {
 
             LOGGER.info("[2PC] Фаза 2: COMMIT");
             
-            // ФАЗА 2a: Коммит БД
-            coordinator.commitDatabase();
-            LOGGER.info("[2PC] БД успешно зафиксирована");
-            
-            // ФАЗА 2b: Коммит MinIO (загрузка файла)
+            // ФАЗА 2a: Коммит MinIO (загрузка файла) - ПЕРВЫМ, чтобы при ошибке откатилась БД
             coordinator.commitMinIO();
             LOGGER.info("[2PC] MinIO успешно зафиксирован");
+            
+            // ФАЗА 2b: Коммит БД - ВТОРЫМ, после успешной загрузки в MinIO
+            coordinator.commitDatabase();
+            LOGGER.info("[2PC] БД успешно зафиксирована");
 
             // Обновляем операцию импорта
             operation.setStatus(ImportStatus.SUCCESS);

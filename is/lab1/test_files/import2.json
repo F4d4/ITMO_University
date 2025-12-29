@@ -1,14 +1,14 @@
 [
   {
-    "name": "Difjfj",
-    "x": 362.0,
-    "y": 21,
+    "name": "TRrhfh",
+    "x": 7.0,
+    "y": 38,
     "type": "BOAT",
-    "enginePower": 25,
-    "numberOfWheels": 8,
-    "capacity": 59.0,
-    "distanceTravelled": 14,
-    "fuelConsumption": 37,
+    "enginePower": 28,
+    "numberOfWheels": 21,
+    "capacity": 24.0,
+    "distanceTravelled": 36,
+    "fuelConsumption": 36,
     "fuelType": "DIESEL"
   }
 ]
