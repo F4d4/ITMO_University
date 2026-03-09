@@ -1,30 +1,51 @@
 package org.example.models;
 
+import org.example.interfaces.Conscious;
+
 import java.util.Objects;
 
-public class Whale extends BaseModel {
-    private WhaleCondition condition;
-    private boolean stillWhale;
+public class Whale extends SceneObject implements Conscious {
 
-    public Whale(String name, WhaleCondition condition) {
+    private Position position;
+    private boolean awareOfExistence;
+    private boolean awareOfDeath;
+
+    public Whale(String name) {
         super(name);
-        this.condition = Objects.requireNonNull(condition, "Состояние не может быть null");
-        this.stillWhale = true;
+        this.position = Position.UNNATURAL;
+        this.awareOfExistence = false;
+        this.awareOfDeath = false;
     }
 
-    public WhaleCondition getCondition() {
-        return condition;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setCondition(WhaleCondition condition) {
-        this.condition = Objects.requireNonNull(condition, "Состояние не может быть null");
+    public void setPosition(Position position) {
+        this.position = Objects.requireNonNull(position, "Положение не может быть null");
     }
 
-    public boolean isStillWhale() {
-        return stillWhale;
+    public boolean isInNaturalPosition() {
+        return position == Position.NATURAL;
     }
 
-    public void setStillWhale(boolean stillWhale) {
-        this.stillWhale = stillWhale;
+    @Override
+    public void becomeAwareOfExistence() {
+        this.awareOfExistence = true;
+    }
+
+    @Override
+    public void becomeAwareOfDeath() {
+        this.awareOfDeath = true;
+    }
+
+    @Override
+    public boolean isAwareOfExistence() {
+        return awareOfExistence;
+    }
+
+    @Override
+    public boolean isAwareOfDeath() {
+        return awareOfDeath;
     }
 }

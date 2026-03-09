@@ -1,49 +1,68 @@
 package org.example.models;
 
 import org.junit.jupiter.api.Test;
-
-import static org.example.models.WhaleCondition.UNUSUAL;
-import static org.example.models.WhaleCondition.USUAL;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WhaleTest {
 
     @Test
-    void shouldCreateWhaleWithCorrectFields() {
-        Whale whale = new Whale("кит", USUAL);
-
-        assertEquals("кит", whale.getName());
-        assertEquals(USUAL, whale.getCondition());
-        assertTrue(whale.isStillWhale());
+    void testWhaleCreation() {
+        Whale whale = new Whale("Кит");
+        assertEquals("Кит", whale.getName());
     }
 
     @Test
-    void shouldChangeCondition() {
-        Whale whale = new Whale("кит", USUAL);
-        whale.setCondition(UNUSUAL);
-        assertEquals(UNUSUAL, whale.getCondition());
+    void testInitialPositionIsUnnatural() {
+        Whale whale = new Whale("Кит");
+        assertEquals(Position.UNNATURAL, whale.getPosition());
+        assertFalse(whale.isInNaturalPosition());
     }
 
     @Test
-    void shouldChangeStillWhaleFlag() {
-        Whale whale = new Whale("кит", USUAL);
-        whale.setStillWhale(false);
-        assertFalse(whale.isStillWhale());
+    void testSetPositionToNatural() {
+        Whale whale = new Whale("Кит");
+        whale.setPosition(Position.NATURAL);
+        assertEquals(Position.NATURAL, whale.getPosition());
+        assertTrue(whale.isInNaturalPosition());
     }
 
     @Test
-    void shouldThrowExceptionWhenNameIsNull() {
-        assertThrows(NullPointerException.class, () -> new Whale(null, USUAL));
+    void testSetPositionNullThrows() {
+        Whale whale = new Whale("Кит");
+        assertThrows(NullPointerException.class, () -> whale.setPosition(null));
     }
 
     @Test
-    void shouldThrowExceptionWhenConditionIsNull() {
-        assertThrows(NullPointerException.class, () -> new Whale("кит", null));
+    void testInitiallyNotAwareOfExistence() {
+        Whale whale = new Whale("Кит");
+        assertFalse(whale.isAwareOfExistence());
     }
 
     @Test
-    void shouldThrowExceptionWhenNewConditionIsNull() {
-        Whale whale = new Whale("кит", USUAL);
-        assertThrows(NullPointerException.class, () -> whale.setCondition(null));
+    void testBecomeAwareOfExistence() {
+        Whale whale = new Whale("Кит");
+        whale.becomeAwareOfExistence();
+        assertTrue(whale.isAwareOfExistence());
+    }
+
+    @Test
+    void testInitiallyNotAwareOfDeath() {
+        Whale whale = new Whale("Кит");
+        assertFalse(whale.isAwareOfDeath());
+    }
+
+    @Test
+    void testBecomeAwareOfDeath() {
+        Whale whale = new Whale("Кит");
+        whale.becomeAwareOfDeath();
+        assertTrue(whale.isAwareOfDeath());
+    }
+
+    @Test
+    void testAwarenessIsIndependent() {
+        Whale whale = new Whale("Кит");
+        whale.becomeAwareOfExistence();
+        assertTrue(whale.isAwareOfExistence());
+        assertFalse(whale.isAwareOfDeath());
     }
 }

@@ -1,23 +1,21 @@
 package org.example;
 
-import org.example.commands.BeginStory;
-import org.example.commands.CreaturePart;
-import org.example.commands.LoseIdentityPart;
-import org.example.commands.Scenario;
-import org.example.commands.TextPart;
+import org.example.commands.AcceptFateCommand;
+import org.example.commands.DescribePositionCommand;
+import org.example.commands.RealizeExistenceCommand;
+import org.example.controllers.Scenario;
 import org.example.models.Whale;
 
-import static org.example.models.WhaleCondition.USUAL;
-
 public class Main {
+
     public static void main(String[] args) {
-        Whale whale = new Whale("кит", USUAL);
+        var whale = new Whale("Кит");
 
-        Scenario scenario = new Scenario()
-                .addCommand(new BeginStory(whale))
-                .addCommand(new CreaturePart(whale))
-                .addCommand(new TextPart(", перед тем, как ему пришлось свыкнуться с осознанием того, что оно уже больше не кит."));
+        var scenario = new Scenario();
+        scenario.addCommand(new DescribePositionCommand(whale));
+        scenario.addCommand(new RealizeExistenceCommand(whale));
+        scenario.addCommand(new AcceptFateCommand(whale));
 
-        System.out.println(scenario.execute());
+        scenario.execute();
     }
 }
