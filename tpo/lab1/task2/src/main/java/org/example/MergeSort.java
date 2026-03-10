@@ -1,83 +1,49 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public final class MergeSort {
-
-    private MergeSort() {}
-
-    public static final class Result {
-        public final int[] sorted;
-        public final List<TraceEvent> trace;
-
-        public Result(int[] sorted, List<TraceEvent> trace) {
-            this.sorted = sorted;
-            this.trace = trace;
+public class MergeSort {
+    public static void sort(int[] array) {
+        if (array == null || array.length < 2) {
+            return;
         }
+        int[] temp = new int[array.length];
+        mergeSort(array, temp, 0, array.length - 1);
     }
 
-    public static Result sortWithTrace(int[] input) {
-        if (input == null) throw new IllegalArgumentException("input == null");
-
-        int[] a = input.clone();
-        List<TraceEvent> t = new ArrayList<>();
-        t.add(new TraceEvent(TracePoint.ENTER_SORT, 0, a.length - 1, -1));
-
-        sortRec(a, 0, a.length - 1, t);
-        return new Result(a, t);
-    }
-
-    private static void sortRec(int[] a, int l, int r, List<TraceEvent> t) {
-        if (l >= r) {
-            t.add(new TraceEvent(TracePoint.BASE_CASE, l, r, -1));
+    private static void mergeSort(int[] array, int[] temp, int left, int right) {
+        if (left >= right) {
             return;
         }
 
-        int m = l + (r - l) / 2;
-        t.add(new TraceEvent(TracePoint.SPLIT, l, m, r));
+        int mid = left + (right - left) / 2;
 
-        sortRec(a, l, m, t);
-        sortRec(a, m + 1, r, t);
-        merge(a, l, m, r, t);
+        mergeSort(array, temp, left, mid);
+        mergeSort(array, temp, mid + 1, right);
+        merge(array, temp, left, mid, right);
     }
 
-    private static void merge(int[] a, int l, int m, int r, List<TraceEvent> t) {
-        t.add(new TraceEvent(TracePoint.ENTER_MERGE, l, m, r));
+    private static void merge(int[] array, int[] temp, int left, int mid, int right) {
+        int i = left;
+        int j = mid + 1;
+        int k = left;
 
-        int n1 = m - l + 1;
-        int n2 = r - m;
-
-        int[] left = new int[n1];
-        int[] right = new int[n2];
-
-        System.arraycopy(a, l, left, 0, n1);
-        System.arraycopy(a, m + 1, right, 0, n2);
-
-        int i = 0, j = 0, k = l;
-
-        while (i < n1 && j < n2) {
-            t.add(new TraceEvent(TracePoint.COMPARE, l + i, (m + 1) + j, -1));
-
-            if (left[i] <= right[j]) { // важно: <= для стабильности
-                a[k++] = left[i++];
-                t.add(new TraceEvent(TracePoint.TAKE_LEFT, i - 1, j, k - 1));
+        while (i <= mid && j <= right) {
+            if (array[i] <= array[j]) {
+                temp[k++] = array[i++];
             } else {
-                a[k++] = right[j++];
-                t.add(new TraceEvent(TracePoint.TAKE_RIGHT, i, j - 1, k - 1));
+                temp[k++] = array[j++];
             }
         }
 
-        while (i < n1) {
-            a[k++] = left[i++];
-            t.add(new TraceEvent(TracePoint.DRAIN_LEFT, i - 1, -1, k - 1));
+        while (i <= mid) {
+            temp[k++] = array[i++];
         }
 
-        while (j < n2) {
-            a[k++] = right[j++];
-            t.add(new TraceEvent(TracePoint.DRAIN_RIGHT, -1, j - 1, k - 1));
+        while (j <= right) {
+            temp[k++] = array[j++];
         }
 
-        t.add(new TraceEvent(TracePoint.WRITE_BACK, l, r, -1));
+        for (int index = left; index <= right; index++) {
+            array[index] = temp[index];
+        }
     }
 }
