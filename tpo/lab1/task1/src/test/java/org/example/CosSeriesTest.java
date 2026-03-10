@@ -82,7 +82,7 @@ class CosSeriesTest {
         }
     }
 
-    @RepeatedTest(200)
+    @Test
     void propertyEvenness() {
         Random r = new Random(12345L);
         double x = (r.nextDouble() * 2.0 - 1.0) * 1e4;
@@ -92,7 +92,7 @@ class CosSeriesTest {
         assertEquals(a, b, 1e-10);
     }
 
-    @RepeatedTest(200)
+    @Test
     void propertyPeriodicity() {
         Random r = new Random(54321L);
         double x = (r.nextDouble() * 2.0 - 1.0) * 1e4;
