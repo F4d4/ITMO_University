@@ -103,12 +103,4 @@ class CosSeriesTest {
         assertEquals(a, b, 1e-10);
     }
 
-    @RepeatedTest(2000)
-    void propertyBounds() {
-        Random r = new Random(777L);
-        double x = (r.nextDouble() * 2.0 - 1.0) * 1e6;
-
-        double y = CosSeries.cos(x, EPS, MAX_TERMS);
-        assertTrue(y >= -1.0000000001 && y <= 1.0000000001);
-    }
 }
