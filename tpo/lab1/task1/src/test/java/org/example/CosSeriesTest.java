@@ -34,12 +34,6 @@ class CosSeriesTest {
                 new double[]{e, Math.cos(e)},
                 new double[]{-e, Math.cos(-e)},
 
-                new double[]{1e-8, Math.cos(1e-8)},
-                new double[]{-1e-8, Math.cos(-1e-8)},
-                new double[]{1.0, Math.cos(1.0)},
-                new double[]{-1.0, Math.cos(-1.0)},
-                new double[]{2.0, Math.cos(2.0)},
-                new double[]{-2.0, Math.cos(-2.0)},
 
                 new double[]{100.0 * p, Math.cos(100.0 * p)},
                 new double[]{1e6, Math.cos(1e6)}

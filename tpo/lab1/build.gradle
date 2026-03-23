@@ -1,19 +1,30 @@
-plugins {
-    id 'java'
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+    group = 'org.example'
+    version = '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
+    repositories {
+        mavenCentral()
+    }
 
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
+    dependencies {
+        testImplementation platform('org.junit:junit-bom:5.9.1')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+    }
 
-test {
-    useJUnitPlatform()
+    test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            html.required = true
+            xml.required = false
+            csv.required = false
+        }
+    }
 }
