@@ -34,7 +34,9 @@ class DescribePositionCommandTest {
         Whale whale = new Whale("Кит");
         new DescribePositionCommand(whale).execute();
 
-        assertFalse(whale.isAwareOfExistence());
-        assertFalse(whale.isAwareOfDeath());
+        assertAll(
+                () -> assertFalse(whale.isAwareOfExistence()),
+                () -> assertFalse(whale.isAwareOfDeath())
+        );
     }
 }

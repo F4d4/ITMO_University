@@ -14,16 +14,20 @@ class WhaleTest {
     @Test
     void testInitialPositionIsUnnatural() {
         Whale whale = new Whale("Кит");
-        assertEquals(Position.UNNATURAL, whale.getPosition());
-        assertFalse(whale.isInNaturalPosition());
+        assertAll(
+                () -> assertEquals(Position.UNNATURAL, whale.getPosition()),
+                () -> assertFalse(whale.isInNaturalPosition())
+        );
     }
 
     @Test
     void testSetPositionToNatural() {
         Whale whale = new Whale("Кит");
         whale.setPosition(Position.NATURAL);
-        assertEquals(Position.NATURAL, whale.getPosition());
-        assertTrue(whale.isInNaturalPosition());
+        assertAll(
+                () -> assertEquals(Position.NATURAL, whale.getPosition()),
+                () -> assertTrue(whale.isInNaturalPosition())
+        );
     }
 
     @Test
@@ -62,7 +66,9 @@ class WhaleTest {
     void testAwarenessIsIndependent() {
         Whale whale = new Whale("Кит");
         whale.becomeAwareOfExistence();
-        assertTrue(whale.isAwareOfExistence());
-        assertFalse(whale.isAwareOfDeath());
+        assertAll(
+                () -> assertTrue(whale.isAwareOfExistence()),
+                () -> assertFalse(whale.isAwareOfDeath())
+        );
     }
 }

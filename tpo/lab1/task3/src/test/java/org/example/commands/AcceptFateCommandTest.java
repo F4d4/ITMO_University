@@ -16,11 +16,13 @@ class AcceptFateCommandTest {
     @Test
     void testExecuteSetsAwarenessOfDeath() {
         Whale whale = new Whale("Кит");
-        assertFalse(whale.isAwareOfDeath());
-
-        new AcceptFateCommand(whale).execute();
-
-        assertTrue(whale.isAwareOfDeath());
+        assertAll(
+                () -> assertFalse(whale.isAwareOfDeath()),
+                () -> {
+                    new AcceptFateCommand(whale).execute();
+                    assertTrue(whale.isAwareOfDeath());
+                }
+        );
     }
 
     @Test

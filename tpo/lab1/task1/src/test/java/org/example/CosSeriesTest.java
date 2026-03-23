@@ -2,6 +2,7 @@ package org.example;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -56,17 +57,21 @@ class CosSeriesTest {
 
     @Test
     void testNaNAndInfinity() {
-        assertTrue(Double.isNaN(CosSeries.cos(Double.NaN, EPS, MAX_TERMS)));
-        assertTrue(Double.isNaN(CosSeries.cos(Double.POSITIVE_INFINITY, EPS, MAX_TERMS)));
-        assertTrue(Double.isNaN(CosSeries.cos(Double.NEGATIVE_INFINITY, EPS, MAX_TERMS)));
+        assertAll(
+                () -> assertTrue(Double.isNaN(CosSeries.cos(Double.NaN, EPS, MAX_TERMS))),
+                () -> assertTrue(Double.isNaN(CosSeries.cos(Double.POSITIVE_INFINITY, EPS, MAX_TERMS))),
+                () -> assertTrue(Double.isNaN(CosSeries.cos(Double.NEGATIVE_INFINITY, EPS, MAX_TERMS)))
+        );
     }
 
     @Test
     void testBadParams() {
-        assertThrows(IllegalArgumentException.class, () -> CosSeries.cos(1.0, 0.0, MAX_TERMS));
-        assertThrows(IllegalArgumentException.class, () -> CosSeries.cos(1.0, -1e-3, MAX_TERMS));
-        assertThrows(IllegalArgumentException.class, () -> CosSeries.cos(1.0, EPS, 0));
-        assertThrows(IllegalArgumentException.class, () -> CosSeries.cos(1.0, EPS, -10));
+        assertAll(
+                () -> assertThrows(IllegalArgumentException.class, () -> CosSeries.cos(1.0, 0.0, MAX_TERMS)),
+                () -> assertThrows(IllegalArgumentException.class, () -> CosSeries.cos(1.0, -1e-3, MAX_TERMS)),
+                () -> assertThrows(IllegalArgumentException.class, () -> CosSeries.cos(1.0, EPS, 0)),
+                () -> assertThrows(IllegalArgumentException.class, () -> CosSeries.cos(1.0, EPS, -10))
+        );
     }
 
     @Test
@@ -102,5 +107,4 @@ class CosSeriesTest {
         double b = CosSeries.cos(x + 2.0 * Math.PI * k, EPS, MAX_TERMS);
         assertEquals(a, b, 1e-10);
     }
-
 }

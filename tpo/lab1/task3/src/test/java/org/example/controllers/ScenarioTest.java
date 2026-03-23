@@ -63,7 +63,9 @@ class ScenarioTest {
 
         scenario.execute();
 
-        assertTrue(whale.isAwareOfExistence());
-        assertTrue(whale.isAwareOfDeath());
+        assertAll(
+                () -> assertTrue(whale.isAwareOfExistence()),
+                () -> assertTrue(whale.isAwareOfDeath())
+        );
     }
 }

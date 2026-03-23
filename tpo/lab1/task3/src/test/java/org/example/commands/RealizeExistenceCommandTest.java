@@ -16,11 +16,13 @@ class RealizeExistenceCommandTest {
     @Test
     void testExecuteSetsAwarenessOfExistence() {
         Whale whale = new Whale("Кит");
-        assertFalse(whale.isAwareOfExistence());
-
-        new RealizeExistenceCommand(whale).execute();
-
-        assertTrue(whale.isAwareOfExistence());
+        assertAll(
+                () -> assertFalse(whale.isAwareOfExistence()),
+                () -> {
+                    new RealizeExistenceCommand(whale).execute();
+                    assertTrue(whale.isAwareOfExistence());
+                }
+        );
     }
 
     @Test
