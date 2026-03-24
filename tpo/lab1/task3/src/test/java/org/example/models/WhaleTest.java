@@ -71,4 +71,27 @@ class WhaleTest {
                 () -> assertFalse(whale.isAwareOfDeath())
         );
     }
+
+    @Test
+    void testNotEnoughTimeToAcceptFate() {
+        Whale whale = new Whale("Кит");
+        whale.setTotalTime(5.0);
+
+        // кит тратит время на осознание существования
+        whale.spendTime(3.0);
+        whale.becomeAwareOfExistence();
+
+        // на осознание смерти нужно 4 сек, а осталось только 2
+        assertFalse(whale.hasEnoughTime(4.0));
+        assertEquals(2.0, whale.getRemainingTime(), 1e-9);
+    }
+
+    @Test
+    void testNegativeTimeThrows() {
+        Whale whale = new Whale("Кит");
+        assertAll(
+                () -> assertThrows(IllegalArgumentException.class, () -> whale.setTotalTime(-1)),
+                () -> assertThrows(IllegalArgumentException.class, () -> whale.spendTime(-1))
+        );
+    }
 }

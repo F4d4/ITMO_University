@@ -9,12 +9,38 @@ public class Whale extends SceneObject implements Conscious {
     private Position position;
     private boolean awareOfExistence;
     private boolean awareOfDeath;
+    private double totalTime;
+    private double timeSpent;
 
     public Whale(String name) {
         super(name);
         this.position = Position.UNNATURAL;
         this.awareOfExistence = false;
         this.awareOfDeath = false;
+        this.totalTime = 0.0;
+        this.timeSpent = 0.0;
+    }
+
+    public void setTotalTime(double totalTime) {
+        if (totalTime < 0) {
+            throw new IllegalArgumentException("Время не может быть отрицательным");
+        }
+        this.totalTime = totalTime;
+    }
+
+    public double getRemainingTime() {
+        return totalTime - timeSpent;
+    }
+
+    public boolean hasEnoughTime(double required) {
+        return getRemainingTime() >= required;
+    }
+
+    public void spendTime(double time) {
+        if (time < 0) {
+            throw new IllegalArgumentException("Время не может быть отрицательным");
+        }
+        timeSpent += time;
     }
 
     public Position getPosition() {
