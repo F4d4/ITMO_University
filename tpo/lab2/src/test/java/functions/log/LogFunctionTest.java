@@ -13,9 +13,6 @@ import static org.mockito.Mockito.when;
 
 /**
  * Тесты для Log2Function, Log3Function, Log10Function.
- *
- * В тестах на основе заглушек LnFunction заменяется табличной заглушкой,
- * которая возвращает предвычисленные значения, изолируя каждую лог-функцию от базовой реализации.
  */
 @ExtendWith(MockitoExtension.class)
 class LogFunctionTest {
@@ -29,8 +26,6 @@ class LogFunctionTest {
     private void stubLn(double x, double value) {
         when(lnStub.compute(eq(x), anyDouble())).thenReturn(value);
     }
-
-    // ---- Тесты Log2 ----
 
     @Test
     void log2OfOneIsZero_withStub() {
@@ -58,8 +53,6 @@ class LogFunctionTest {
         assertThrows(ArithmeticException.class, () -> new Log2Function(lnStub).compute(-3.0, EPS));
     }
 
-    // ---- Тесты Log3 ----
-
     @Test
     void log3OfOneIsZero_withStub() {
         stubLn(1.0, 0.0);
@@ -80,8 +73,6 @@ class LogFunctionTest {
         assertEquals(2.0, new Log3Function(lnStub).compute(9.0, EPS), DELTA);
     }
 
-    // ---- Тесты Log10 ----
-
     @Test
     void log10OfOneIsZero_withStub() {
         stubLn(1.0, 0.0);
@@ -101,8 +92,6 @@ class LogFunctionTest {
         stubLn(10.0, Math.log(10));
         assertEquals(2.0, new Log10Function(lnStub).compute(100.0, EPS), DELTA);
     }
-
-    // ---- Интеграционные тесты: реальная LnFunction ----
 
     @Test
     void allLogFunctionsWithRealLn() {

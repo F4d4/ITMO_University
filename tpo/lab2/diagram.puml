@@ -1,0 +1,74 @@
+@startuml
+class functions.trig.TanFunction {
+- SinFunction sinFunction
+- CosFunction cosFunction
++ double compute(double,double)
+}
+
+
+class org.itmo.CsvWriter {
++ void write(String,double,double,double,DoubleUnaryOperator,String)
+}
+
+class functions.log.Log2Function {
+- LnFunction lnFunction
++ double compute(double,double)
+}
+
+
+class org.example.Main {
+- {static} double EPSILON
+- {static} String SEPARATOR
+- {static} Path OUTPUT_DIR
+- {static} double FROM
+- {static} double TO
+- {static} double STEP
++ {static} void main(String[])
+- {static} String out(String)
+}
+
+
+class functions.log.Log3Function {
+- LnFunction lnFunction
++ double compute(double,double)
+}
+
+
+class functions.base.LnFunction {
++ double compute(double,double)
+}
+
+class functions.base.SinFunction {
++ double compute(double,double)
+}
+
+class org.itmo.FunctionSystem {
+- CotFunction cotFunction
+- TanFunction tanFunction
+- Log2Function log2Function
+- Log3Function log3Function
+- Log10Function log10Function
++ double compute(double,double)
+}
+
+
+class functions.trig.CosFunction {
+- SinFunction sinFunction
++ double compute(double,double)
+}
+
+
+class functions.trig.CotFunction {
+- SinFunction sinFunction
+- CosFunction cosFunction
++ double compute(double,double)
+}
+
+
+class functions.log.Log10Function {
+- LnFunction lnFunction
++ double compute(double,double)
+}
+
+
+@enduml

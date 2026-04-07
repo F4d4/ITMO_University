@@ -23,10 +23,10 @@ import static org.mockito.Mockito.when;
  * Интеграционные тесты для FunctionSystem.
  *
  * Стратегия интеграции (снизу вверх, по диаграмме зависимостей модулей):
- *   Уровень 1 – Все заглушки: проверка связности системы и ветвления.
- *   Уровень 2 – Интеграция реальной цепочки sin → cos → tan/cot; заглушки для логов (ветвь x ≤ 0).
- *   Уровень 3 – Интеграция реальной цепочки ln → log2/3/10; заглушки для тригонометрии (ветвь x > 0).
- *   Уровень 4 – Полная интеграция: все функции реальные, обе ветви.
+ *    Все заглушки: проверка связности системы и ветвления.
+ *    Интеграция реальной цепочки sin -> cos -> tan/cot; заглушки для логов (ветвь x <= 0).
+ *    Интеграция реальной цепочки ln -> log2/3/10; заглушки для тригонометрии (ветвь x > 0).
+ *    Полная интеграция: все функции реальные, обе ветви.
  */
 @ExtendWith(MockitoExtension.class)
 class FunctionSystemIntegrationTest {
@@ -39,11 +39,7 @@ class FunctionSystemIntegrationTest {
     @Mock private Log2Function log2Stub;
     @Mock private Log3Function log3Stub;
     @Mock private Log10Function log10Stub;
-
-    // -------------------------------------------------------------------------
-    // Уровень 1: все заглушки – связность системы
-    // -------------------------------------------------------------------------
-
+    // все заглушки – связность системы
     @Test
     void level1_negativeBranch_returnsProductOfCotAndTan() {
         double x = -Math.PI / 4;
@@ -84,11 +80,7 @@ class FunctionSystemIntegrationTest {
         FunctionSystem system = new FunctionSystem(cotStub, tanStub, log2Stub, log3Stub, log10Stub);
         assertThrows(ArithmeticException.class, () -> system.compute(0.0, EPS));
     }
-
-    // -------------------------------------------------------------------------
-    // Уровень 2: реальная тригонометрическая цепочка (sin → cos → tan, cot); заглушки для логов (x ≤ 0)
-    // -------------------------------------------------------------------------
-
+    // реальная тригонометрическая цепочка (sin -> cos -> tan, cot); заглушки для логов (x <= 0)
     @Test
     void level2_negativeBranch_cotTimesTanEqualsOne() {
         SinFunction sin = new SinFunction();
@@ -112,14 +104,10 @@ class FunctionSystemIntegrationTest {
         TanFunction tan = new TanFunction(sin, cos);
 
         FunctionSystem system = new FunctionSystem(cot, tan, log2Stub, log3Stub, log10Stub);
-        // sin(−π) ≈ 0 → cot не определен
+        // sin(−pi) ≈ 0 -> cot не определен
         assertThrows(ArithmeticException.class, () -> system.compute(-Math.PI, EPS));
     }
-
-    // -------------------------------------------------------------------------
-    // Уровень 3: реальная логарифмическая цепочка (ln → log2/3/10); заглушки для тригонометрии (x > 0)
-    // -------------------------------------------------------------------------
-
+    // реальная логарифмическая цепочка (ln -> log2/3/10); заглушки для тригонометрии (x > 0)
     @Test
     void level3_positiveBranch_knownValueAtX2() {
         LnFunction    ln    = new LnFunction();
@@ -141,22 +129,18 @@ class FunctionSystemIntegrationTest {
 
     @Test
     void level3_positiveBranch_xEqualsOneIsUndefined() {
-        // При x=1: log2(1)=0, log10(1)=0 → деление на ноль (или 0/0)
+        // При x=1: log2(1)=0, log10(1)=0 -> деление на ноль (или 0/0)
         LnFunction    ln    = new LnFunction();
         Log2Function  log2  = new Log2Function(ln);
         Log3Function  log3  = new Log3Function(ln);
         Log10Function log10 = new Log10Function(ln);
 
         FunctionSystem system = new FunctionSystem(cotStub, tanStub, log2, log3, log10);
-        // log2(1)/log10(1) = 0/0 → NaN, но сами логарифмы не бросают исключение; результат NaN
+        // log2(1)/log10(1) = 0/0 -> NaN, но сами логарифмы не бросают исключение; результат NaN
         double result = system.compute(1.0, EPS);
         assertTrue(Double.isNaN(result) || Double.isInfinite(result));
     }
-
-    // -------------------------------------------------------------------------
-    // Уровень 4: полная интеграция – все функции реальные
-    // -------------------------------------------------------------------------
-
+    // полная интеграция – все функции реальные
     @Test
     void level4_fullIntegration_negativeBranch_isAlwaysOne() {
         FunctionSystem system = buildFullSystem();
@@ -188,8 +172,6 @@ class FunctionSystemIntegrationTest {
         // x = 0 попадает в тригонометрическую ветвь, но cot(0) не определен
         assertThrows(ArithmeticException.class, () -> system.compute(0.0, EPS));
     }
-
-    // -------------------------------------------------------------------------
 
     private FunctionSystem buildFullSystem() {
         SinFunction   sin   = new SinFunction();

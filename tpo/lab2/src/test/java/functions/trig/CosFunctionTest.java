@@ -13,11 +13,6 @@ import static org.mockito.Mockito.when;
 
 /**
  * Тесты для CosFunction.
- *
- * Тесты на основе заглушки: SinFunction заменяется табличной заглушкой (Mockito mock),
- * которая возвращает известные значения для конкретных аргументов, изолируя CosFunction.
- *
- * CosFunction делегирует вычисление в sin по формуле: cos(x) = sin(π/2 - x).
  */
 @ExtendWith(MockitoExtension.class)
 class CosFunctionTest {
@@ -27,11 +22,10 @@ class CosFunctionTest {
     @Mock
     private SinFunction sinStub;
 
-    // --- Тесты с заглушкой sin (изоляция модуля) ---
 
     @Test
     void cosZeroIsOne_withStub() {
-        // cos(0) = sin(π/2) = 1
+        // cos(0) = sin(pi/2) = 1
         when(sinStub.compute(eq(Math.PI / 2), anyDouble())).thenReturn(1.0);
         CosFunction cos = new CosFunction(sinStub);
 
@@ -40,7 +34,7 @@ class CosFunctionTest {
 
     @Test
     void cosHalfPiIsZero_withStub() {
-        // cos(π/2) = sin(0) = 0
+        // cos(pi/2) = sin(0) = 0
         when(sinStub.compute(eq(0.0), anyDouble())).thenReturn(0.0);
         CosFunction cos = new CosFunction(sinStub);
 
@@ -49,15 +43,13 @@ class CosFunctionTest {
 
     @Test
     void cosPiIsMinusOne_withStub() {
-        // cos(π) = sin(π/2 - π) = sin(-π/2) = -1
+        // cos(pi) = sin(pi/2 - pi) = sin(-pi/2) = -1
         when(sinStub.compute(eq(Math.PI / 2 - Math.PI), anyDouble())).thenReturn(-1.0);
         CosFunction cos = new CosFunction(sinStub);
 
         assertEquals(-1.0, cos.compute(Math.PI, 1e-9), DELTA);
     }
-
-    // --- Интеграционный тест: реальная SinFunction ---
-
+    
     @Test
     void cosWithRealSin_knownValues() {
         SinFunction realSin = new SinFunction();
@@ -67,7 +59,7 @@ class CosFunctionTest {
         assertEquals(1.0,  cos.compute(0.0,       eps), 1e-6);
         assertEquals(0.0,  cos.compute(Math.PI / 2, eps), 1e-6);
         assertEquals(-1.0, cos.compute(Math.PI,    eps), 1e-6);
-        assertEquals(0.5,  cos.compute(Math.PI / 3, eps), 1e-6); // cos(60°) = 0.5
+        assertEquals(0.5,  cos.compute(Math.PI / 3, eps), 1e-6); // cos(60) = 0.5
     }
 
     @Test

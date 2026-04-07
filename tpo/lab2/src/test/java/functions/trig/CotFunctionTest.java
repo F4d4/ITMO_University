@@ -25,7 +25,7 @@ class CotFunctionTest {
 
     @Test
     void cotQuarterPiIsOne_withStubs() {
-        // cot(π/4) = cos(π/4)/sin(π/4) = 1
+        // cot(pi/4) = cos(pi/4)/sin(pi/4) = 1
         double root2over2 = Math.sqrt(2) / 2;
         when(sinStub.compute(eq(Math.PI / 4), anyDouble())).thenReturn(root2over2);
         when(cosStub.compute(eq(Math.PI / 4), anyDouble())).thenReturn(root2over2);
@@ -36,7 +36,7 @@ class CotFunctionTest {
 
     @Test
     void cotHalfPiIsZero_withStubs() {
-        // cot(π/2) = cos(π/2)/sin(π/2) = 0/1 = 0
+        // cot(pi/2) = cos(pi/2)/sin(pi/2) = 0/1 = 0
         when(sinStub.compute(eq(Math.PI / 2), anyDouble())).thenReturn(1.0);
         when(cosStub.compute(eq(Math.PI / 2), anyDouble())).thenReturn(0.0);
         CotFunction cot = new CotFunction(sinStub, cosStub);

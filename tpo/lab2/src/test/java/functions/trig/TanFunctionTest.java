@@ -25,7 +25,7 @@ class TanFunctionTest {
 
     @Test
     void tanQuarterPiIsOne_withStubs() {
-        // tan(π/4) = sin(π/4)/cos(π/4) = 1
+        // tan(pi/4) = sin(pi/4)/cos(pi/4) = 1
         double root2over2 = Math.sqrt(2) / 2;
         when(sinStub.compute(eq(Math.PI / 4), anyDouble())).thenReturn(root2over2);
         when(cosStub.compute(eq(Math.PI / 4), anyDouble())).thenReturn(root2over2);
@@ -53,7 +53,7 @@ class TanFunctionTest {
 
     @Test
     void tanNegativeAngle_withStubs() {
-        // tan(-π/4) = -1
+        // tan(-pi/4) = -1
         double root2over2 = Math.sqrt(2) / 2;
         when(sinStub.compute(eq(-Math.PI / 4), anyDouble())).thenReturn(-root2over2);
         when(cosStub.compute(eq(-Math.PI / 4), anyDouble())).thenReturn(root2over2);
