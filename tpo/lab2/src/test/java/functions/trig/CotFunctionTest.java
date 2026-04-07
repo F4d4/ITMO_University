@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -70,7 +71,9 @@ class CotFunctionTest {
         CosFunction realCos = new CosFunction(realSin);
         CotFunction cot = new CotFunction(realSin, realCos);
 
-        assertEquals(1.0,  cot.compute(Math.PI / 4, EPS), DELTA);
-        assertEquals(0.0,  cot.compute(Math.PI / 2, EPS), DELTA);
+        assertAll(
+                () -> assertEquals(1.0, cot.compute(Math.PI / 4, EPS), DELTA),
+                () -> assertEquals(0.0, cot.compute(Math.PI / 2, EPS), DELTA)
+        );
     }
 }

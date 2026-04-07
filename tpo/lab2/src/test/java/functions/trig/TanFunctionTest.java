@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -68,8 +69,10 @@ class TanFunctionTest {
         CosFunction realCos = new CosFunction(realSin);
         TanFunction tan = new TanFunction(realSin, realCos);
 
-        assertEquals(1.0,  tan.compute(Math.PI / 4, EPS), DELTA);
-        assertEquals(0.0,  tan.compute(0.0, EPS), DELTA);
-        assertEquals(-1.0, tan.compute(-Math.PI / 4, EPS), DELTA);
+        assertAll(
+                () -> assertEquals(1.0,  tan.compute(Math.PI / 4,  EPS), DELTA),
+                () -> assertEquals(0.0,  tan.compute(0.0,          EPS), DELTA),
+                () -> assertEquals(-1.0, tan.compute(-Math.PI / 4, EPS), DELTA)
+        );
     }
 }

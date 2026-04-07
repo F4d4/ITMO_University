@@ -91,9 +91,11 @@ class FunctionSystemIntegrationTest {
         FunctionSystem system = new FunctionSystem(cot, tan, log2Stub, log3Stub, log10Stub);
 
         // cot(x)*tan(x) = cos(x)/sin(x) * sin(x)/cos(x) = 1 для допустимых x
-        assertEquals(1.0, system.compute(-Math.PI / 4, EPS), DELTA);
-        assertEquals(1.0, system.compute(-1.0,         EPS), DELTA);
-        assertEquals(1.0, system.compute(-0.5,         EPS), DELTA);
+        assertAll(
+                () -> assertEquals(1.0, system.compute(-Math.PI / 4, EPS), DELTA),
+                () -> assertEquals(1.0, system.compute(-1.0,         EPS), DELTA),
+                () -> assertEquals(1.0, system.compute(-0.5,         EPS), DELTA)
+        );
     }
 
     @Test

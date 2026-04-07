@@ -100,12 +100,14 @@ class LogFunctionTest {
         Log3Function  log3  = new Log3Function(realLn);
         Log10Function log10 = new Log10Function(realLn);
 
-        assertEquals(1.0, log2.compute(2.0,   EPS), DELTA);
-        assertEquals(2.0, log2.compute(4.0,   EPS), DELTA);
-        assertEquals(1.0, log3.compute(3.0,   EPS), DELTA);
-        assertEquals(2.0, log3.compute(9.0,   EPS), DELTA);
-        assertEquals(1.0, log10.compute(10.0, EPS), DELTA);
-        assertEquals(2.0, log10.compute(100.0,EPS), DELTA);
+        assertAll(
+                () -> assertEquals(1.0, log2.compute(2.0,    EPS), DELTA),
+                () -> assertEquals(2.0, log2.compute(4.0,    EPS), DELTA),
+                () -> assertEquals(1.0, log3.compute(3.0,    EPS), DELTA),
+                () -> assertEquals(2.0, log3.compute(9.0,    EPS), DELTA),
+                () -> assertEquals(1.0, log10.compute(10.0,  EPS), DELTA),
+                () -> assertEquals(2.0, log10.compute(100.0, EPS), DELTA)
+        );
     }
 
     @Test

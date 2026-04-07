@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
@@ -56,10 +57,12 @@ class CosFunctionTest {
         CosFunction cos = new CosFunction(realSin);
         double eps = 1e-9;
 
-        assertEquals(1.0,  cos.compute(0.0,       eps), 1e-6);
-        assertEquals(0.0,  cos.compute(Math.PI / 2, eps), 1e-6);
-        assertEquals(-1.0, cos.compute(Math.PI,    eps), 1e-6);
-        assertEquals(0.5,  cos.compute(Math.PI / 3, eps), 1e-6); // cos(60) = 0.5
+        assertAll(
+                () -> assertEquals(1.0,  cos.compute(0.0,         eps), 1e-6),
+                () -> assertEquals(0.0,  cos.compute(Math.PI / 2, eps), 1e-6),
+                () -> assertEquals(-1.0, cos.compute(Math.PI,     eps), 1e-6),
+                () -> assertEquals(0.5,  cos.compute(Math.PI / 3, eps), 1e-6) // cos(60) = 0.5
+        );
     }
 
     @Test
