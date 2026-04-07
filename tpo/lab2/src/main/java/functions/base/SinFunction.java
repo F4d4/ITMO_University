@@ -7,7 +7,7 @@ package functions.base;
 public class SinFunction {
 
     public double compute(double x, double epsilon) {
-        // Нормализация к [-2π, 2π] для уменьшения потерь точности
+        // Нормализация к [-2 * pi, 2 * pi] для уменьшения потерь точности
         x = x % (2 * Math.PI);
 
         double result = 0;
