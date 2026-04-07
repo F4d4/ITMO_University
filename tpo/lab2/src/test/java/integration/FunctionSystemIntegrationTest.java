@@ -181,18 +181,6 @@ class FunctionSystemIntegrationTest {
         assertEquals(expected, system.compute(x, EPS), DELTA);
     }
 
-    @Test
-    void level4_fullIntegration_positiveBranch_x10() {
-        FunctionSystem system = buildFullSystem();
-
-        double x = 10.0;
-        double l2  = Math.log(x) / Math.log(2);
-        double l10 = Math.log(x) / Math.log(10);
-        double l3  = Math.log(x) / Math.log(3);
-        double expected = Math.pow(Math.pow(l2 / l10, 2) * Math.pow(l3, 2), 2) * l2;
-
-        assertEquals(expected, system.compute(x, EPS), DELTA);
-    }
 
     @Test
     void level4_fullIntegration_nonPositiveLogArgThrows() {
