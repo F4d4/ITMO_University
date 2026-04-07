@@ -1,8 +1,8 @@
 package functions.base;
 
 /**
- * Computes ln(x) via the series: ln(x) = 2 * (t + t^3/3 + t^5/5 + ...), t = (x-1)/(x+1).
- * The series converges for all x > 0. Implemented from scratch without Math.log().
+ * Вычисляет ln(x) с помощью ряда: ln(x) = 2 * (t + t^3/3 + t^5/5 + ...), t = (x-1)/(x+1).
+ * Ряд сходится для всех x > 0. Реализовано с нуля без использования Math.log().
  */
 public class LnFunction {
 
