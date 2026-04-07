@@ -3,7 +3,7 @@ package functions.trig;
 import functions.base.SinFunction;
 
 /**
- * Computes tan(x) = sin(x) / cos(x).
+ * Вычисляет tan(x) = sin(x) / cos(x).
  */
 public class TanFunction {
 

@@ -36,12 +36,12 @@ public class Main {
         FunctionSystem system = new FunctionSystem(cot, tan, log2, log3, log10);
         CsvWriter csvWriter = new CsvWriter();
 
-        // System of functions: full range covering both branches (x <= 0 and x > 0)
+        // Система функций: полный диапазон, покрывающий обе ветви (x <= 0 и x > 0)
         csvWriter.write(OUTPUT_DIR.resolve("system.csv").toString(), -3.0, 10.0, 0.1,
                 x -> system.compute(x, EPSILON), SEPARATOR);
         System.out.println("data/system.csv written (x from -3 to 10, step 0.1)");
 
-        // Individual modules
+        // Отдельные модули
         csvWriter.write(OUTPUT_DIR.resolve("sin.csv").toString(),   -6.3, 6.3,  0.1, x -> sin.compute(x, EPSILON),   SEPARATOR);
         csvWriter.write(OUTPUT_DIR.resolve("ln.csv").toString(),     0.1, 10.0, 0.1, x -> ln.compute(x, EPSILON),    SEPARATOR);
         csvWriter.write(OUTPUT_DIR.resolve("cos.csv").toString(),   -6.3, 6.3,  0.1, x -> cos.compute(x, EPSILON),   SEPARATOR);

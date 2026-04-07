@@ -3,8 +3,8 @@ package functions.trig;
 import functions.base.SinFunction;
 
 /**
- * Computes cos(x) using the co-function identity: cos(x) = sin(π/2 - x).
- * Depends on SinFunction as the underlying base implementation.
+ * Вычисляет cos(x) с использованием кофункционального тождества: cos(x) = sin(π/2 - x).
+ * Зависит от SinFunction как от базовой реализации.
  */
 public class CosFunction {
 

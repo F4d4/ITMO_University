@@ -12,10 +12,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 /**
- * Tests for Log2Function, Log3Function, Log10Function.
+ * Тесты для Log2Function, Log3Function, Log10Function.
  *
- * Stub-based tests replace LnFunction with a table stub that provides
- * precomputed values, isolating each log function from the base implementation.
+ * В тестах на основе заглушек LnFunction заменяется табличной заглушкой,
+ * которая возвращает предвычисленные значения, изолируя каждую лог-функцию от базовой реализации.
  */
 @ExtendWith(MockitoExtension.class)
 class LogFunctionTest {
@@ -25,12 +25,12 @@ class LogFunctionTest {
 
     @Mock private LnFunction lnStub;
 
-    // Helper: stub ln table entries needed for log_b(x) = ln(x)/ln(b)
+    // Вспомогательный метод: подстановка табличных значений ln для log_b(x) = ln(x)/ln(b)
     private void stubLn(double x, double value) {
         when(lnStub.compute(eq(x), anyDouble())).thenReturn(value);
     }
 
-    // ---- Log2 tests ----
+    // ---- Тесты Log2 ----
 
     @Test
     void log2OfOneIsZero_withStub() {
@@ -58,7 +58,7 @@ class LogFunctionTest {
         assertThrows(ArithmeticException.class, () -> new Log2Function(lnStub).compute(-3.0, EPS));
     }
 
-    // ---- Log3 tests ----
+    // ---- Тесты Log3 ----
 
     @Test
     void log3OfOneIsZero_withStub() {
@@ -80,7 +80,7 @@ class LogFunctionTest {
         assertEquals(2.0, new Log3Function(lnStub).compute(9.0, EPS), DELTA);
     }
 
-    // ---- Log10 tests ----
+    // ---- Тесты Log10 ----
 
     @Test
     void log10OfOneIsZero_withStub() {
@@ -102,7 +102,7 @@ class LogFunctionTest {
         assertEquals(2.0, new Log10Function(lnStub).compute(100.0, EPS), DELTA);
     }
 
-    // ---- Integration tests: real LnFunction ----
+    // ---- Интеграционные тесты: реальная LnFunction ----
 
     @Test
     void allLogFunctionsWithRealLn() {
@@ -121,7 +121,7 @@ class LogFunctionTest {
 
     @Test
     void changeOfBaseIdentity_withRealLn() {
-        // log_2(x) * log_3(2) = log_3(x)   (change-of-base sanity check)
+        // log_2(x) * log_3(2) = log_3(x)   (проверка формулы смены основания)
         LnFunction realLn = new LnFunction();
         Log2Function  log2 = new Log2Function(realLn);
         Log3Function  log3 = new Log3Function(realLn);

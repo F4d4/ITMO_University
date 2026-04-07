@@ -20,13 +20,13 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 /**
- * Integration tests for FunctionSystem.
+ * Интеграционные тесты для FunctionSystem.
  *
- * Integration strategy (bottom-up, per the module dependency diagram):
- *   Level 1 – All stubs: verifies system wiring and branching.
- *   Level 2 – Real sin → cos → tan/cot integrated; stubs for logs (x ≤ 0 branch).
- *   Level 3 – Real ln → log2/3/10 integrated; stubs for trig (x > 0 branch).
- *   Level 4 – Full integration: all real functions, both branches.
+ * Стратегия интеграции (снизу вверх, по диаграмме зависимостей модулей):
+ *   Уровень 1 – Все заглушки: проверка связности системы и ветвления.
+ *   Уровень 2 – Интеграция реальной цепочки sin → cos → tan/cot; заглушки для логов (ветвь x ≤ 0).
+ *   Уровень 3 – Интеграция реальной цепочки ln → log2/3/10; заглушки для тригонометрии (ветвь x > 0).
+ *   Уровень 4 – Полная интеграция: все функции реальные, обе ветви.
  */
 @ExtendWith(MockitoExtension.class)
 class FunctionSystemIntegrationTest {
@@ -41,7 +41,7 @@ class FunctionSystemIntegrationTest {
     @Mock private Log10Function log10Stub;
 
     // -------------------------------------------------------------------------
-    // Level 1: All stubs – system wiring
+    // Уровень 1: все заглушки – связность системы
     // -------------------------------------------------------------------------
 
     @Test
@@ -57,7 +57,7 @@ class FunctionSystemIntegrationTest {
     @Test
     void level1_positiveBranch_usesLogStubs() {
         double x = 2.0;
-        // Stub log values so the formula is computable
+        // Подставляем значения логарифмов-заглушек, чтобы формула была вычислима
         when(log2Stub.compute(eq(x), anyDouble())).thenReturn(1.0);
         when(log10Stub.compute(eq(x), anyDouble())).thenReturn(0.30103);
         when(log3Stub.compute(eq(x), anyDouble())).thenReturn(0.63093);
@@ -65,7 +65,7 @@ class FunctionSystemIntegrationTest {
         // ((((1/0.30103)^2) * 0.63093^2)^2) * 1
         double a = 1.0 / 0.30103;
         double expected = Math.pow(Math.pow(a * a * 0.63093 * 0.63093, 2), 1) * 1.0;
-        // Recompute exactly as in FunctionSystem
+        // Пересчитываем точно так же, как в FunctionSystem
         double b = a * a;
         double c = 0.63093 * 0.63093;
         double d = b * c;
@@ -86,7 +86,7 @@ class FunctionSystemIntegrationTest {
     }
 
     // -------------------------------------------------------------------------
-    // Level 2: Real trig chain (sin → cos → tan, cot); stubs for logs (x ≤ 0)
+    // Уровень 2: реальная тригонометрическая цепочка (sin → cos → tan, cot); заглушки для логов (x ≤ 0)
     // -------------------------------------------------------------------------
 
     @Test
@@ -98,7 +98,7 @@ class FunctionSystemIntegrationTest {
 
         FunctionSystem system = new FunctionSystem(cot, tan, log2Stub, log3Stub, log10Stub);
 
-        // cot(x)*tan(x) = cos(x)/sin(x) * sin(x)/cos(x) = 1 for valid x
+        // cot(x)*tan(x) = cos(x)/sin(x) * sin(x)/cos(x) = 1 для допустимых x
         assertEquals(1.0, system.compute(-Math.PI / 4, EPS), DELTA);
         assertEquals(1.0, system.compute(-1.0,         EPS), DELTA);
         assertEquals(1.0, system.compute(-0.5,         EPS), DELTA);
@@ -112,12 +112,12 @@ class FunctionSystemIntegrationTest {
         TanFunction tan = new TanFunction(sin, cos);
 
         FunctionSystem system = new FunctionSystem(cot, tan, log2Stub, log3Stub, log10Stub);
-        // sin(−π) ≈ 0 → cot undefined
+        // sin(−π) ≈ 0 → cot не определен
         assertThrows(ArithmeticException.class, () -> system.compute(-Math.PI, EPS));
     }
 
     // -------------------------------------------------------------------------
-    // Level 3: Real log chain (ln → log2/3/10); stubs for trig (x > 0)
+    // Уровень 3: реальная логарифмическая цепочка (ln → log2/3/10); заглушки для тригонометрии (x > 0)
     // -------------------------------------------------------------------------
 
     @Test
@@ -129,7 +129,7 @@ class FunctionSystemIntegrationTest {
 
         FunctionSystem system = new FunctionSystem(cotStub, tanStub, log2, log3, log10);
 
-        // Expected using standard Math.log for reference
+        // Ожидаемое значение считаем через стандартный Math.log как эталон
         double x = 2.0;
         double l2  = Math.log(x) / Math.log(2);
         double l10 = Math.log(x) / Math.log(10);
@@ -141,20 +141,20 @@ class FunctionSystemIntegrationTest {
 
     @Test
     void level3_positiveBranch_xEqualsOneIsUndefined() {
-        // At x=1: log2(1)=0, log10(1)=0 → division by zero (or 0/0)
+        // При x=1: log2(1)=0, log10(1)=0 → деление на ноль (или 0/0)
         LnFunction    ln    = new LnFunction();
         Log2Function  log2  = new Log2Function(ln);
         Log3Function  log3  = new Log3Function(ln);
         Log10Function log10 = new Log10Function(ln);
 
         FunctionSystem system = new FunctionSystem(cotStub, tanStub, log2, log3, log10);
-        // log2(1)/log10(1) = 0/0 → NaN, but no exception from logs themselves; result is NaN
+        // log2(1)/log10(1) = 0/0 → NaN, но сами логарифмы не бросают исключение; результат NaN
         double result = system.compute(1.0, EPS);
         assertTrue(Double.isNaN(result) || Double.isInfinite(result));
     }
 
     // -------------------------------------------------------------------------
-    // Level 4: Full integration – all real functions
+    // Уровень 4: полная интеграция – все функции реальные
     // -------------------------------------------------------------------------
 
     @Test
@@ -164,7 +164,7 @@ class FunctionSystemIntegrationTest {
         double[] xs = {-0.1, -0.5, -1.0, -Math.PI / 4, -Math.PI / 3};
         for (double x : xs) {
             assertEquals(1.0, system.compute(x, EPS), DELTA,
-                    "Expected cot(x)*tan(x)=1 at x=" + x);
+                    "Ожидалось cot(x)*tan(x)=1 при x=" + x);
         }
     }
 
@@ -197,7 +197,7 @@ class FunctionSystemIntegrationTest {
     @Test
     void level4_fullIntegration_nonPositiveLogArgThrows() {
         FunctionSystem system = buildFullSystem();
-        // x = 0 is handled by trig branch but cot(0) is undefined
+        // x = 0 попадает в тригонометрическую ветвь, но cot(0) не определен
         assertThrows(ArithmeticException.class, () -> system.compute(0.0, EPS));
     }
 

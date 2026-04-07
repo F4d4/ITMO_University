@@ -3,7 +3,7 @@ package functions.log;
 import functions.base.LnFunction;
 
 /**
- * Computes log_10(x) = ln(x) / ln(10).
+ * Вычисляет log_10(x) = ln(x) / ln(10).
  */
 public class Log10Function {
 

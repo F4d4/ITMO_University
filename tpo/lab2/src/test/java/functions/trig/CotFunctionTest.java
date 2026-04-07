@@ -12,7 +12,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 /**
- * Tests for CotFunction using table stubs for sin and cos.
+ * Тесты для CotFunction с использованием табличных заглушек для sin и cos.
  */
 @ExtendWith(MockitoExtension.class)
 class CotFunctionTest {

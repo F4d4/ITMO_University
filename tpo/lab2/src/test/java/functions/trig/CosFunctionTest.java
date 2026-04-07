@@ -12,12 +12,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 /**
- * Tests for CosFunction.
+ * Тесты для CosFunction.
  *
- * Stub-based tests: SinFunction is replaced by a table stub (Mockito mock)
- * that returns known values for specific arguments, isolating CosFunction.
+ * Тесты на основе заглушки: SinFunction заменяется табличной заглушкой (Mockito mock),
+ * которая возвращает известные значения для конкретных аргументов, изолируя CosFunction.
  *
- * CosFunction delegates to sin via: cos(x) = sin(π/2 - x).
+ * CosFunction делегирует вычисление в sin по формуле: cos(x) = sin(π/2 - x).
  */
 @ExtendWith(MockitoExtension.class)
 class CosFunctionTest {
@@ -27,7 +27,7 @@ class CosFunctionTest {
     @Mock
     private SinFunction sinStub;
 
-    // --- Tests using sin stub (unit isolation) ---
+    // --- Тесты с заглушкой sin (изоляция модуля) ---
 
     @Test
     void cosZeroIsOne_withStub() {
@@ -56,7 +56,7 @@ class CosFunctionTest {
         assertEquals(-1.0, cos.compute(Math.PI, 1e-9), DELTA);
     }
 
-    // --- Integration test: real SinFunction ---
+    // --- Интеграционный тест: реальная SinFunction ---
 
     @Test
     void cosWithRealSin_knownValues() {

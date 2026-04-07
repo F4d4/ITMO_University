@@ -12,7 +12,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 /**
- * Tests for TanFunction using table stubs for sin and cos.
+ * Тесты для TanFunction с использованием табличных заглушек для sin и cos.
  */
 @ExtendWith(MockitoExtension.class)
 class TanFunctionTest {

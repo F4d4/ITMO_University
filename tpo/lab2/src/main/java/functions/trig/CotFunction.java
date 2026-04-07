@@ -3,7 +3,7 @@ package functions.trig;
 import functions.base.SinFunction;
 
 /**
- * Computes cot(x) = cos(x) / sin(x).
+ * Вычисляет cot(x) = cos(x) / sin(x).
  */
 public class CotFunction {
 

@@ -3,11 +3,12 @@ package org.itmo;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Locale;
 import java.util.function.DoubleUnaryOperator;
 
 /**
- * Writes function values to a CSV file in the format: X,f(X).
- * Undefined values (ArithmeticException) are recorded as "undefined".
+ * Записывает значения функции в CSV-файл в формате: X,f(X).
+ * Неопределенные значения (ArithmeticException) записываются как "undefined".
  */
 public class CsvWriter {
 
@@ -18,9 +19,9 @@ public class CsvWriter {
             for (double x = from; x <= to + step / 2; x += step) {
                 try {
                     double y = function.applyAsDouble(x);
-                    writer.printf("%.6f%s%.6f%n", x, separator, y);
+                    writer.printf(Locale.US, "%.6f%s%.6f%n", x, separator, y);
                 } catch (ArithmeticException e) {
-                    writer.printf("%.6f%sundefined%n", x, separator);
+                    writer.printf(Locale.US, "%.6f%sundefined%n", x, separator);
                 }
             }
         }

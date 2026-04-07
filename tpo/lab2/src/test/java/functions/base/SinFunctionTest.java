@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for SinFunction (Taylor series implementation).
- * Verified against known mathematical values.
+ * Модульные тесты для SinFunction (реализация через ряд Тейлора).
+ * Проверка выполняется по известным математическим значениям.
  */
 class SinFunctionTest {
 
@@ -60,7 +60,7 @@ class SinFunctionTest {
 
     @Test
     void sinPythagoreanIdentityHolds() {
-        // sin²(x) + cos²(x) = 1 checked implicitly via known value sin(π/3)=√3/2
+        // sin²(x) + cos²(x) = 1 проверяется неявно через известное значение sin(π/3)=√3/2
         double expected = Math.sqrt(3) / 2;
         assertEquals(expected, sin.compute(Math.PI / 3, EPSILON), DELTA);
     }

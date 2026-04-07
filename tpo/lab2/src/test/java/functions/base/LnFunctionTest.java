@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for LnFunction (series expansion implementation).
+ * Модульные тесты для LnFunction (реализация через разложение в ряд).
  */
 class LnFunctionTest {
 

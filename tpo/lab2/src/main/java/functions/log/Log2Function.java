@@ -3,7 +3,7 @@ package functions.log;
 import functions.base.LnFunction;
 
 /**
- * Computes log_2(x) = ln(x) / ln(2).
+ * Вычисляет log_2(x) = ln(x) / ln(2).
  */
 public class Log2Function {
 

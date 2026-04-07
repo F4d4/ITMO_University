@@ -7,7 +7,7 @@ import functions.trig.CotFunction;
 import functions.trig.TanFunction;
 
 /**
- * Piecewise function system (variant 28931):
+ * Кусочно-заданная система функций (вариант 28931):
  *   x <= 0 : cot(x) * tan(x)
  *   x >  0 : ((((log2(x) / log10(x))^2 * log3(x)^2)^2) * log2(x)
  */

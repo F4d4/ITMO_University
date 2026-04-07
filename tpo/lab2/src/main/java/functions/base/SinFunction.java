@@ -1,13 +1,13 @@
 package functions.base;
 
 /**
- * Computes sin(x) via Taylor series: sin(x) = x - x^3/3! + x^5/5! - ...
- * This is a base function implemented from scratch without using Math.sin().
+ * Вычисляет sin(x) через ряд Тейлора: sin(x) = x - x^3/3! + x^5/5! - ...
+ * Это базовая функция, реализованная с нуля без использования Math.sin().
  */
 public class SinFunction {
 
     public double compute(double x, double epsilon) {
-        // Normalize to [-2π, 2π] to reduce floating-point cancellation
+        // Нормализация к [-2π, 2π] для уменьшения потерь точности
         x = x % (2 * Math.PI);
 
         double result = 0;
