@@ -11,8 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MonetizationRequest {
 
-    @NotNull(message = "ID пользователя обязателен")
-    private Long userId;
+    // userId не передаётся — берётся из JWT токена
 
     @NotNull(message = "ID видео обязателен")
     private Long videoId;

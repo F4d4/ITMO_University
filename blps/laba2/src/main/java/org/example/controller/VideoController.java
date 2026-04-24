@@ -6,6 +6,7 @@ import org.example.dto.request.VideoInfoRequest;
 import org.example.dto.request.VideoPublishRequest;
 import org.example.dto.response.ApiResponse;
 import org.example.dto.response.VideoResponse;
+import org.example.security.SecurityUtils;
 import org.example.service.VideoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,18 +22,18 @@ import java.util.List;
 public class VideoController {
 
     private final VideoService videoService;
+    private final SecurityUtils securityUtils;
 
     // ─── BPMN 1: Загрузка видео ──────────────────────────────────────────────────
 
     /**
      * BPMN 1, Шаг 1: Загрузка видеофайла (USER).
-     * Клиент выбирает файл, сервер валидирует и сохраняет в MinIO.
-     * Статус → UPLOADING.
+     * userId берётся из JWT токена.
      */
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<VideoResponse>> uploadVideo(
-            @RequestParam("userId") Long userId,
             @RequestParam("file") MultipartFile file) {
+        Long userId = securityUtils.getCurrentUserId();
         VideoResponse video = videoService.uploadVideoFile(userId, file);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.ok(
@@ -43,14 +44,14 @@ public class VideoController {
 
     /**
      * BPMN 1, Шаг 2: Заполнение информации о видео (USER).
-     * Клиент вводит название, описание и теги. Сервер валидирует описание.
-     * Статус → DRAFT.
+     * Сервер проверяет, что видео принадлежит текущему пользователю.
      */
     @PutMapping("/{videoId}/info")
     public ResponseEntity<ApiResponse<VideoResponse>> updateVideoInfo(
             @PathVariable Long videoId,
             @Valid @RequestBody VideoInfoRequest request) {
-        VideoResponse video = videoService.updateVideoInfo(videoId, request);
+        Long userId = securityUtils.getCurrentUserId();
+        VideoResponse video = videoService.updateVideoInfo(videoId, userId, request);
         return ResponseEntity.ok(ApiResponse.ok(
                 "Информация о видео сохранена. Видео добавлено в черновики.",
                 video
@@ -61,16 +62,14 @@ public class VideoController {
 
     /**
      * BPMN 2, Шаг 1 (USER): Отправка видео на публикацию.
-     * Клиент выбирает черновик, настраивает аудиторию и доступ.
-     * Сервер автоматически проверяет описание.
-     * При успехе: статус → PENDING_PUBLICATION (ждёт проверки модератора).
-     * Одобрение/отклонение выполняется через /api/moderation/videos/{videoId}/approve|reject.
+     * Сервер проверяет, что видео принадлежит текущему пользователю.
      */
     @PostMapping("/{videoId}/submit-publish")
     public ResponseEntity<ApiResponse<VideoResponse>> submitForPublication(
             @PathVariable Long videoId,
             @Valid @RequestBody VideoPublishRequest request) {
-        VideoResponse video = videoService.submitForPublication(videoId, request);
+        Long userId = securityUtils.getCurrentUserId();
+        VideoResponse video = videoService.submitForPublication(videoId, userId, request);
         return ResponseEntity.ok(ApiResponse.ok(
                 "Видео отправлено на проверку модератором. Статус: PENDING_PUBLICATION.",
                 video
@@ -89,21 +88,21 @@ public class VideoController {
     }
 
     /**
-     * Получить все видео пользователя (все статусы)
+     * Получить все видео текущего пользователя (userId из JWT)
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<VideoResponse>>> getVideosByUser(
-            @RequestParam("userId") Long userId) {
+    public ResponseEntity<ApiResponse<List<VideoResponse>>> getMyVideos() {
+        Long userId = securityUtils.getCurrentUserId();
         List<VideoResponse> videos = videoService.getVideosByUser(userId);
         return ResponseEntity.ok(ApiResponse.ok("Список видео пользователя", videos));
     }
 
     /**
-     * BPMN 2: Получить черновики пользователя
+     * BPMN 2: Получить черновики текущего пользователя (userId из JWT)
      */
     @GetMapping("/drafts")
-    public ResponseEntity<ApiResponse<List<VideoResponse>>> getDraftsByUser(
-            @RequestParam("userId") Long userId) {
+    public ResponseEntity<ApiResponse<List<VideoResponse>>> getMyDrafts() {
+        Long userId = securityUtils.getCurrentUserId();
         List<VideoResponse> drafts = videoService.getDraftsByUser(userId);
         return ResponseEntity.ok(ApiResponse.ok("Черновики пользователя", drafts));
     }

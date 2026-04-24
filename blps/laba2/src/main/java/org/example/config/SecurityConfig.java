@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/monetization/*/methods").hasRole("USER")
                 .requestMatchers(HttpMethod.GET, "/api/videos/drafts").hasRole("USER")
                 .requestMatchers(HttpMethod.GET, "/api/videos").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/api/monetization/my").hasRole("USER")
 
                 // MODERATOR-only operations
                 .requestMatchers("/api/moderation/**").hasRole("MODERATOR")

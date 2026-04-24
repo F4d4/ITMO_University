@@ -70,13 +70,15 @@ public class VideoService {
 
     /**
      * BPMN 1, Шаг 2: Клиент заполняет информацию о видео (название, описание, теги).
-     * Сервер валидирует описание (не более 150 символов).
+     * Сервер проверяет владельца, валидирует описание.
      * При успехе обновляет запись Video и меняет статус на DRAFT.
      */
     @Transactional
-    public VideoResponse updateVideoInfo(Long videoId, VideoInfoRequest request) {
+    public VideoResponse updateVideoInfo(Long videoId, Long userId, VideoInfoRequest request) {
         Video video = videoRepository.findById(videoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Видео", videoId));
+
+        checkOwnership(video, userId);
 
         if (video.getStatus() != VideoStatus.UPLOADING && video.getStatus() != VideoStatus.DRAFT) {
             throw new BusinessException(
@@ -101,13 +103,15 @@ public class VideoService {
 
     /**
      * BPMN 2, Шаг 1 (USER): Клиент выбирает черновик и настраивает параметры публикации.
-     * Сервер проводит автоматическую проверку описания.
+     * Сервер проверяет владельца и проводит автоматическую проверку описания.
      * При успехе: статус → PENDING_PUBLICATION (ждёт проверки модератора).
      */
     @Transactional
-    public VideoResponse submitForPublication(Long videoId, VideoPublishRequest request) {
+    public VideoResponse submitForPublication(Long videoId, Long userId, VideoPublishRequest request) {
         Video video = videoRepository.findById(videoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Видео", videoId));
+
+        checkOwnership(video, userId);
 
         if (video.getStatus() != VideoStatus.DRAFT) {
             throw new BusinessException(
@@ -232,6 +236,13 @@ public class VideoService {
         return videoRepository.findByStatus(VideoStatus.PENDING_PUBLICATION).stream()
                 .map(this::toResponse)
                 .toList();
+    }
+
+    private void checkOwnership(Video video, Long userId) {
+        if (!video.getUser().getId().equals(userId)) {
+            throw new BusinessException("Нет доступа: видео не принадлежит текущему пользователю",
+                    HttpStatus.FORBIDDEN);
+        }
     }
 
     private VideoResponse toResponse(Video video) {

@@ -49,9 +49,9 @@ public class MonetizationService {
      * При успехе: монетизация одобряется и сохраняется в БД.
      */
     @Transactional
-    public MonetizationResponse requestMonetization(MonetizationRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Пользователь", request.getUserId()));
+    public MonetizationResponse requestMonetization(Long userId, MonetizationRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь", userId));
 
         Video video = videoRepository.findById(request.getVideoId())
                 .orElseThrow(() -> new ResourceNotFoundException("Видео", request.getVideoId()));
