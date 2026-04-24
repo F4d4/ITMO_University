@@ -53,8 +53,11 @@ public class MonetizationController {
             @PathVariable Long monetizationId,
             @Valid @RequestBody MonetizationMethodRequest request) {
         MonetizationMethodResponse method = monetizationService.addMonetizationMethod(monetizationId, request);
+        String message = method.getStatus() == org.example.entity.MethodStatus.APPROVED
+                ? "Подписка автоматически одобрена системой."
+                : "Реклама отправлена на проверку модератору.";
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.ok("Способ монетизации отправлен на проверку модератору.", method));
+                .body(ApiResponse.ok(message, method));
     }
 
     // ─── Вспомогательные эндпоинты ────────────────────────────────────────────────
