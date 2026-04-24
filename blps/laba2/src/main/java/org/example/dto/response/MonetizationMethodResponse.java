@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.entity.AdType;
+import org.example.entity.MethodStatus;
 import org.example.entity.MonetizationType;
 
 import java.math.BigDecimal;
@@ -21,5 +22,7 @@ public class MonetizationMethodResponse {
     private AdType adType;
     private String adName;
     private BigDecimal subscriptionPrice;
+    private MethodStatus status;
+    private String tags;
     private LocalDateTime createdAt;
 }

@@ -46,6 +46,13 @@ public class MonetizationMethod {
     @Column(name = "subscription_price", nullable = true, precision = 10, scale = 2)
     private BigDecimal subscriptionPrice;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MethodStatus status = MethodStatus.PENDING_REVIEW;
+
+    @Column(nullable = true)
+    private String tags;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

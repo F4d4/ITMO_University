@@ -33,4 +33,9 @@ public class MonetizationMethodRequest {
      */
     @DecimalMin(value = "0.01", message = "Цена подписки должна быть больше 0")
     private BigDecimal subscriptionPrice;
+
+    /**
+     * Теги для способа монетизации (опционально)
+     */
+    private String tags;
 }

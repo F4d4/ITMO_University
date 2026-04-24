@@ -25,15 +25,9 @@ public class VideoController {
     // ─── BPMN 1: Загрузка видео ──────────────────────────────────────────────────
 
     /**
-     * BPMN 1, Шаг 1: Загрузка видеофайла.
-     * Клиент выбирает файл и нажимает «Загрузить видео».
-     * Сервер валидирует файл (mp4, < 100 МБ), сохраняет в MinIO.
-     *
-     * Параметры:
-     * - userId: ID пользователя (автора)
-     * - file: видеофайл (.mp4, до 100 МБ)
-     *
-     * Ответ: данные о созданной записи видео со статусом UPLOADING
+     * BPMN 1, Шаг 1: Загрузка видеофайла (USER).
+     * Клиент выбирает файл, сервер валидирует и сохраняет в MinIO.
+     * Статус → UPLOADING.
      */
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<VideoResponse>> uploadVideo(
@@ -48,13 +42,9 @@ public class VideoController {
     }
 
     /**
-     * BPMN 1, Шаг 2: Заполнение информации о видео.
-     * Клиент вводит название, описание (до 150 символов) и теги.
-     * Сервер валидирует описание и сохраняет данные.
-     * Статус видео меняется с UPLOADING на DRAFT.
-     * Клиент получает уведомление о загрузке.
-     *
-     * Ответ: обновлённые данные видео со статусом DRAFT
+     * BPMN 1, Шаг 2: Заполнение информации о видео (USER).
+     * Клиент вводит название, описание и теги. Сервер валидирует описание.
+     * Статус → DRAFT.
      */
     @PutMapping("/{videoId}/info")
     public ResponseEntity<ApiResponse<VideoResponse>> updateVideoInfo(
@@ -70,25 +60,19 @@ public class VideoController {
     // ─── BPMN 2: Публикация видео ─────────────────────────────────────────────────
 
     /**
-     * BPMN 2: Публикация видео.
+     * BPMN 2, Шаг 1 (USER): Отправка видео на публикацию.
      * Клиент выбирает черновик, настраивает аудиторию и доступ.
-     * Сервер проводит модерацию (проверяет описание на запрещённые слова).
-     * При успехе: видео копируется в published-videos, статус → PUBLISHED.
-     * Клиент получает уведомление о публикации.
-     *
-     * Параметры тела запроса:
-     * - audienceType: ALL_AGES | ADULTS_ONLY
-     * - accessType: PUBLIC | PRIVATE
-     *
-     * Ответ: данные опубликованного видео
+     * Сервер автоматически проверяет описание.
+     * При успехе: статус → PENDING_PUBLICATION (ждёт проверки модератора).
+     * Одобрение/отклонение выполняется через /api/moderation/videos/{videoId}/approve|reject.
      */
-    @PostMapping("/{videoId}/publish")
-    public ResponseEntity<ApiResponse<VideoResponse>> publishVideo(
+    @PostMapping("/{videoId}/submit-publish")
+    public ResponseEntity<ApiResponse<VideoResponse>> submitForPublication(
             @PathVariable Long videoId,
             @Valid @RequestBody VideoPublishRequest request) {
-        VideoResponse video = videoService.publishVideo(videoId, request);
+        VideoResponse video = videoService.submitForPublication(videoId, request);
         return ResponseEntity.ok(ApiResponse.ok(
-                "Видео успешно опубликовано. Уведомление о публикации отправлено.",
+                "Видео отправлено на проверку модератором. Статус: PENDING_PUBLICATION.",
                 video
         ));
     }
@@ -115,7 +99,7 @@ public class VideoController {
     }
 
     /**
-     * Получить черновики пользователя (BPMN 2: «Выбор видео из черновика»)
+     * BPMN 2: Получить черновики пользователя
      */
     @GetMapping("/drafts")
     public ResponseEntity<ApiResponse<List<VideoResponse>>> getDraftsByUser(
@@ -125,7 +109,7 @@ public class VideoController {
     }
 
     /**
-     * Получить все опубликованные видео
+     * Получить все опубликованные видео (публичный эндпоинт)
      */
     @GetMapping("/published")
     public ResponseEntity<ApiResponse<List<VideoResponse>>> getAllPublished() {

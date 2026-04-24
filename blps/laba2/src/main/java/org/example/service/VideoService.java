@@ -1,5 +1,6 @@
 package org.example.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.request.VideoInfoRequest;
@@ -12,7 +13,9 @@ import org.example.repository.UserRepository;
 import org.example.repository.VideoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,28 +30,32 @@ public class VideoService {
     private final UserRepository userRepository;
     private final MinioService minioService;
     private final ValidationService validationService;
+    private final PlatformTransactionManager transactionManager;
+
+    private TransactionTemplate transactionTemplate;
+
+    @PostConstruct
+    public void init() {
+        transactionTemplate = new TransactionTemplate(transactionManager);
+    }
 
     // ─── BPMN 1: Загрузка видео ──────────────────────────────────────────────────
 
     /**
-     * Шаг 1 (BPMN 1): Клиент выбирает файл и нажимает «Загрузить видео».
+     * BPMN 1, Шаг 1: Клиент выбирает файл.
      * Сервер валидирует файл (формат mp4, размер < 100 МБ).
-     * При успехе сохраняет в MinIO (uploaded-videos) и создаёт запись Video со статусом UPLOADING.
+     * При успехе: сохраняет в MinIO и создаёт запись Video со статусом UPLOADING.
      */
     @Transactional
     public VideoResponse uploadVideoFile(Long userId, MultipartFile file) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Пользователь", userId));
 
-        // Валидация файла (BPMN 1: «Валидация файла»)
         validationService.validateVideoFile(file);
 
         String objectName = "video_" + UUID.randomUUID() + ".mp4";
-
-        // Загрузка в MinIO
         minioService.uploadVideoFile(file, objectName);
 
-        // Сохраняем запись видео со статусом UPLOADING
         Video video = new Video();
         video.setUser(user);
         video.setMinioKey(objectName);
@@ -62,10 +69,9 @@ public class VideoService {
     }
 
     /**
-     * Шаг 2 (BPMN 1): Клиент заполняет информацию о видео (название, описание, теги).
+     * BPMN 1, Шаг 2: Клиент заполняет информацию о видео (название, описание, теги).
      * Сервер валидирует описание (не более 150 символов).
      * При успехе обновляет запись Video и меняет статус на DRAFT.
-     * Клиент получает уведомление о загрузке видео.
      */
     @Transactional
     public VideoResponse updateVideoInfo(Long videoId, VideoInfoRequest request) {
@@ -78,7 +84,6 @@ public class VideoService {
             );
         }
 
-        // Валидация описания (BPMN 1: «Валидация описания видео»)
         validationService.validateDescription(request.getDescription());
 
         video.setTitle(request.getTitle());
@@ -95,44 +100,95 @@ public class VideoService {
     // ─── BPMN 2: Публикация видео ─────────────────────────────────────────────────
 
     /**
-     * (BPMN 2): Клиент нажимает «Опубликовать видео».
-     * 1. Выбирает тип аудитории (ALL_AGES / ADULTS_ONLY).
-     * 2. Выбирает тип доступа (PUBLIC / PRIVATE).
-     * Сервер проводит модерацию описания (проверка запрещённых слов).
-     * При успехе копирует файл в бакет published-videos и меняет статус на PUBLISHED.
-     * Клиент получает уведомление о публикации.
+     * BPMN 2, Шаг 1 (USER): Клиент выбирает черновик и настраивает параметры публикации.
+     * Сервер проводит автоматическую проверку описания.
+     * При успехе: статус → PENDING_PUBLICATION (ждёт проверки модератора).
      */
     @Transactional
-    public VideoResponse publishVideo(Long videoId, VideoPublishRequest request) {
+    public VideoResponse submitForPublication(Long videoId, VideoPublishRequest request) {
         Video video = videoRepository.findById(videoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Видео", videoId));
 
         if (video.getStatus() != VideoStatus.DRAFT) {
             throw new BusinessException(
-                    "Опубликовать можно только видео со статусом DRAFT. " +
+                    "Отправить на публикацию можно только видео со статусом DRAFT. " +
                     "Текущий статус: " + video.getStatus()
             );
         }
 
         if (video.getTitle() == null || video.getTitle().isBlank()) {
-            throw new BusinessException("Нельзя опубликовать видео без названия. " +
-                    "Сначала заполните информацию о видео.");
+            throw new BusinessException("Нельзя опубликовать видео без названия.");
         }
 
-        // Модерация описания (BPMN 2: «Модерация видео»)
+        // Автоматическая проверка описания (BPMN 2)
         validationService.moderateVideoDescription(video.getDescription());
-
-        // Копируем файл в published-videos (BPMN 2: «Добавление видео в базу данных для просмотра»)
-        minioService.publishVideoFile(video.getMinioKey());
 
         video.setAudienceType(request.getAudienceType());
         video.setAccessType(request.getAccessType());
-        video.setBucketName(minioService.getPublishedBucket());
-        video.setStatus(VideoStatus.PUBLISHED);
+        video.setStatus(VideoStatus.PENDING_PUBLICATION);
 
         video = videoRepository.save(video);
-        log.info("Видео id={} опубликовано. Аудитория={}, Доступ={}", videoId,
-                request.getAudienceType(), request.getAccessType());
+        log.info("Видео id={} отправлено на проверку модератором, статус → PENDING_PUBLICATION", videoId);
+
+        return toResponse(video);
+    }
+
+    /**
+     * BPMN 2, Шаг 2 (MODERATOR): Ручная проверка и одобрение публикации.
+     * Транзакция (JTA/Narayana): изменить статус на PUBLISHED + сохранить параметры публикации
+     * + скопировать файл в published-videos.
+     */
+    public VideoResponse approvePublication(Long videoId) {
+        Video videoCheck = videoRepository.findById(videoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Видео", videoId));
+
+        if (videoCheck.getStatus() != VideoStatus.PENDING_PUBLICATION) {
+            throw new BusinessException(
+                    "Одобрить можно только видео со статусом PENDING_PUBLICATION. " +
+                    "Текущий статус: " + videoCheck.getStatus()
+            );
+        }
+
+        // Копируем файл в published-videos ДО транзакции (MinIO не является JTA-ресурсом)
+        minioService.publishVideoFile(videoCheck.getMinioKey());
+
+        // Программная JTA-транзакция: изменить статус + сохранить параметры публикации + добавить запись в БД
+        VideoResponse result = transactionTemplate.execute(status -> {
+            Video v = videoRepository.findById(videoId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Видео", videoId));
+            // Изменить статус видео на PUBLISHED
+            v.setStatus(VideoStatus.PUBLISHED);
+            // Сохранить параметры публикации (bucketName)
+            v.setBucketName(minioService.getPublishedBucket());
+            // Добавить запись в БД опубликованных видео
+            Video saved = videoRepository.save(v);
+            log.info("Видео id={} опубликовано модератором (JTA-транзакция)", videoId);
+            // Маппинг внутри транзакции, чтобы lazy-relations были доступны
+            return toResponse(saved);
+        });
+
+        return result;
+    }
+
+    /**
+     * BPMN 2 (MODERATOR): Отклонение публикации.
+     * Статус возвращается в DRAFT.
+     */
+    @Transactional
+    public VideoResponse rejectPublication(Long videoId, String reason) {
+        Video video = videoRepository.findById(videoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Видео", videoId));
+
+        if (video.getStatus() != VideoStatus.PENDING_PUBLICATION) {
+            throw new BusinessException(
+                    "Отклонить можно только видео со статусом PENDING_PUBLICATION. " +
+                    "Текущий статус: " + video.getStatus()
+            );
+        }
+
+        video.setStatus(VideoStatus.DRAFT);
+        video = videoRepository.save(video);
+        log.info("Публикация видео id={} отклонена модератором. Причина: {}", videoId, reason);
 
         return toResponse(video);
     }
@@ -167,6 +223,13 @@ public class VideoService {
     @Transactional(readOnly = true)
     public List<VideoResponse> getAllPublishedVideos() {
         return videoRepository.findByStatus(VideoStatus.PUBLISHED).stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<VideoResponse> getPendingPublicationVideos() {
+        return videoRepository.findByStatus(VideoStatus.PENDING_PUBLICATION).stream()
                 .map(this::toResponse)
                 .toList();
     }

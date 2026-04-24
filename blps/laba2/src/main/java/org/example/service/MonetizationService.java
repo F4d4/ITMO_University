@@ -1,5 +1,6 @@
 package org.example.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.request.MonetizationMethodRequest;
@@ -15,7 +16,9 @@ import org.example.repository.UserRepository;
 import org.example.repository.VideoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 
@@ -29,15 +32,21 @@ public class MonetizationService {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
     private final ValidationService validationService;
+    private final PlatformTransactionManager transactionManager;
+
+    private TransactionTemplate transactionTemplate;
+
+    @PostConstruct
+    public void init() {
+        transactionTemplate = new TransactionTemplate(transactionManager);
+    }
 
     // ─── BPMN 3: Запрос на монетизацию ───────────────────────────────────────────
 
     /**
-     * (BPMN 3): Клиент (автор) выбирает стратегию монетизации и настраивает её.
-     * Сервер проверяет соответствие монетизации: у пользователя есть хотя бы одно
-     * опубликованное видео.
+     * BPMN 3: Клиент выбирает стратегию монетизации и настраивает её.
+     * Сервер проверяет соответствие: у пользователя должно быть хотя бы одно опубликованное видео.
      * При успехе: монетизация одобряется и сохраняется в БД.
-     * Клиент получает уведомление об одобрении.
      */
     @Transactional
     public MonetizationResponse requestMonetization(MonetizationRequest request) {
@@ -62,19 +71,17 @@ public class MonetizationService {
             throw new BusinessException("Монетизация для данного видео уже одобрена");
         }
 
-        // BPMN 3: «Проверка соответствия монетизации» —
-        // у пользователя должно быть хотя бы одно опубликованное видео
+        // BPMN 3: Проверка соответствия монетизации
         boolean hasPublishedVideo = videoRepository.existsByUserIdAndStatus(user.getId(), VideoStatus.PUBLISHED);
         if (!hasPublishedVideo) {
             log.warn("Пользователь id={} не имеет опубликованных видео — монетизация отклонена", user.getId());
             throw new BusinessException(
-                    "Монетизация отклонена: у пользователя нет ни одного опубликованного видео. " +
-                    "Сначала опубликуйте хотя бы одно видео.",
+                    "Монетизация отклонена: у пользователя нет ни одного опубликованного видео.",
                     HttpStatus.UNPROCESSABLE_ENTITY
             );
         }
 
-        // BPMN 3: «Одобрение монетизации» + «Добавление информации в базу данных»
+        // BPMN 3: Одобрение монетизации + добавление в БД
         Monetization monetization = new Monetization();
         monetization.setVideo(video);
         monetization.setUser(user);
@@ -92,18 +99,9 @@ public class MonetizationService {
     // ─── BPMN 4: Добавление способа монетизации ──────────────────────────────────
 
     /**
-     * (BPMN 4): Клиент нажимает «Добавить рекламу» и выбирает тип монетизации.
-     *
-     * Сервер:
-     * 1. Проверяет, что монетизация одобрена (APPROVED).
-     *    Если нет → отказ («Отказ в способе монетизации»).
-     * 2. Если тип AD:
-     *    - Проводит модерацию названия рекламы (проверка запрещённых слов).
-     *    - Если не прошло → отказ.
-     *    - Требует указать adType (PRE_ROLL / MID_ROLL / POST_ROLL).
-     * 3. Если тип SUBSCRIPTION:
-     *    - Требует указать subscriptionPrice > 0.
-     * 4. Сохраняет способ монетизации в БД.
+     * BPMN 4, Шаг 1 (USER): Клиент выбирает тип монетизации (реклама или подписка) и настраивает параметры.
+     * Сервер автоматически проверяет описание и валидирует параметры.
+     * При успехе: способ монетизации сохраняется со статусом PENDING_REVIEW (ждёт проверки модератора).
      */
     @Transactional
     public MonetizationMethodResponse addMonetizationMethod(Long monetizationId,
@@ -111,13 +109,11 @@ public class MonetizationService {
         Monetization monetization = monetizationRepository.findById(monetizationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Монетизация", monetizationId));
 
-        // BPMN 4: «Проверка одобрена ли монетизация»
+        // BPMN 4: Проверка одобрена ли монетизация
         if (monetization.getStatus() != MonetizationStatus.APPROVED) {
-            log.warn("Попытка добавить способ монетизации к неодобренной монетизации id={}, статус={}",
-                    monetizationId, monetization.getStatus());
+            log.warn("Попытка добавить способ монетизации к неодобренной монетизации id={}", monetizationId);
             throw new BusinessException(
-                    "Монетизация не одобрена. Текущий статус: " + monetization.getStatus() +
-                    ". Добавить способ монетизации можно только при статусе APPROVED.",
+                    "Монетизация не одобрена. Текущий статус: " + monetization.getStatus(),
                     HttpStatus.UNPROCESSABLE_ENTITY
             );
         }
@@ -125,39 +121,99 @@ public class MonetizationService {
         MonetizationMethod method = new MonetizationMethod();
         method.setMonetization(monetization);
         method.setType(request.getType());
+        method.setTags(request.getTags());
+        method.setStatus(MethodStatus.PENDING_REVIEW);
 
         if (request.getType() == MonetizationType.AD) {
-            // BPMN 4: ветка «Выбрана реклама»
-
             if (request.getAdType() == null) {
                 throw new BusinessException(
                         "Для типа AD необходимо указать тип рекламы: PRE_ROLL, MID_ROLL или POST_ROLL"
                 );
             }
-
-            // BPMN 4: «Модерация рекламы» — проверка названия на запрещённые слова
+            // BPMN 4: Автоматическая проверка описания рекламы
             validationService.moderateAdName(request.getAdName());
-
             method.setAdType(request.getAdType());
             method.setAdName(request.getAdName());
 
         } else if (request.getType() == MonetizationType.SUBSCRIPTION) {
-            // BPMN 4: ветка «Не выбрана реклама» → подписка
-
             if (request.getSubscriptionPrice() == null ||
                     request.getSubscriptionPrice().doubleValue() <= 0) {
                 throw new BusinessException(
                         "Для типа SUBSCRIPTION необходимо указать цену подписки (subscriptionPrice > 0)"
                 );
             }
-
             method.setSubscriptionPrice(request.getSubscriptionPrice());
         }
 
-        // BPMN 4: «Сохранения способа монетизации в базе данных»
+        // Сохраняем со статусом PENDING_REVIEW — ждёт ручной проверки модератора
         method = monetizationMethodRepository.save(method);
-        log.info("Способ монетизации id={} добавлен к монетизации id={}, тип={}",
-                method.getId(), monetizationId, request.getType());
+        log.info("Способ монетизации id={} добавлен со статусом PENDING_REVIEW, ждёт проверки", method.getId());
+
+        return toMethodResponse(method);
+    }
+
+    /**
+     * BPMN 4, Шаг 2 (MODERATOR): Ручная проверка и одобрение способа монетизации.
+     * Программная JTA-транзакция (Narayana):
+     *   1. Сохранить способы монетизации (статус → APPROVED)
+     *   2. Создать теги
+     *   3. Добавить запись в БД монетизаций
+     */
+    public MonetizationMethodResponse approveMonetizationMethod(Long methodId) {
+        MonetizationMethod method = monetizationMethodRepository.findById(methodId)
+                .orElseThrow(() -> new ResourceNotFoundException("Способ монетизации", methodId));
+
+        if (method.getStatus() != MethodStatus.PENDING_REVIEW) {
+            throw new BusinessException(
+                    "Одобрить можно только способ со статусом PENDING_REVIEW. " +
+                    "Текущий статус: " + method.getStatus()
+            );
+        }
+
+        // Программная JTA-транзакция: сохранить способы + создать теги + добавить запись в БД монетизаций
+        MonetizationMethodResponse result = transactionTemplate.execute(status -> {
+            MonetizationMethod m = monetizationMethodRepository.findById(methodId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Способ монетизации", methodId));
+
+            // Сохранить способы монетизации (статус APPROVED)
+            m.setStatus(MethodStatus.APPROVED);
+
+            // Создать теги (если не указаны — генерируем по умолчанию на основе типа)
+            if (m.getTags() == null || m.getTags().isBlank()) {
+                String autoTags = m.getType() == MonetizationType.AD
+                        ? "реклама," + (m.getAdType() != null ? m.getAdType().name().toLowerCase() : "")
+                        : "подписка,subscription";
+                m.setTags(autoTags);
+            }
+
+            // Добавить запись в БД монетизаций
+            MonetizationMethod saved = monetizationMethodRepository.save(m);
+            log.info("Способ монетизации id={} одобрен модератором (JTA-транзакция)", methodId);
+            // Маппинг внутри транзакции, чтобы lazy-relations были доступны
+            return toMethodResponse(saved);
+        });
+
+        return result;
+    }
+
+    /**
+     * BPMN 4 (MODERATOR): Отклонение способа монетизации.
+     */
+    @Transactional
+    public MonetizationMethodResponse rejectMonetizationMethod(Long methodId, String reason) {
+        MonetizationMethod method = monetizationMethodRepository.findById(methodId)
+                .orElseThrow(() -> new ResourceNotFoundException("Способ монетизации", methodId));
+
+        if (method.getStatus() != MethodStatus.PENDING_REVIEW) {
+            throw new BusinessException(
+                    "Отклонить можно только способ со статусом PENDING_REVIEW. " +
+                    "Текущий статус: " + method.getStatus()
+            );
+        }
+
+        method.setStatus(MethodStatus.REJECTED);
+        method = monetizationMethodRepository.save(method);
+        log.info("Способ монетизации id={} отклонён. Причина: {}", methodId, reason);
 
         return toMethodResponse(method);
     }
@@ -194,6 +250,13 @@ public class MonetizationService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<MonetizationMethodResponse> getPendingMethods() {
+        return monetizationMethodRepository.findByStatus(MethodStatus.PENDING_REVIEW).stream()
+                .map(this::toMethodResponse)
+                .toList();
+    }
+
     private MonetizationResponse toResponse(Monetization m) {
         return new MonetizationResponse(
                 m.getId(),
@@ -214,6 +277,8 @@ public class MonetizationService {
                 m.getAdType(),
                 m.getAdName(),
                 m.getSubscriptionPrice(),
+                m.getStatus(),
+                m.getTags(),
                 m.getCreatedAt()
         );
     }
