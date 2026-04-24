@@ -122,7 +122,6 @@ public class MonetizationService {
         method.setMonetization(monetization);
         method.setType(request.getType());
         method.setTags(request.getTags());
-        method.setStatus(MethodStatus.PENDING_REVIEW);
 
         if (request.getType() == MonetizationType.AD) {
             if (request.getAdType() == null) {
@@ -130,24 +129,33 @@ public class MonetizationService {
                         "Для типа AD необходимо указать тип рекламы: PRE_ROLL, MID_ROLL или POST_ROLL"
                 );
             }
-            // BPMN 4: Автоматическая проверка описания рекламы
+            // BPMN 4: Автоматическая проверка названия рекламы
             validationService.moderateAdName(request.getAdName());
             method.setAdType(request.getAdType());
             method.setAdName(request.getAdName());
+            // Реклама отправляется на ручную проверку модератором
+            method.setStatus(MethodStatus.PENDING_REVIEW);
+            method = monetizationMethodRepository.save(method);
+            log.info("Способ монетизации AD id={} добавлен со статусом PENDING_REVIEW, ждёт проверки модератором", method.getId());
 
         } else if (request.getType() == MonetizationType.SUBSCRIPTION) {
-            if (request.getSubscriptionPrice() == null ||
-                    request.getSubscriptionPrice().doubleValue() <= 0) {
+            // BPMN 4: Подписка — автоматическая проверка системой (цена >= 0 и не пустая)
+            if (request.getSubscriptionPrice() == null) {
                 throw new BusinessException(
-                        "Для типа SUBSCRIPTION необходимо указать цену подписки (subscriptionPrice > 0)"
+                        "Для типа SUBSCRIPTION необходимо указать цену подписки"
+                );
+            }
+            if (request.getSubscriptionPrice().doubleValue() < 0) {
+                throw new BusinessException(
+                        "Цена подписки не может быть отрицательной"
                 );
             }
             method.setSubscriptionPrice(request.getSubscriptionPrice());
+            // Подписка автоматически одобряется системой
+            method.setStatus(MethodStatus.APPROVED);
+            method = monetizationMethodRepository.save(method);
+            log.info("Способ монетизации SUBSCRIPTION id={} автоматически одобрен системой", method.getId());
         }
-
-        // Сохраняем со статусом PENDING_REVIEW — ждёт ручной проверки модератора
-        method = monetizationMethodRepository.save(method);
-        log.info("Способ монетизации id={} добавлен со статусом PENDING_REVIEW, ждёт проверки", method.getId());
 
         return toMethodResponse(method);
     }
