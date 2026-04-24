@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.entity.Role;
 
 @Getter
 @Setter
@@ -28,4 +29,9 @@ public class CreateUserRequest {
     @NotBlank(message = "Пароль обязателен")
     @Size(min = 6, message = "Пароль должен содержать не менее 6 символов")
     private String password;
+
+    /**
+     * Роль пользователя: USER или MODERATOR. Если не указана — по умолчанию USER.
+     */
+    private Role role;
 }

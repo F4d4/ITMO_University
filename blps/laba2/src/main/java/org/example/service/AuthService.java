@@ -46,7 +46,7 @@ public class AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.USER);
+        user.setRole(request.getRole() != null ? request.getRole() : Role.USER);
 
         user = userRepository.save(user);
         log.info("Зарегистрирован пользователь id={}, username={}", user.getId(), user.getUsername());
