@@ -1,0 +1,599 @@
+@startuml
+title Project class diagram - youtube-monetization
+
+left to right direction
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 55
+skinparam ranksep 45
+hide empty members
+
+package "org.example" {
+  class LabaApplication <<SpringBootApplication>> {
+    +main(args: String[]): void
+  }
+}
+
+package "org.example.config" {
+  class MinioConfig <<Configuration>> {
+    -String endpoint
+    -String accessKey
+    -String secretKey
+    +minioClient(): MinioClient
+  }
+
+  class SecurityConfig <<Configuration>> {
+    -JwtAuthenticationFilter jwtAuthenticationFilter
+    +filterChain(http: HttpSecurity): SecurityFilterChain
+    +authenticationManager(config: AuthenticationConfiguration): AuthenticationManager
+    +passwordEncoder(): PasswordEncoder
+  }
+}
+
+package "org.example.controller" {
+  class AuthController <<RestController>> {
+    -AuthService authService
+    +register(request: CreateUserRequest): ResponseEntity
+    +login(request: LoginRequest): ResponseEntity
+  }
+
+  class VideoController <<RestController>> {
+    -VideoService videoService
+    -SecurityUtils securityUtils
+    +uploadVideo(file: MultipartFile): ResponseEntity
+    +updateVideoInfo(videoId: Long, request: VideoInfoRequest): ResponseEntity
+    +submitForPublication(videoId: Long, request: VideoPublishRequest): ResponseEntity
+    +getVideoById(videoId: Long): ResponseEntity
+    +getMyVideos(): ResponseEntity
+    +getMyDrafts(): ResponseEntity
+    +getAllPublished(): ResponseEntity
+  }
+
+  class ModerationController <<RestController>> {
+    -VideoService videoService
+    -MonetizationService monetizationService
+    +getPendingVideos(): ResponseEntity
+    +approveVideoPublication(videoId: Long): ResponseEntity
+    +rejectVideoPublication(videoId: Long, reason: String): ResponseEntity
+    +getPendingMethods(): ResponseEntity
+    +approveMonetizationMethod(methodId: Long): ResponseEntity
+    +rejectMonetizationMethod(methodId: Long, reason: String): ResponseEntity
+  }
+
+  class MonetizationController <<RestController>> {
+    -MonetizationService monetizationService
+    -SecurityUtils securityUtils
+    +requestMonetization(request: MonetizationRequest): ResponseEntity
+    +addMonetizationMethod(monetizationId: Long, request: MonetizationMethodRequest): ResponseEntity
+    +getMonetizationById(monetizationId: Long): ResponseEntity
+    +getMonetizationsByVideo(videoId: Long): ResponseEntity
+    +getMyMonetizations(): ResponseEntity
+    +getMethodsByMonetization(monetizationId: Long): ResponseEntity
+  }
+
+  class UserController <<RestController>> {
+    -UserService userService
+    +getUserById(userId: Long): ResponseEntity
+    +getAllUsers(pageable: Pageable): ResponseEntity
+  }
+}
+
+package "org.example.dto.request" {
+  class CreateUserRequest <<RequestDTO>> {
+    -String username
+    -String email
+    -String password
+    -Role role
+  }
+
+  class LoginRequest <<RequestDTO>> {
+    -String username
+    -String password
+  }
+
+  class VideoInfoRequest <<RequestDTO>> {
+    -String title
+    -String description
+    -String tags
+  }
+
+  class VideoPublishRequest <<RequestDTO>> {
+    -AudienceType audienceType
+    -AccessType accessType
+  }
+
+  class MonetizationRequest <<RequestDTO>> {
+    -Long videoId
+    -String strategy
+    -String configuration
+  }
+
+  class MonetizationMethodRequest <<RequestDTO>> {
+    -MonetizationType type
+    -AdType adType
+    -String adName
+    -BigDecimal subscriptionPrice
+    -String tags
+  }
+}
+
+package "org.example.dto.response" {
+  class ApiResponse <<ResponseWrapper>> {
+    -boolean success
+    -String message
+    -T data
+    {static} +ok(message: String, data: T): ApiResponse
+    {static} +ok(message: String): ApiResponse
+    {static} +error(message: String): ApiResponse
+  }
+
+  class AuthResponse <<ResponseDTO>> {
+    -String token
+    -String tokenType
+    -Long userId
+    -String username
+    -Role role
+  }
+
+  class UserResponse <<ResponseDTO>> {
+    -Long id
+    -String username
+    -String email
+    -Role role
+    -LocalDateTime createdAt
+  }
+
+  class VideoResponse <<ResponseDTO>> {
+    -Long id
+    -Long userId
+    -String title
+    -String description
+    -String tags
+    -VideoStatus status
+    -AudienceType audienceType
+    -AccessType accessType
+    -String minioKey
+    -String bucketName
+    -LocalDateTime createdAt
+    -LocalDateTime updatedAt
+  }
+
+  class MonetizationResponse <<ResponseDTO>> {
+    -Long id
+    -Long videoId
+    -Long userId
+    -String strategy
+    -String configuration
+    -MonetizationStatus status
+    -LocalDateTime createdAt
+  }
+
+  class MonetizationMethodResponse <<ResponseDTO>> {
+    -Long id
+    -Long monetizationId
+    -MonetizationType type
+    -AdType adType
+    -String adName
+    -BigDecimal subscriptionPrice
+    -MethodStatus status
+    -String tags
+    -LocalDateTime createdAt
+  }
+}
+
+package "org.example.entity" {
+  class User <<Entity>> {
+    -Long id
+    -String username
+    -String email
+    -String password
+    -Role role
+    -LocalDateTime createdAt
+    #onCreate(): void
+  }
+
+  class Video <<Entity>> {
+    -Long id
+    -User user
+    -String title
+    -String description
+    -String tags
+    -String minioKey
+    -String bucketName
+    -VideoStatus status
+    -AudienceType audienceType
+    -AccessType accessType
+    -LocalDateTime createdAt
+    -LocalDateTime updatedAt
+    #onCreate(): void
+    #onUpdate(): void
+  }
+
+  class Monetization <<Entity>> {
+    -Long id
+    -Video video
+    -User user
+    -String strategy
+    -String configuration
+    -MonetizationStatus status
+    -LocalDateTime createdAt
+    #onCreate(): void
+  }
+
+  class MonetizationMethod <<Entity>> {
+    -Long id
+    -Monetization monetization
+    -MonetizationType type
+    -AdType adType
+    -String adName
+    -BigDecimal subscriptionPrice
+    -MethodStatus status
+    -String tags
+    -LocalDateTime createdAt
+    #onCreate(): void
+  }
+
+  enum Role {
+    USER
+    MODERATOR
+  }
+
+  enum VideoStatus {
+    UPLOADING
+    DRAFT
+    PENDING_PUBLICATION
+    PUBLISHED
+  }
+
+  enum AudienceType {
+    ALL_AGES
+    ADULTS_ONLY
+  }
+
+  enum AccessType {
+    PUBLIC
+    PRIVATE
+  }
+
+  enum MonetizationStatus {
+    PENDING
+    APPROVED
+    REJECTED
+  }
+
+  enum MonetizationType {
+    AD
+    SUBSCRIPTION
+  }
+
+  enum AdType {
+    PRE_ROLL
+    MID_ROLL
+    POST_ROLL
+  }
+
+  enum MethodStatus {
+    PENDING_REVIEW
+    APPROVED
+    REJECTED
+  }
+}
+
+package "org.example.repository" {
+  interface UserRepository <<Repository>> {
+    +findByUsername(username: String): Optional<User>
+    +existsByUsername(username: String): boolean
+    +existsByEmail(email: String): boolean
+  }
+
+  interface VideoRepository <<Repository>> {
+    +findByUserId(userId: Long): List<Video>
+    +findByUserIdAndStatus(userId: Long, status: VideoStatus): List<Video>
+    +existsByUserIdAndStatus(userId: Long, status: VideoStatus): boolean
+    +findByStatus(status: VideoStatus): List<Video>
+  }
+
+  interface MonetizationRepository <<Repository>> {
+    +findByVideoId(videoId: Long): List<Monetization>
+    +findByUserId(userId: Long): List<Monetization>
+    +findByVideoIdAndStatus(videoId: Long, status: MonetizationStatus): Optional<Monetization>
+    +existsByVideoIdAndStatus(videoId: Long, status: MonetizationStatus): boolean
+  }
+
+  interface MonetizationMethodRepository <<Repository>> {
+    +findByMonetizationId(monetizationId: Long): List<MonetizationMethod>
+    +findByStatus(status: MethodStatus): List<MonetizationMethod>
+  }
+}
+
+package "org.example.security" {
+  class CustomUserDetailsService <<Service>> {
+    -UserRepository userRepository
+    +loadUserByUsername(username: String): UserDetails
+  }
+
+  class JwtAuthenticationFilter <<Filter>> {
+    -JwtTokenProvider jwtTokenProvider
+    -CustomUserDetailsService userDetailsService
+    #doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain): void
+    -extractTokenFromRequest(request: HttpServletRequest): String
+  }
+
+  class JwtTokenProvider <<Component>> {
+    -String jwtSecret
+    -long jwtExpirationMs
+    -getSigningKey(): Key
+    +generateToken(username: String, role: String): String
+    +getUsernameFromToken(token: String): String
+    +validateToken(token: String): boolean
+  }
+
+  class SecurityUtils <<Component>> {
+    -UserRepository userRepository
+    +getCurrentUser(): User
+    +getCurrentUserId(): Long
+  }
+}
+
+package "org.example.service" {
+  class AuthService <<Service>> {
+    -UserRepository userRepository
+    -PasswordEncoder passwordEncoder
+    -JwtTokenProvider jwtTokenProvider
+    -AuthenticationManager authenticationManager
+    +register(request: CreateUserRequest): AuthResponse
+    +login(request: LoginRequest): AuthResponse
+  }
+
+  class VideoService <<Service>> {
+    -VideoRepository videoRepository
+    -UserRepository userRepository
+    -MinioService minioService
+    -ValidationService validationService
+    -PlatformTransactionManager transactionManager
+    -TransactionTemplate transactionTemplate
+    +init(): void
+    +uploadVideoFile(userId: Long, file: MultipartFile): VideoResponse
+    +updateVideoInfo(videoId: Long, userId: Long, request: VideoInfoRequest): VideoResponse
+    +submitForPublication(videoId: Long, userId: Long, request: VideoPublishRequest): VideoResponse
+    +approvePublication(videoId: Long): VideoResponse
+    +rejectPublication(videoId: Long, reason: String): VideoResponse
+    +getVideoById(videoId: Long): VideoResponse
+    +getVideosByUser(userId: Long): List<VideoResponse>
+    +getDraftsByUser(userId: Long): List<VideoResponse>
+    +getAllPublishedVideos(): List<VideoResponse>
+    +getPendingPublicationVideos(): List<VideoResponse>
+    -checkOwnership(video: Video, userId: Long): void
+    -toResponse(video: Video): VideoResponse
+  }
+
+  class MonetizationService <<Service>> {
+    -MonetizationRepository monetizationRepository
+    -MonetizationMethodRepository monetizationMethodRepository
+    -UserRepository userRepository
+    -VideoRepository videoRepository
+    -ValidationService validationService
+    -PlatformTransactionManager transactionManager
+    -TransactionTemplate transactionTemplate
+    +init(): void
+    +requestMonetization(userId: Long, request: MonetizationRequest): MonetizationResponse
+    +addMonetizationMethod(monetizationId: Long, request: MonetizationMethodRequest): MonetizationMethodResponse
+    +approveMonetizationMethod(methodId: Long): MonetizationMethodResponse
+    +rejectMonetizationMethod(methodId: Long, reason: String): MonetizationMethodResponse
+    +getMonetizationById(monetizationId: Long): MonetizationResponse
+    +getMonetizationsByVideo(videoId: Long): List<MonetizationResponse>
+    +getMonetizationsByUser(userId: Long): List<MonetizationResponse>
+    +getMethodsByMonetization(monetizationId: Long): List<MonetizationMethodResponse>
+    +getPendingMethods(): List<MonetizationMethodResponse>
+    -toResponse(m: Monetization): MonetizationResponse
+    -toMethodResponse(m: MonetizationMethod): MonetizationMethodResponse
+  }
+
+  class UserService <<Service>> {
+    -UserRepository userRepository
+    +getUserById(userId: Long): UserResponse
+    +getAllUsers(pageable: Pageable): Page<UserResponse>
+    +toResponse(user: User): UserResponse
+  }
+
+  class MinioService <<Service>> {
+    -MinioClient minioClient
+    -String uploadedBucket
+    -String publishedBucket
+    +uploadVideoFile(file: MultipartFile, objectName: String): String
+    +publishVideoFile(objectName: String): String
+    +deleteObject(bucketName: String, objectName: String): void
+    +getUploadedBucket(): String
+    +getPublishedBucket(): String
+    -ensureBucketExists(bucketName: String): void
+  }
+
+  class ValidationService <<Service>> {
+    {static} -long MAX_VIDEO_SIZE_BYTES
+    {static} -int MAX_DESCRIPTION_LENGTH
+    {static} -List<String> FORBIDDEN_WORDS
+    +validateVideoFile(file: MultipartFile): void
+    +validateDescription(description: String): void
+    +moderateVideoDescription(description: String): void
+    +moderateAdName(adName: String): void
+    -checkForbiddenWords(text: String, fieldName: String): void
+  }
+}
+
+package "org.example.exception" {
+  class BusinessException <<Exception>> {
+    -HttpStatus status
+    +BusinessException(message: String, status: HttpStatus)
+    +BusinessException(message: String)
+    +getStatus(): HttpStatus
+  }
+
+  class ResourceNotFoundException <<Exception>> {
+    +ResourceNotFoundException(resourceName: String, id: Long)
+  }
+
+  class GlobalExceptionHandler <<RestControllerAdvice>> {
+    +handleBusinessException(ex: BusinessException): ResponseEntity
+    +handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity
+    +handleMaxSizeException(ex: MaxUploadSizeExceededException): ResponseEntity
+    +handleAccessDeniedException(ex: AccessDeniedException): ResponseEntity
+    +handleBadCredentials(ex: BadCredentialsException): ResponseEntity
+    +handleGenericException(ex: Exception): ResponseEntity
+  }
+}
+
+package "External Spring / libraries" {
+  class RuntimeException <<external>>
+  class JpaRepository <<external>>
+  class MinioClient <<external>>
+  class PasswordEncoder <<external>>
+  class AuthenticationManager <<external>>
+  class PlatformTransactionManager <<external>>
+  class TransactionTemplate <<external>>
+  class SecurityFilterChain <<external>>
+  class UserDetailsService <<external>>
+  class OncePerRequestFilter <<external>>
+}
+
+' Domain relationships
+User "1" <-- "0..*" Video : user
+User "1" <-- "0..*" Monetization : user
+Video "1" <-- "0..*" Monetization : video
+Monetization "1" <-- "0..*" MonetizationMethod : monetization
+
+User --> Role
+Video --> VideoStatus
+Video --> AudienceType
+Video --> AccessType
+Monetization --> MonetizationStatus
+MonetizationMethod --> MonetizationType
+MonetizationMethod --> AdType
+MonetizationMethod --> MethodStatus
+
+' Repository relationships
+UserRepository --|> JpaRepository
+VideoRepository --|> JpaRepository
+MonetizationRepository --|> JpaRepository
+MonetizationMethodRepository --|> JpaRepository
+UserRepository ..> User
+VideoRepository ..> Video
+VideoRepository ..> VideoStatus
+MonetizationRepository ..> Monetization
+MonetizationRepository ..> MonetizationStatus
+MonetizationMethodRepository ..> MonetizationMethod
+MonetizationMethodRepository ..> MethodStatus
+
+' Controller to service dependencies
+AuthController --> AuthService
+VideoController --> VideoService
+VideoController --> SecurityUtils
+ModerationController --> VideoService
+ModerationController --> MonetizationService
+MonetizationController --> MonetizationService
+MonetizationController --> SecurityUtils
+UserController --> UserService
+
+' Request and response DTO usage
+AuthController ..> CreateUserRequest
+AuthController ..> LoginRequest
+AuthController ..> AuthResponse
+VideoController ..> VideoInfoRequest
+VideoController ..> VideoPublishRequest
+VideoController ..> VideoResponse
+MonetizationController ..> MonetizationRequest
+MonetizationController ..> MonetizationMethodRequest
+MonetizationController ..> MonetizationResponse
+MonetizationController ..> MonetizationMethodResponse
+ModerationController ..> VideoResponse
+ModerationController ..> MonetizationMethodResponse
+UserController ..> UserResponse
+AuthController ..> ApiResponse
+VideoController ..> ApiResponse
+MonetizationController ..> ApiResponse
+ModerationController ..> ApiResponse
+UserController ..> ApiResponse
+
+' Service dependencies
+AuthService --> UserRepository
+AuthService --> JwtTokenProvider
+AuthService --> PasswordEncoder
+AuthService --> AuthenticationManager
+AuthService ..> CreateUserRequest
+AuthService ..> LoginRequest
+AuthService ..> AuthResponse
+AuthService ..> User
+AuthService ..> Role
+
+VideoService --> VideoRepository
+VideoService --> UserRepository
+VideoService --> MinioService
+VideoService --> ValidationService
+VideoService --> PlatformTransactionManager
+VideoService --> TransactionTemplate
+VideoService ..> Video
+VideoService ..> User
+VideoService ..> VideoInfoRequest
+VideoService ..> VideoPublishRequest
+VideoService ..> VideoResponse
+
+MonetizationService --> MonetizationRepository
+MonetizationService --> MonetizationMethodRepository
+MonetizationService --> UserRepository
+MonetizationService --> VideoRepository
+MonetizationService --> ValidationService
+MonetizationService --> PlatformTransactionManager
+MonetizationService --> TransactionTemplate
+MonetizationService ..> Monetization
+MonetizationService ..> MonetizationMethod
+MonetizationService ..> MonetizationRequest
+MonetizationService ..> MonetizationMethodRequest
+MonetizationService ..> MonetizationResponse
+MonetizationService ..> MonetizationMethodResponse
+
+UserService --> UserRepository
+UserService ..> User
+UserService ..> UserResponse
+
+MinioService --> MinioClient
+ValidationService ..> BusinessException
+
+' Security dependencies
+SecurityConfig --> JwtAuthenticationFilter
+SecurityConfig ..> SecurityFilterChain
+JwtAuthenticationFilter --|> OncePerRequestFilter
+JwtAuthenticationFilter --> JwtTokenProvider
+JwtAuthenticationFilter --> CustomUserDetailsService
+CustomUserDetailsService --|> UserDetailsService
+CustomUserDetailsService --> UserRepository
+SecurityUtils --> UserRepository
+SecurityUtils ..> User
+
+' Config dependencies
+MinioConfig ..> MinioClient
+
+' DTO enum dependencies
+CreateUserRequest --> Role
+AuthResponse --> Role
+UserResponse --> Role
+VideoPublishRequest --> AudienceType
+VideoPublishRequest --> AccessType
+VideoResponse --> VideoStatus
+VideoResponse --> AudienceType
+VideoResponse --> AccessType
+MonetizationRequest ..> Video
+MonetizationResponse --> MonetizationStatus
+MonetizationMethodRequest --> MonetizationType
+MonetizationMethodRequest --> AdType
+MonetizationMethodResponse --> MonetizationType
+MonetizationMethodResponse --> AdType
+MonetizationMethodResponse --> MethodStatus
+
+' Exceptions
+BusinessException --|> RuntimeException
+ResourceNotFoundException --|> BusinessException
+GlobalExceptionHandler ..> BusinessException
+GlobalExceptionHandler ..> ApiResponse
+
+@enduml
