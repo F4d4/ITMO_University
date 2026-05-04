@@ -56,6 +56,31 @@ mvn test -Dbrowser=firefox
 mvn test -Dbrowser=chrome -Dheadless=false
 ```
 
+Если Stack Overflow показывает проверку "are you human", запускайте тесты в видимом режиме. WebDriver будет ждать ручного прохождения проверки до 180 секунд:
+
+```powershell
+mvn test -Dbrowser=firefox -Dheadless=false
+```
+
+Время ожидания можно увеличить:
+
+```powershell
+mvn test -Dbrowser=firefox -Dheadless=false -Dverification.wait.seconds=300
+```
+
+Если проверка Cloudflare в Chrome повторяется бесконечно, запустите обычный Chrome с портом удаленной отладки:
+
+```powershell
+$profile="$env:TEMP\selenium-stackoverflow-chrome"
+Start-Process "chrome.exe" -ArgumentList "--remote-debugging-port=9222","--user-data-dir=$profile"
+```
+
+В открывшемся Chrome вручную откройте `https://stackoverflow.com/questions` и пройдите проверку. Затем, не закрывая это окно, запустите тесты с подключением к нему:
+
+```powershell
+mvn test -Dbrowser=chrome -Dheadless=false -Dchrome.debuggerAddress=127.0.0.1:9222 -Dverification.wait.seconds=300
+```
+
 Selenium IDE шаблон можно открыть в расширении Selenium IDE через `Open an existing project` и выбрать файл:
 
 ```text

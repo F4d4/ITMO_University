@@ -2,7 +2,6 @@ package com.example.stackoverflow;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.time.Duration;
 import java.util.List;
@@ -35,6 +34,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 class StackOverflowFunctionalTest {
     private static final String BASE_URL = "https://stackoverflow.com";
     private static final long TIMEOUT_SECONDS = Long.getLong("selenium.timeout.seconds", 20L);
+    private static final long MANUAL_VERIFICATION_WAIT_SECONDS = Long.getLong("verification.wait.seconds", 180L);
 
     private WebDriver driver;
     private WebDriverWait wait;
@@ -82,7 +82,7 @@ class StackOverflowFunctionalTest {
             driver.get(BASE_URL + "/search?q=selenium+webdriver");
             waitForDocumentReady();
             acceptCookiesIfShown();
-            assumeInterfaceIsAvailable();
+            waitUntilInterfaceIsAvailable();
         }
         assertTrue(driver.getCurrentUrl().contains("q="), "Search URL should contain query parameter");
         try {
@@ -90,7 +90,7 @@ class StackOverflowFunctionalTest {
                     || bodyText().contains("Search Results")
                     || bodyText().contains("No results found"));
         } catch (TimeoutException exception) {
-            assumeInterfaceIsAvailable();
+            waitUntilInterfaceIsAvailable();
             throw new AssertionError("Search page did not show results. " + pageSnapshot(), exception);
         }
         assertTrue(!driver.findElements(StackOverflowLocators.SEARCH_RESULTS).isEmpty()
@@ -110,7 +110,7 @@ class StackOverflowFunctionalTest {
         firstQuestion.click();
 
         wait.until(currentDriver -> currentDriver.getCurrentUrl().contains("/questions/"));
-        assumeInterfaceIsAvailable();
+        waitUntilInterfaceIsAvailable();
         waitForPresent(StackOverflowLocators.QUESTION_TITLE);
         waitForPresent(StackOverflowLocators.QUESTION_BODY);
         assertFalse(driver.findElements(StackOverflowLocators.POST_TAGS).isEmpty(), "Question page should show tags");
@@ -158,14 +158,14 @@ class StackOverflowFunctionalTest {
         if (!waitForUrlChangeOrLogin()) {
             driver.get(BASE_URL + "/questions/ask");
             waitForDocumentReady();
-            assumeInterfaceIsAvailable();
+            waitUntilInterfaceIsAvailable();
         }
 
         try {
             wait.until(currentDriver -> currentDriver.getCurrentUrl().contains("/users/login")
                     || isPresent(StackOverflowLocators.LOGIN_REQUIRED_MESSAGE));
         } catch (TimeoutException exception) {
-            assumeInterfaceIsAvailable();
+            waitUntilInterfaceIsAvailable();
             throw new AssertionError("Login redirect was not observed. " + pageSnapshot(), exception);
         }
         assertTrue(driver.getCurrentUrl().contains("/users/login") || isPresent(StackOverflowLocators.LOGIN_REQUIRED_MESSAGE),
@@ -189,6 +189,11 @@ class StackOverflowFunctionalTest {
         if ("chrome".equals(browser)) {
             ChromeOptions options = new ChromeOptions();
             options.setPageLoadStrategy(PageLoadStrategy.EAGER);
+            String debuggerAddress = System.getProperty("chrome.debuggerAddress", "").trim();
+            if (!debuggerAddress.isEmpty()) {
+                options.setExperimentalOption("debuggerAddress", debuggerAddress);
+                return new ChromeDriver(options);
+            }
             options.addArguments("--window-size=1440,1000");
             options.addArguments("--disable-notifications");
             options.addArguments("--disable-blink-features=AutomationControlled");
@@ -207,14 +212,17 @@ class StackOverflowFunctionalTest {
         driver.get(BASE_URL + path);
         waitForDocumentReady();
         acceptCookiesIfShown();
-        assumeInterfaceIsAvailable();
+        waitUntilInterfaceIsAvailable();
     }
 
     private WebElement waitForVisible(org.openqa.selenium.By locator) {
         try {
             return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         } catch (TimeoutException exception) {
-            assumeInterfaceIsAvailable();
+            if (isAntiBotVerificationPage()) {
+                waitUntilInterfaceIsAvailable();
+                return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            }
             throw new AssertionError("Element was not visible: " + locator + ". " + pageSnapshot(), exception);
         }
     }
@@ -223,7 +231,10 @@ class StackOverflowFunctionalTest {
         try {
             return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
         } catch (TimeoutException exception) {
-            assumeInterfaceIsAvailable();
+            if (isAntiBotVerificationPage()) {
+                waitUntilInterfaceIsAvailable();
+                return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+            }
             throw new AssertionError("Element was not present: " + locator + ". " + pageSnapshot(), exception);
         }
     }
@@ -233,7 +244,17 @@ class StackOverflowFunctionalTest {
     }
 
     private void waitForDocumentReady() {
-        wait.until(currentDriver -> "complete".equals(((JavascriptExecutor) currentDriver).executeScript("return document.readyState")));
+        try {
+            wait.until(currentDriver -> {
+                Object readyState = ((JavascriptExecutor) currentDriver).executeScript("return document.readyState");
+                return "complete".equals(readyState) || "interactive".equals(readyState);
+            });
+        } catch (TimeoutException exception) {
+            if (!bodyText().isBlank()) {
+                return;
+            }
+            throw exception;
+        }
     }
 
     private void acceptCookiesIfShown() {
@@ -246,15 +267,39 @@ class StackOverflowFunctionalTest {
         }
     }
 
-    private void assumeInterfaceIsAvailable() {
-        String pageText = bodyText().toLowerCase(Locale.ROOT);
-        String title = driver.getTitle().toLowerCase(Locale.ROOT);
-        assumeFalse(pageText.contains("human verification")
-                        || pageText.contains("are you a human")
-                        || pageText.contains("verifying you are human")
-                        || pageText.contains("security service to protect against malicious bots")
-                        || title.contains("just a moment"),
-                "Stack Overflow returned an anti-bot verification page instead of the tested interface");
+    private void waitUntilInterfaceIsAvailable() {
+        if (!isAntiBotVerificationPage()) {
+            return;
+        }
+
+        System.out.println("Stack Overflow opened an anti-bot verification page. "
+                + "Complete it manually in the browser window; waiting up to "
+                + MANUAL_VERIFICATION_WAIT_SECONDS + " seconds.");
+
+        WebDriverWait verificationWait = new WebDriverWait(driver, Duration.ofSeconds(MANUAL_VERIFICATION_WAIT_SECONDS));
+        try {
+            verificationWait.until(currentDriver -> !isAntiBotVerificationPage());
+        } catch (TimeoutException exception) {
+            throw new AssertionError("Stack Overflow anti-bot verification was not completed within "
+                    + MANUAL_VERIFICATION_WAIT_SECONDS + " seconds. " + pageSnapshot(), exception);
+        }
+
+        waitForDocumentReady();
+        acceptCookiesIfShown();
+    }
+
+    private boolean isAntiBotVerificationPage() {
+        try {
+            String pageText = bodyText().toLowerCase(Locale.ROOT);
+            String title = driver.getTitle().toLowerCase(Locale.ROOT);
+            return pageText.contains("human verification")
+                    || pageText.contains("are you a human")
+                    || pageText.contains("verifying you are human")
+                    || pageText.contains("security service to protect against malicious bots")
+                    || title.contains("just a moment");
+        } catch (WebDriverException exception) {
+            return false;
+        }
     }
 
     private void waitForBodyText(String text) {

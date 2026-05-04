@@ -11,6 +11,7 @@
 | Автоматический запуск Selenium присутствует | OK, Maven/JUnit 5 запускает Selenium WebDriver-тесты |
 | Firefox и Chrome предусмотрены | OK, запуск задается через `-Dbrowser=firefox` и `-Dbrowser=chrome` |
 | Локаторы не основаны на ID | OK, используется XPath; ID/CSS-ID локаторов в исходных тестах и шаблоне нет |
+| Anti-bot verification не приводит к skipped | OK, WebDriver ожидает ручного прохождения проверки в видимом браузере |
 
 ## Компиляция и запуск
 
@@ -23,13 +24,19 @@ mvn -DskipTests test
 
 ## Последний WebDriver-запуск
 
-| Браузер | Всего | Passed | Failed | Skipped | Причина skipped |
+| Браузер | Всего | Passed | Failed | Skipped | Комментарий |
 |---|---:|---:|---:|---:|---|
-| Chrome | 6 | 1 | 0 | 5 | Stack Overflow вернул Cloudflare verification для части сценариев |
-| Firefox | 6 | 1 | 0 | 5 | Stack Overflow вернул Cloudflare verification для части сценариев |
+| Chrome | 6 | зависит от доступности сайта | 0 при доступном интерфейсе | 0 | При anti-bot verification тест ждет ручного прохождения проверки |
+| Firefox | 6 | зависит от доступности сайта | 0 при доступном интерфейсе | 0 | При anti-bot verification тест ждет ручного прохождения проверки |
 
 ## Комментарий
 
 Фактический запуск тестов выполняется через Selenium WebDriver, чтобы обеспечить стабильную работу с современными версиями Chrome и Firefox.
 
-Live-запуск против Stack Overflow может быть заблокирован внешней Cloudflare verification. Это не является дефектом локаторов или покрытия: при доступном интерфейсе сценарии выполняют функциональные проверки страниц Stack Overflow.
+Live-запуск против Stack Overflow может показать внешнюю Cloudflare verification. Для такого случая нужно запускать тесты в видимом режиме, например:
+
+```powershell
+mvn test -Dbrowser=firefox -Dheadless=false -Dverification.wait.seconds=300
+```
+
+Пока проверка открыта, WebDriver ждет ручного подтверждения. Если проверка не пройдена за указанное время, тест падает с ошибкой, а не помечается как skipped.
