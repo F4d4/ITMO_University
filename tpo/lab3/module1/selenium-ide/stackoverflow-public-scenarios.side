@@ -1,0 +1,82 @@
+{
+  "id": "stackoverflow-lab-2422",
+  "version": "2.0",
+  "name": "Stack Overflow public scenarios 2422",
+  "url": "http://stackoverflow.com",
+  "tests": [
+    {
+      "id": "uc-01-newest-questions",
+      "name": "UC-01 Newest questions",
+      "commands": [
+        {"id": "uc-01-01", "comment": "", "command": "open", "target": "/questions", "targets": [], "value": ""},
+        {"id": "uc-01-02", "comment": "", "command": "waitForElementPresent", "target": "xpath=//h1[contains(normalize-space(.),'Questions')]", "targets": [], "value": ""},
+        {"id": "uc-01-03", "comment": "", "command": "assertElementPresent", "target": "xpath=//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]", "targets": [], "value": ""},
+        {"id": "uc-01-04", "comment": "", "command": "assertElementPresent", "target": "xpath=//a[contains(@href,'/questions/ask') and contains(normalize-space(.),'Ask Question')]", "targets": [], "value": ""}
+      ]
+    },
+    {
+      "id": "uc-02-search",
+      "name": "UC-02 Search question",
+      "commands": [
+        {"id": "uc-02-01", "comment": "", "command": "open", "target": "/questions", "targets": [], "value": ""},
+        {"id": "uc-02-02", "comment": "", "command": "waitForElementPresent", "target": "xpath=//form[contains(@action,'/search')]//input[(contains(@name,'q') or contains(@aria-label,'Search')) and not(@type='hidden')]", "targets": [], "value": ""},
+        {"id": "uc-02-03", "comment": "", "command": "type", "target": "xpath=//form[contains(@action,'/search')]//input[(contains(@name,'q') or contains(@aria-label,'Search')) and not(@type='hidden')]", "targets": [], "value": "selenium webdriver"},
+        {"id": "uc-02-04", "comment": "", "command": "sendKeys", "target": "xpath=//form[contains(@action,'/search')]//input[(contains(@name,'q') or contains(@aria-label,'Search')) and not(@type='hidden')]", "targets": [], "value": "${KEY_ENTER}"},
+        {"id": "uc-02-05", "comment": "", "command": "waitForElementPresent", "target": "xpath=//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//a[contains(@href,'/questions/') and normalize-space()]", "targets": [], "value": ""}
+      ]
+    },
+    {
+      "id": "uc-03-open-question",
+      "name": "UC-03 Open question",
+      "commands": [
+        {"id": "uc-03-01", "comment": "", "command": "open", "target": "/questions", "targets": [], "value": ""},
+        {"id": "uc-03-02", "comment": "", "command": "waitForElementPresent", "target": "xpath=(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3//a[contains(@href,'/questions/') and normalize-space()])[1]", "targets": [], "value": ""},
+        {"id": "uc-03-03", "comment": "", "command": "click", "target": "xpath=(//div[contains(@class,'s-post-summary') or contains(@class,'question-summary')]//h3//a[contains(@href,'/questions/') and normalize-space()])[1]", "targets": [], "value": ""},
+        {"id": "uc-03-04", "comment": "", "command": "waitForElementPresent", "target": "xpath=//h1//*[self::a or self::span][normalize-space()]", "targets": [], "value": ""},
+        {"id": "uc-03-05", "comment": "", "command": "assertElementPresent", "target": "xpath=//div[contains(@class,'question')]//div[contains(@class,'s-prose') or @itemprop='text']", "targets": [], "value": ""},
+        {"id": "uc-03-06", "comment": "", "command": "assertElementPresent", "target": "xpath=//a[contains(@class,'post-tag') and normalize-space()]", "targets": [], "value": ""}
+      ]
+    },
+    {
+      "id": "uc-04-tags",
+      "name": "UC-04 Open popular tag",
+      "commands": [
+        {"id": "uc-04-01", "comment": "", "command": "open", "target": "/tags", "targets": [], "value": ""},
+        {"id": "uc-04-02", "comment": "", "command": "waitForElementPresent", "target": "xpath=//h1[contains(normalize-space(.),'Tags')]", "targets": [], "value": ""},
+        {"id": "uc-04-03", "comment": "", "command": "waitForElementPresent", "target": "xpath=//a[normalize-space(.)='python' and (contains(@href,'/questions/tagged/python') or contains(@href,'/tags/python'))]", "targets": [], "value": ""},
+        {"id": "uc-04-04", "comment": "", "command": "click", "target": "xpath=//a[normalize-space(.)='python' and (contains(@href,'/questions/tagged/python') or contains(@href,'/tags/python'))]", "targets": [], "value": ""}
+      ]
+    },
+    {
+      "id": "uc-05-active-sort",
+      "name": "UC-05 Active sorting",
+      "commands": [
+        {"id": "uc-05-01", "comment": "", "command": "open", "target": "/questions", "targets": [], "value": ""},
+        {"id": "uc-05-02", "comment": "", "command": "waitForElementPresent", "target": "xpath=//a[contains(@href,'tab=Active') and normalize-space()='Active']", "targets": [], "value": ""},
+        {"id": "uc-05-03", "comment": "", "command": "click", "target": "xpath=//a[contains(@href,'tab=Active') and normalize-space()='Active']", "targets": [], "value": ""},
+        {"id": "uc-05-04", "comment": "", "command": "waitForElementPresent", "target": "xpath=//*[self::h1 or self::h2][contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'active')]", "targets": [], "value": ""}
+      ]
+    },
+    {
+      "id": "uc-06-anonymous-ask",
+      "name": "UC-06 Ask question requires login",
+      "commands": [
+        {"id": "uc-06-01", "comment": "", "command": "open", "target": "/questions", "targets": [], "value": ""},
+        {"id": "uc-06-02", "comment": "", "command": "click", "target": "xpath=//a[contains(@href,'/questions/ask') and contains(normalize-space(.),'Ask Question')]", "targets": [], "value": ""},
+        {"id": "uc-06-03", "comment": "", "command": "waitForElementPresent", "target": "xpath=//*[contains(normalize-space(.),'You must be logged in to ask a question') or contains(normalize-space(.),'Log in below')]", "targets": [], "value": ""}
+      ]
+    }
+  ],
+  "suites": [
+    {
+      "id": "suite-public",
+      "name": "Stack Overflow public scenarios",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 300,
+      "tests": ["uc-01-newest-questions", "uc-02-search", "uc-03-open-question", "uc-04-tags", "uc-05-active-sort", "uc-06-anonymous-ask"]
+    }
+  ],
+  "urls": ["http://stackoverflow.com/"],
+  "plugins": []
+}

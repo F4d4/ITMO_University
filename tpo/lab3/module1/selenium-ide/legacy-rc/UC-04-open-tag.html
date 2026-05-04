@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>UC-04 Open popular tag</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+  <thead>
+    <tr><td rowspan="1" colspan="3">UC-04 Open popular tag</td></tr>
+  </thead>
+  <tbody>
+    <tr><td>open</td><td>/tags</td><td></td></tr>
+    <tr><td>waitForElementPresent</td><td>xpath=//h1[normalize-space()]</td><td></td></tr>
+    <tr><td>assertTextPresent</td><td>Tags</td><td></td></tr>
+    <tr><td>waitForElementPresent</td><td>xpath=//a[normalize-space(.)='python' and (contains(@href,'/questions/tagged/python') or contains(@href,'/tags/python'))]</td><td></td></tr>
+    <tr><td>clickAndWait</td><td>xpath=//a[normalize-space(.)='python' and (contains(@href,'/questions/tagged/python') or contains(@href,'/tags/python'))]</td><td></td></tr>
+    <tr><td>waitForLocation</td><td>*python*</td><td></td></tr>
+  </tbody>
+</table>
+</body>
+</html>
