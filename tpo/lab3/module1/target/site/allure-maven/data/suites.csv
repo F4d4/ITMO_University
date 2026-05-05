@@ -1,3 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","181045","UC-01: visitor sees newest questions and main navigation","","Tue May 05 11:14:06 MSK 2026","failed","Tue May 05 11:17:07 MSK 2026","","com.example.stackoverflow.StackOverflowFunctionalTest","com.example.stackoverflow.StackOverflowFunctionalTest","newestQuestionsPageShowsQuestionListAndNavigation"
-"","1","StackOverflowFunctionalTest","","Tue May 05 11:13:38 MSK 2026","broken","Tue May 05 11:13:38 MSK 2026","","com.example.stackoverflow.StackOverflowFunctionalTest","com.example.stackoverflow.StackOverflowFunctionalTest",""
