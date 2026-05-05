@@ -16,7 +16,24 @@
     <maven.compiler.release>17</maven.compiler.release>
     <junit.jupiter.version>5.10.1</junit.jupiter.version>
     <selenium.version>4.19.1</selenium.version>
+    <allure.version>2.34.0</allure.version>
+    <allure.maven.version>2.17.0</allure.maven.version>
+    <browser>chrome</browser>
+    <headless>true</headless>
+    <selenium.timeout.seconds>20</selenium.timeout.seconds>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-bom</artifactId>
+        <version>${allure.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -29,6 +46,11 @@
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <version>${selenium.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-junit5</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -47,7 +69,18 @@
             <browser>${browser}</browser>
             <headless>${headless}</headless>
             <selenium.timeout.seconds>${selenium.timeout.seconds}</selenium.timeout.seconds>
+            <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
           </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-maven</artifactId>
+        <version>${allure.maven.version}</version>
+        <configuration>
+          <reportVersion>${allure.version}</reportVersion>
+          <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+          <reportDirectory>${project.build.directory}/site/allure-maven</reportDirectory>
         </configuration>
       </plugin>
     </plugins>

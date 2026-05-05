@@ -1,0 +1,1 @@
+[{"uid":"61262b9243328807","name":"UC-01: visitor sees newest questions and main navigation","time":{"start":1777968846380,"stop":1777969027425,"duration":181045},"status":"failed","severity":"normal"},{"uid":"58dd902b3723536","name":"StackOverflowFunctionalTest","time":{"start":1777968818433,"stop":1777968818434,"duration":1},"status":"broken","severity":"normal"}]
