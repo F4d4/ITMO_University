@@ -1,0 +1,5 @@
+[     284ms] [WARNING] Error with Feature-Policy header: Unrecognized feature: 'speaker'. @ :0
+[     448ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://htlbid.com/v3/mapping.base/htlbid.js?v=1.4:0
+[     448ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://securepubads.g.doubleclick.net/tag/js/gpt.js:0
+[     556ms] [ERROR] Not signed in with the identity provider. @ https://stackoverflow.com/questions/79943013/does-the-creation-of-a-stdarray-of-stdbytes-or-unsigned-char-implicitly-crea:0
+[    4285ms] [ERROR] [GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token. @ https://accounts.google.com/gsi/client:85

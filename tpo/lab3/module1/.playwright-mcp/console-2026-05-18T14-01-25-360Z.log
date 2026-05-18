@@ -1,0 +1,6 @@
+[     503ms] [WARNING] Error with Feature-Policy header: Unrecognized feature: 'speaker'. @ :0
+[     560ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "username"): (More info: https://goo.gl/9p2vKq) %o @ https://stackoverflow.com/users/login?ssrc=anon_ask&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2fask:0
+[     567ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://securepubads.g.doubleclick.net/tag/js/gpt.js:0
+[     567ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://htlbid.com/v3/mapping.base/htlbid.js?v=1.4:0
+[     627ms] [ERROR] Not signed in with the identity provider. @ https://stackoverflow.com/users/login?ssrc=anon_ask&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2fask:0
+[    7080ms] [ERROR] [GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token. @ https://accounts.google.com/gsi/client:85

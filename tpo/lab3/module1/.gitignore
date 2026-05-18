@@ -1,1 +1,6 @@
 /target/
+.so-cookies/
+*.cookies.json
+credentials.properties
+*.local
+

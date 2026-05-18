@@ -1,0 +1,1105 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - generic [ref=e4]:
+      - link "Stack Overflow" [ref=e5] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e6]
+      - link "About" [ref=e8] [cursor=pointer]:
+        - /url: https://stackoverflow.co/
+        - generic [ref=e9]: About
+      - button "Products" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]: Products
+      - link "For Teams" [ref=e12] [cursor=pointer]:
+        - /url: https://stackoverflow.co/internal/
+        - generic [ref=e13]: For Teams
+      - search [ref=e14]:
+        - generic [ref=e15]:
+          - combobox "Search" [ref=e16]
+          - img
+      - navigation "Topbar" [ref=e17]:
+        - list [ref=e18]:
+          - listitem
+          - listitem [ref=e19]:
+            - link "Jason Verdiev's user avatar Jason Verdiev" [ref=e20] [cursor=pointer]:
+              - /url: /users/32742720/jason-verdiev
+              - generic "Jason Verdiev" [ref=e21]:
+                - img "Jason Verdiev's user avatar" [ref=e22]
+              - generic [ref=e23]: Jason Verdiev
+              - list [ref=e25]:
+                - listitem [ref=e26]:
+                  - text: "1"
+                  - generic [ref=e27]: ", 1 reputation"
+                - listitem
+          - listitem [ref=e28]:
+            - link "Inbox (1 unread message)" [ref=e29] [cursor=pointer]:
+              - /url: https://stackexchange.com/users/46366101?tab=inbox
+              - img [ref=e30]
+              - generic [ref=e32]: "1"
+          - listitem [ref=e33]:
+            - link "Achievements" [ref=e34] [cursor=pointer]:
+              - /url: https://stackexchange.com/users/46366101?tab=reputation
+              - img [ref=e35]
+          - listitem [ref=e37]:
+            - link "Help Center and other resources" [ref=e38] [cursor=pointer]:
+              - /url: /help
+              - img [ref=e39]
+          - listitem [ref=e41]:
+            - link "Site switcher" [ref=e42] [cursor=pointer]:
+              - /url: https://stackexchange.com
+              - img [ref=e43]
+          - listitem
+  - generic [ref=e46]:
+    - generic [ref=e47]:
+      - text: How are we doing? Please help us improve Stack Overflow.
+      - link "Take our short survey" [ref=e48] [cursor=pointer]:
+        - /url: https://stackoverflow.com/survey/site-satisfaction/redirect
+    - link "dismiss" [ref=e49] [cursor=pointer]:
+      - /url: "#"
+      - img [ref=e50]
+  - generic [ref=e52]:
+    - navigation "Primary" [ref=e55]:
+      - list [ref=e56]:
+        - listitem [ref=e57]:
+          - list [ref=e58]:
+            - listitem [ref=e59]:
+              - link "Home" [ref=e60] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e61]:
+                  - img [ref=e62]
+                  - generic [ref=e64]: Home
+            - listitem [ref=e65]:
+              - link "Questions" [ref=e66] [cursor=pointer]:
+                - /url: /questions
+                - generic [ref=e67]:
+                  - img [ref=e68]
+                  - generic [ref=e70]: Questions
+            - listitem [ref=e71]:
+              - link "AI Assist" [ref=e72] [cursor=pointer]:
+                - /url: https://stackoverflow.com/ai-assist
+                - generic [ref=e73]:
+                  - img [ref=e75]
+                  - generic [ref=e77]: AI Assist
+            - listitem [ref=e78]:
+              - link "Tags" [ref=e79] [cursor=pointer]:
+                - /url: /tags
+                - generic [ref=e80]:
+                  - img [ref=e81]
+                  - generic [ref=e84]: Tags
+            - listitem [ref=e85]:
+              - link "Saves" [ref=e86] [cursor=pointer]:
+                - /url: /users/saves/32742720/all
+                - generic [ref=e87]:
+                  - img [ref=e88]
+                  - generic [ref=e90]: Saves
+            - listitem [ref=e91]
+            - listitem [ref=e92]:
+              - link "Challenges" [ref=e93] [cursor=pointer]:
+                - /url: /beta/challenges
+                - generic [ref=e94]:
+                  - img [ref=e95]
+                  - generic [ref=e97]: Challenges
+            - listitem [ref=e98]:
+              - link "Chat" [expanded] [ref=e99] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+                - img [ref=e102]
+                - generic [ref=e107]: Chat
+            - listitem [ref=e108]:
+              - link "Articles" [ref=e109] [cursor=pointer]:
+                - /url: https://stackoverflow.blog/contributed?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=so-blog&utm_content=experiment-articles
+                - generic [ref=e110]:
+                  - img [ref=e111]
+                  - generic [ref=e114]: Articles
+            - listitem [ref=e115]:
+              - link "Users" [ref=e116] [cursor=pointer]:
+                - /url: /users
+                - generic [ref=e117]:
+                  - img [ref=e118]
+                  - generic [ref=e120]: Users
+            - listitem [ref=e121]
+            - listitem [ref=e122]:
+              - link "Companies" [ref=e123] [cursor=pointer]:
+                - /url: https://stackoverflow.com/jobs/companies?so_medium=stackoverflow&so_source=SiteNav
+                - generic [ref=e124]:
+                  - img [ref=e125]
+                  - generic [ref=e127]: Companies
+            - listitem [ref=e128]:
+              - button "Collectives" [ref=e130] [cursor=pointer]:
+                - generic [ref=e131]: Collectives
+                - img [ref=e133]
+            - listitem [ref=e135]:
+              - paragraph [ref=e136]:
+                - text: Communities for your favorite technologies.
+                - link "Explore all Collectives" [ref=e137] [cursor=pointer]:
+                  - /url: /collectives-all
+        - listitem [ref=e138]:
+          - button "Dismiss this promotion" [ref=e139] [cursor=pointer]:
+            - img [ref=e140]
+          - generic [ref=e142]: Stack Internal
+          - generic [ref=e143]:
+            - img [ref=e144]
+            - paragraph [ref=e158]:
+              - text: Stack Overflow for Teams is now called
+              - strong [ref=e159]: Stack Internal
+              - text: . Bring the best of human thought and AI automation together at your work.
+            - link "Try for free" [ref=e160] [cursor=pointer]:
+              - /url: https://stackoverflowteams.com/teams/create/free/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+            - link "Learn more" [ref=e161] [cursor=pointer]:
+              - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+        - listitem [ref=e162]:
+          - paragraph [ref=e163]:
+            - text: Looking for
+            - button "Stack Internal was moved popover" [ref=e164] [cursor=pointer]: your teams?
+    - generic [ref=e165]:
+      - main [ref=e166]:
+        - generic [ref=e167]:
+          - heading "Recently Active Questions" [level=1] [ref=e168]
+          - link "Ask Question" [ref=e170] [cursor=pointer]:
+            - /url: /questions/ask
+        - generic [ref=e172]:
+          - generic [ref=e173]: 24,154,240 questions
+          - generic [ref=e175]:
+            - generic [ref=e176]:
+              - link "Newest" [ref=e177] [cursor=pointer]:
+                - /url: /questions?tab=Newest
+                - generic [ref=e178]: Newest
+              - link "Active" [ref=e179] [cursor=pointer]:
+                - /url: /questions?tab=Active
+                - generic [ref=e180]: Active
+              - link "Bountied 4" [ref=e181] [cursor=pointer]:
+                - /url: /questions?tab=Bounties
+                - generic [ref=e182]: Bountied
+                - generic [ref=e183]: "4"
+              - link "Unanswered" [ref=e184] [cursor=pointer]:
+                - /url: /questions?tab=Unanswered
+                - generic [ref=e185]: Unanswered
+              - button "More" [ref=e186] [cursor=pointer]:
+                - generic [ref=e187]: More
+            - button "Filter" [ref=e189] [cursor=pointer]:
+              - img [ref=e190]
+              - text: Filter
+        - generic [ref=e193]:
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - generic "Score of -2" [ref=e197]:
+                - generic [ref=e198]: "-2"
+                - generic [ref=e199]: votes
+              - generic "0 answers" [ref=e200]:
+                - generic [ref=e201]: "0"
+                - generic [ref=e202]: answers
+              - generic "47 views" [ref=e203]:
+                - generic [ref=e204]: "47"
+                - generic [ref=e205]: views
+            - generic [ref=e206]:
+              - heading "Reading a text file (*.txt) to std::string array, c++17" [level=3] [ref=e207]:
+                - link "Reading a text file (*.txt) to std::string array, c++17" [ref=e208] [cursor=pointer]:
+                  - /url: /questions/79943105/reading-a-text-file-txt-to-stdstring-array-c17
+              - generic [ref=e209]: When using the below function to stream a text file to a std::string, the output string always has a space and a square symbol at the beginning and the .c_str() function with std::cout only prints out ...
+              - generic [ref=e210]:
+                - list [ref=e212]:
+                  - listitem [ref=e213]:
+                    - link "show questions tagged 'c++'" [ref=e214] [cursor=pointer]:
+                      - /url: /questions/tagged/c%2b%2b
+                      - text: c++
+                  - listitem [ref=e215]:
+                    - link "show questions tagged 'text'" [ref=e216] [cursor=pointer]:
+                      - /url: /questions/tagged/text
+                      - text: text
+                  - listitem [ref=e217]:
+                    - link "show questions tagged 'stdstring'" [ref=e218] [cursor=pointer]:
+                      - /url: /questions/tagged/stdstring
+                      - text: stdstring
+                - generic [ref=e219]:
+                  - link "Ted Lyngmo's user avatar" [ref=e220] [cursor=pointer]:
+                    - /url: /users/7582247/ted-lyngmo
+                    - img "Ted Lyngmo's user avatar" [ref=e222]
+                  - generic [ref=e223]:
+                    - link "Ted Lyngmo" [ref=e225] [cursor=pointer]:
+                      - /url: /users/7582247/ted-lyngmo
+                    - list [ref=e226]:
+                      - listitem [ref=e227]: 126k
+                  - time [ref=e228]:
+                    - link "modified 59 secs ago" [ref=e229] [cursor=pointer]:
+                      - /url: /questions/79943105/reading-a-text-file-txt-to-stdstring-array-c17
+          - generic [ref=e231]:
+            - generic [ref=e232]:
+              - generic "Score of 0" [ref=e233]:
+                - generic [ref=e234]: "0"
+                - generic [ref=e235]: votes
+              - generic "0 answers" [ref=e236]:
+                - generic [ref=e237]: "0"
+                - generic [ref=e238]: answers
+              - generic "3 views" [ref=e239]:
+                - generic [ref=e240]: "3"
+                - generic [ref=e241]: views
+            - generic [ref=e242]:
+              - heading "Java DFS not finding correct path in weighted directed graph" [level=3] [ref=e243]:
+                - link "Java DFS not finding correct path in weighted directed graph" [ref=e244] [cursor=pointer]:
+                  - /url: /questions/79943132/java-dfs-not-finding-correct-path-in-weighted-directed-graph
+              - generic [ref=e245]: "I have a weighted directed graph implementation in Java. My DFS sometimes doesn't find the correct path when there are multiple routes. Here is my code: // Graph.java package at.htl; import java.util...."
+              - generic [ref=e246]:
+                - list [ref=e248]:
+                  - listitem [ref=e249]:
+                    - link "show questions tagged 'java'" [ref=e250] [cursor=pointer]:
+                      - /url: /questions/tagged/java
+                      - text: java
+                  - listitem [ref=e251]:
+                    - link "show questions tagged 'graph'" [ref=e252] [cursor=pointer]:
+                      - /url: /questions/tagged/graph
+                      - text: graph
+                  - listitem [ref=e253]:
+                    - link "show questions tagged 'depth-first-search'" [ref=e254] [cursor=pointer]:
+                      - /url: /questions/tagged/depth-first-search
+                      - text: depth-first-search
+                  - listitem [ref=e255]:
+                    - link "show questions tagged 'breadth-first-search'" [ref=e256] [cursor=pointer]:
+                      - /url: /questions/tagged/breadth-first-search
+                      - text: breadth-first-search
+                - generic [ref=e257]:
+                  - link "user32091719's user avatar" [ref=e258] [cursor=pointer]:
+                    - /url: /users/32654963/user32091719
+                    - img "user32091719's user avatar" [ref=e260]
+                  - generic [ref=e261]:
+                    - link "user32091719" [ref=e263] [cursor=pointer]:
+                      - /url: /users/32654963/user32091719
+                    - list [ref=e264]:
+                      - listitem [ref=e265]: "1"
+                  - time [ref=e266]:
+                    - link "asked 1 min ago" [ref=e267] [cursor=pointer]:
+                      - /url: /questions/79943132/java-dfs-not-finding-correct-path-in-weighted-directed-graph
+          - generic [ref=e269]:
+            - generic [ref=e270]:
+              - generic "Score of 0" [ref=e271]:
+                - generic [ref=e272]: "0"
+                - generic [ref=e273]: votes
+              - generic "0 answers" [ref=e274]:
+                - generic [ref=e275]: "0"
+                - generic [ref=e276]: answers
+              - generic "2 views" [ref=e277]:
+                - generic [ref=e278]: "2"
+                - generic [ref=e279]: views
+            - generic [ref=e280]:
+              - heading "Black Screen on all sideloaded apps while trying to run them with JIT using stickdebug on Ipad OS 26.4" [level=3] [ref=e281]:
+                - link "Black Screen on all sideloaded apps while trying to run them with JIT using stickdebug on Ipad OS 26.4" [ref=e282] [cursor=pointer]:
+                  - /url: /questions/79943131/black-screen-on-all-sideloaded-apps-while-trying-to-run-them-with-jit-using-stic
+              - generic [ref=e283]: I am running Stick Debug on IOS 26.4 on a A16 Ipad. Whenever I double click a app in StickDebug, it opens it then crashes. I have never been able to get stickdebug working. Thanks for the help!
+              - generic [ref=e284]:
+                - list [ref=e286]:
+                  - listitem [ref=e287]:
+                    - link "show questions tagged 'emulation'" [ref=e288] [cursor=pointer]:
+                      - /url: /questions/tagged/emulation
+                      - text: emulation
+                  - listitem [ref=e289]:
+                    - link "show questions tagged 'jit'" [ref=e290] [cursor=pointer]:
+                      - /url: /questions/tagged/jit
+                      - text: jit
+                  - listitem [ref=e291]:
+                    - link "show questions tagged 'ipados'" [ref=e292] [cursor=pointer]:
+                      - /url: /questions/tagged/ipados
+                      - text: ipados
+                  - listitem [ref=e293]:
+                    - link "show questions tagged 'ios26'" [ref=e294] [cursor=pointer]:
+                      - /url: /questions/tagged/ios26
+                      - text: ios26
+                - generic [ref=e295]:
+                  - link "Joe timbersock's user avatar" [ref=e296] [cursor=pointer]:
+                    - /url: /users/32742844/joe-timbersock
+                    - img "Joe timbersock's user avatar" [ref=e298]
+                  - generic [ref=e299]:
+                    - link "Joe timbersock" [ref=e301] [cursor=pointer]:
+                      - /url: /users/32742844/joe-timbersock
+                    - list [ref=e302]:
+                      - listitem [ref=e303]: "1"
+                  - time [ref=e304]:
+                    - link "asked 1 min ago" [ref=e305] [cursor=pointer]:
+                      - /url: /questions/79943131/black-screen-on-all-sideloaded-apps-while-trying-to-run-them-with-jit-using-stic
+          - generic [ref=e307]:
+            - generic [ref=e308]:
+              - generic [ref=e309]:
+                - img [ref=e310]
+                - text: Advice
+              - generic "Score of 0" [ref=e312]:
+                - generic [ref=e313]: "0"
+                - generic [ref=e314]: votes
+              - generic "# replies" [ref=e315]:
+                - generic [ref=e316]: "1"
+                - generic [ref=e317]: replies
+              - generic "10 views" [ref=e318]:
+                - generic [ref=e319]: "10"
+                - generic [ref=e320]: views
+            - generic [ref=e321]:
+              - heading "Getting numbers from captcha picture" [level=3] [ref=e322]:
+                - link "Getting numbers from captcha picture" [ref=e323] [cursor=pointer]:
+                  - /url: /questions/79943128/getting-numbers-from-captcha-picture
+              - generic [ref=e324]: I need help with getting values from certain captcha pictures and it should be accurate. the captcha uses only 4 digits in picture. I have seen some people solving with image recognition tools such as ...
+              - generic [ref=e325]:
+                - list [ref=e327]:
+                  - listitem [ref=e328]:
+                    - link "show questions tagged 'python'" [ref=e329] [cursor=pointer]:
+                      - /url: /questions/tagged/python
+                      - text: python
+                  - listitem [ref=e330]:
+                    - link "show questions tagged 'selenium-webdriver'" [ref=e331] [cursor=pointer]:
+                      - /url: /questions/tagged/selenium-webdriver
+                      - text: selenium-webdriver
+                  - listitem [ref=e332]:
+                    - link "show questions tagged 'captcha'" [ref=e333] [cursor=pointer]:
+                      - /url: /questions/tagged/captcha
+                      - text: captcha
+                - generic [ref=e334]:
+                  - link "GrumpyCrouton's user avatar" [ref=e335] [cursor=pointer]:
+                    - /url: /users/4705262/grumpycrouton
+                    - img "GrumpyCrouton's user avatar" [ref=e337]
+                  - generic [ref=e338]:
+                    - link "GrumpyCrouton" [ref=e340] [cursor=pointer]:
+                      - /url: /users/4705262/grumpycrouton
+                    - list [ref=e341]:
+                      - listitem [ref=e342]: 8,643
+                  - time [ref=e343]:
+                    - link "answered 3 mins ago" [ref=e344] [cursor=pointer]:
+                      - /url: /questions/79943128/getting-numbers-from-captcha-picture?lastactivity
+          - generic [ref=e346]:
+            - generic [ref=e347]:
+              - generic "Score of 2" [ref=e348]:
+                - generic [ref=e349]: "2"
+                - generic [ref=e350]: votes
+              - generic "one of the answers was accepted as the correct answer" [ref=e351]:
+                - img [ref=e352]
+                - generic [ref=e354]: "2"
+                - generic [ref=e355]: answers
+              - generic "6524 views" [ref=e356]:
+                - generic [ref=e357]: 7k
+                - generic [ref=e358]: views
+            - generic [ref=e359]:
+              - heading "Access 2010 VBA Picture Object in Form" [level=3] [ref=e360]:
+                - link "Access 2010 VBA Picture Object in Form" [ref=e361] [cursor=pointer]:
+                  - /url: /questions/10919651/access-2010-vba-picture-object-in-form
+              - generic [ref=e362]: i have a form in access with one field (club_name), i have a picture object in this form. someplace in a folder i have some pictures (*.png) that each club's picture equal to records in my table.for ...
+              - generic [ref=e363]:
+                - list [ref=e365]:
+                  - listitem [ref=e366]:
+                    - link "show questions tagged 'ms-access'" [ref=e367] [cursor=pointer]:
+                      - /url: /questions/tagged/ms-access
+                      - text: ms-access
+                - generic [ref=e368]:
+                  - link "محمد خليل's user avatar" [ref=e369] [cursor=pointer]:
+                    - /url: /users/32742836/%d9%85%d8%ad%d9%85%d8%af-%d8%ae%d9%84%d9%8a%d9%84
+                    - img "محمد خليل's user avatar" [ref=e371]
+                  - generic [ref=e372]:
+                    - link "محمد خليل" [ref=e374] [cursor=pointer]:
+                      - /url: /users/32742836/%d9%85%d8%ad%d9%85%d8%af-%d8%ae%d9%84%d9%8a%d9%84
+                    - list [ref=e375]:
+                      - listitem [ref=e376]: "1"
+                  - time [ref=e377]:
+                    - link "answered 5 mins ago" [ref=e378] [cursor=pointer]:
+                      - /url: /questions/10919651/access-2010-vba-picture-object-in-form?lastactivity
+          - generic [ref=e380]:
+            - generic [ref=e381]:
+              - generic [ref=e382]:
+                - img [ref=e383]
+                - text: Best practices
+              - generic "Score of 0" [ref=e385]:
+                - generic [ref=e386]: "0"
+                - generic [ref=e387]: votes
+              - generic "# replies" [ref=e388]:
+                - generic [ref=e389]: "14"
+                - generic [ref=e390]: replies
+              - generic "205 views" [ref=e391]:
+                - generic [ref=e392]: "205"
+                - generic [ref=e393]: views
+            - generic [ref=e394]:
+              - heading "write a program C++ with private member data only 5 examples with statements" [level=3] [ref=e395]:
+                - link "write a program C++ with private member data only 5 examples with statements" [ref=e396] [cursor=pointer]:
+                  - /url: /questions/79942668/write-a-program-c-with-private-member-data-only-5-examples-with-statements
+              - generic [ref=e397]: I Want to write a C++class with private members. I am unsure how to correctly declare them and access them via member functions . cloud something provide a detailed example that shows how to set and ...
+              - generic [ref=e398]:
+                - list [ref=e400]:
+                  - listitem [ref=e401]:
+                    - link "show questions tagged 'c++'" [ref=e402] [cursor=pointer]:
+                      - /url: /questions/tagged/c%2b%2b
+                      - text: c++
+                - generic [ref=e403]:
+                  - link "Richard Chambers's user avatar" [ref=e404] [cursor=pointer]:
+                    - /url: /users/1466970/richard-chambers
+                    - img "Richard Chambers's user avatar" [ref=e406]
+                  - generic [ref=e407]:
+                    - link "Richard Chambers" [ref=e409] [cursor=pointer]:
+                      - /url: /users/1466970/richard-chambers
+                    - list [ref=e410]:
+                      - listitem [ref=e411]: 18.1k
+                  - time [ref=e412]:
+                    - link "answered 6 mins ago" [ref=e413] [cursor=pointer]:
+                      - /url: /questions/79942668/write-a-program-c-with-private-member-data-only-5-examples-with-statements?lastactivity
+          - generic [ref=e415]:
+            - generic [ref=e416]:
+              - generic "Score of 909" [ref=e417]:
+                - generic [ref=e418]: "909"
+                - generic [ref=e419]: votes
+              - generic "one of the answers was accepted as the correct answer" [ref=e420]:
+                - img [ref=e421]
+                - generic [ref=e423]: "26"
+                - generic [ref=e424]: answers
+              - generic "557097 views" [ref=e425]:
+                - generic [ref=e426]: 557k
+                - generic [ref=e427]: views
+            - generic [ref=e428]:
+              - heading "Git keeps asking me for my ssh key passphrase" [level=3] [ref=e429]:
+                - link "Git keeps asking me for my ssh key passphrase" [ref=e430] [cursor=pointer]:
+                  - /url: /questions/10032461/git-keeps-asking-me-for-my-ssh-key-passphrase
+              - generic [ref=e431]: I created keys as instructed in the GitHub tutorial, added them to GitHub, and tried using ssh-agent explicitly — yet git continues to ask me for my passphrase every time I try to do a pull or a push. ...
+              - generic [ref=e432]:
+                - list [ref=e434]:
+                  - listitem [ref=e435]:
+                    - link "show questions tagged 'git'" [ref=e436] [cursor=pointer]:
+                      - /url: /questions/tagged/git
+                      - text: git
+                  - listitem [ref=e437]:
+                    - link "show questions tagged 'ssh-agent'" [ref=e438] [cursor=pointer]:
+                      - /url: /questions/tagged/ssh-agent
+                      - text: ssh-agent
+                - generic [ref=e439]:
+                  - link "Michael come lately's user avatar" [ref=e440] [cursor=pointer]:
+                    - /url: /users/241211/michael-come-lately
+                    - img "Michael come lately's user avatar" [ref=e442]
+                  - generic [ref=e443]:
+                    - link "Michael come lately" [ref=e445] [cursor=pointer]:
+                      - /url: /users/241211/michael-come-lately
+                    - list [ref=e446]:
+                      - listitem [ref=e447]: 9,651
+                  - time [ref=e448]:
+                    - link "modified 8 mins ago" [ref=e449] [cursor=pointer]:
+                      - /url: /questions/10032461/git-keeps-asking-me-for-my-ssh-key-passphrase?lastactivity
+          - generic [ref=e451]:
+            - generic [ref=e452]:
+              - generic [ref=e453]:
+                - img [ref=e454]
+                - text: Advice
+              - generic "Score of 0" [ref=e456]:
+                - generic [ref=e457]: "0"
+                - generic [ref=e458]: votes
+              - generic "# replies" [ref=e459]:
+                - generic [ref=e460]: "0"
+                - generic [ref=e461]: replies
+              - generic "44 views" [ref=e462]:
+                - generic [ref=e463]: "44"
+                - generic [ref=e464]: views
+            - generic [ref=e465]:
+              - heading "Why some people are destroying spirit of Stackoverflow?" [level=3] [ref=e466]:
+                - link "Why some people are destroying spirit of Stackoverflow?" [ref=e467] [cursor=pointer]:
+                  - /url: /questions/79943123/why-some-people-are-destroying-spirit-of-stackoverflow
+              - generic [ref=e468]: This is not a question but a little comment on the latest changes in Stack Overflow ! For the past year or two, some questions have been closed because they no longer meet Stack Overflow's current ...
+              - generic [ref=e469]:
+                - list [ref=e471]:
+                  - listitem [ref=e472]:
+                    - link "show questions tagged 'closures'" [ref=e473] [cursor=pointer]:
+                      - /url: /questions/tagged/closures
+                      - text: closures
+                  - listitem [ref=e474]:
+                    - link "show questions tagged 'censure'" [ref=e475] [cursor=pointer]:
+                      - /url: /questions/tagged/censure
+                      - text: censure
+                  - listitem [ref=e476]:
+                    - link "show questions tagged 'out-topic'" [ref=e477] [cursor=pointer]:
+                      - /url: /questions/tagged/out-topic
+                      - text: out-topic
+                - generic [ref=e478]:
+                  - link "barndog's user avatar" [ref=e479] [cursor=pointer]:
+                    - /url: /users/1369331/barndog
+                    - img "barndog's user avatar" [ref=e481]
+                  - generic [ref=e482]:
+                    - link "barndog" [ref=e484] [cursor=pointer]:
+                      - /url: /users/1369331/barndog
+                    - list [ref=e485]:
+                      - listitem [ref=e486]: 7,245
+                  - time [ref=e487]:
+                    - link "modified 8 mins ago" [ref=e488] [cursor=pointer]:
+                      - /url: /questions/79943123/why-some-people-are-destroying-spirit-of-stackoverflow
+          - generic [ref=e490]:
+            - generic [ref=e491]:
+              - generic "Score of -1" [ref=e492]:
+                - generic [ref=e493]: "-1"
+                - generic [ref=e494]: votes
+              - generic "1 answer" [ref=e495]:
+                - generic [ref=e496]: "1"
+                - generic [ref=e497]: answer
+              - generic "2238 views" [ref=e498]:
+                - generic [ref=e499]: 2k
+                - generic [ref=e500]: views
+            - generic [ref=e501]:
+              - heading "How to convert black and white QR code to string of ones and zeros?" [level=3] [ref=e502]:
+                - link "How to convert black and white QR code to string of ones and zeros?" [ref=e503] [cursor=pointer]:
+                  - /url: /questions/75918431/how-to-convert-black-and-white-qr-code-to-string-of-ones-and-zeros
+              - generic [ref=e504]: I've used the qrcode library to generate a QR code. Now I would like to derive a string of ones and zeros from it, such that black pixels are 1, white pixels are 0, and I make one long string of all ...
+              - generic [ref=e505]:
+                - list [ref=e507]:
+                  - listitem [ref=e508]:
+                    - link "show questions tagged 'python'" [ref=e509] [cursor=pointer]:
+                      - /url: /questions/tagged/python
+                      - text: python
+                  - listitem [ref=e510]:
+                    - link "show questions tagged 'qr-code'" [ref=e511] [cursor=pointer]:
+                      - /url: /questions/tagged/qr-code
+                      - text: qr-code
+                - generic [ref=e512]:
+                  - link "Dalija Prasnikar's user avatar" [ref=e513] [cursor=pointer]:
+                    - /url: /users/4267244/dalija-prasnikar
+                    - img "Dalija Prasnikar's user avatar" [ref=e515]
+                  - generic [ref=e516]:
+                    - generic [ref=e517]:
+                      - link "Dalija Prasnikar" [ref=e518] [cursor=pointer]:
+                        - /url: /users/4267244/dalija-prasnikar
+                      - generic "Moderator" [ref=e519]: ♦
+                    - list [ref=e520]:
+                      - listitem [ref=e521]: 28.7k
+                  - time [ref=e522]:
+                    - link "modified 12 mins ago" [ref=e523] [cursor=pointer]:
+                      - /url: /questions/75918431/how-to-convert-black-and-white-qr-code-to-string-of-ones-and-zeros?lastactivity
+          - generic [ref=e525]:
+            - generic [ref=e526]:
+              - generic [ref=e527]:
+                - img [ref=e528]
+                - text: Advice
+              - generic "Score of 0" [ref=e530]:
+                - generic [ref=e531]: "0"
+                - generic [ref=e532]: votes
+              - generic "# replies" [ref=e533]:
+                - generic [ref=e534]: "1"
+                - generic [ref=e535]: replies
+              - generic "25 views" [ref=e536]:
+                - generic [ref=e537]: "25"
+                - generic [ref=e538]: views
+            - generic [ref=e539]:
+              - heading "How to specify different number of parallel jobs depending on source file type?" [level=3] [ref=e540]:
+                - link "How to specify different number of parallel jobs depending on source file type?" [ref=e541] [cursor=pointer]:
+                  - /url: /questions/79943054/how-to-specify-different-number-of-parallel-jobs-depending-on-source-file-type
+              - generic [ref=e542]: You have 100 .cpp and 20 .cu source files. Your system can compile many .cpp in parallel, but compiling more than, say, 2 .cu concurrently causes serious problems, from swapping to outright crashing. ...
+              - generic [ref=e543]:
+                - list [ref=e545]:
+                  - listitem [ref=e546]:
+                    - link "show questions tagged 'cmake'" [ref=e547] [cursor=pointer]:
+                      - /url: /questions/tagged/cmake
+                      - text: cmake
+                  - listitem [ref=e548]:
+                    - link "show questions tagged 'makefile'" [ref=e549] [cursor=pointer]:
+                      - /url: /questions/tagged/makefile
+                      - text: makefile
+                - generic [ref=e550]:
+                  - link "Daniel H's user avatar" [ref=e551] [cursor=pointer]:
+                    - /url: /users/3167649/daniel-h
+                    - img "Daniel H's user avatar" [ref=e553]
+                  - generic [ref=e554]:
+                    - link "Daniel H" [ref=e556] [cursor=pointer]:
+                      - /url: /users/3167649/daniel-h
+                    - list [ref=e557]:
+                      - listitem [ref=e558]: "114"
+                  - time [ref=e559]:
+                    - link "answered 20 mins ago" [ref=e560] [cursor=pointer]:
+                      - /url: /questions/79943054/how-to-specify-different-number-of-parallel-jobs-depending-on-source-file-type?lastactivity
+          - generic [ref=e562]:
+            - generic [ref=e563]:
+              - generic "Score of 11" [ref=e564]:
+                - generic [ref=e565]: "11"
+                - generic [ref=e566]: votes
+              - generic "1 answer" [ref=e567]:
+                - generic [ref=e568]: "1"
+                - generic [ref=e569]: answer
+              - generic "10020 views" [ref=e570]:
+                - generic [ref=e571]: 10k
+                - generic [ref=e572]: views
+            - generic [ref=e573]:
+              - heading "The meaning behind the colon \":\" between registers in x86 assembly, especially for addresses?" [level=3] [ref=e574]:
+                - link "The meaning behind the colon \":\" between registers in x86 assembly, especially for addresses?" [ref=e575] [cursor=pointer]:
+                  - /url: /questions/17746832/the-meaning-behind-the-colon-between-registers-in-x86-assembly-especially-f
+              - generic [ref=e576]: I'm new to assembly and I'm currently reading a guide that would frequently express things like ax:bx, ds:dx, ss:sp. I'll use one of the above in an example from the book "Mastering Turbo ...
+              - generic [ref=e577]:
+                - list [ref=e579]:
+                  - listitem [ref=e580]:
+                    - link "show questions tagged 'assembly'" [ref=e581] [cursor=pointer]:
+                      - /url: /questions/tagged/assembly
+                      - text: assembly
+                  - listitem [ref=e582]:
+                    - link "show questions tagged 'x86-16'" [ref=e583] [cursor=pointer]:
+                      - /url: /questions/tagged/x86-16
+                      - text: x86-16
+                  - listitem [ref=e584]:
+                    - link "show questions tagged 'memory-address'" [ref=e585] [cursor=pointer]:
+                      - /url: /questions/tagged/memory-address
+                      - text: memory-address
+                  - listitem [ref=e586]:
+                    - link "show questions tagged 'tasm'" [ref=e587] [cursor=pointer]:
+                      - /url: /questions/tagged/tasm
+                      - text: tasm
+                  - listitem [ref=e588]:
+                    - link "show questions tagged 'memory-segmentation'" [ref=e589] [cursor=pointer]:
+                      - /url: /questions/tagged/memory-segmentation
+                      - text: memory-segmentation
+                - generic [ref=e590]:
+                  - link "Peter Cordes's user avatar" [ref=e591] [cursor=pointer]:
+                    - /url: /users/224132/peter-cordes
+                    - img "Peter Cordes's user avatar" [ref=e593]
+                  - generic [ref=e594]:
+                    - link "Peter Cordes" [ref=e596] [cursor=pointer]:
+                      - /url: /users/224132/peter-cordes
+                    - list [ref=e597]:
+                      - listitem [ref=e598]: 381k
+                  - time [ref=e599]:
+                    - link "modified 21 mins ago" [ref=e600] [cursor=pointer]:
+                      - /url: /questions/17746832/the-meaning-behind-the-colon-between-registers-in-x86-assembly-especially-f?lastactivity
+          - generic [ref=e602]:
+            - generic [ref=e603]:
+              - generic "Score of 0" [ref=e604]:
+                - generic [ref=e605]: "0"
+                - generic [ref=e606]: votes
+              - generic "1 answer" [ref=e607]:
+                - generic [ref=e608]: "1"
+                - generic [ref=e609]: answer
+              - generic "38 views" [ref=e610]:
+                - generic [ref=e611]: "38"
+                - generic [ref=e612]: views
+            - generic [ref=e613]:
+              - 'heading "`NULL` and non-result-set values both return `NULL` when using IN subquery in Apache IoTDB SELECT clause" [level=3] [ref=e614]':
+                - 'link "`NULL` and non-result-set values both return `NULL` when using IN subquery in Apache IoTDB SELECT clause" [ref=e615] [cursor=pointer]':
+                  - /url: /questions/79943064/null-and-non-result-set-values-both-return-null-when-using-in-subquery-in-ap
+              - generic [ref=e616]: I'm using the table model of Apache IoTDB 2.0.6 to implement a data filtering feature, where I need to mark whether each record belongs to a specific category. For example, I want to check if each ...
+              - generic [ref=e617]:
+                - list [ref=e619]:
+                  - listitem [ref=e620]:
+                    - link "show questions tagged 'apache-iotdb'" [ref=e621] [cursor=pointer]:
+                      - /url: /questions/tagged/apache-iotdb
+                      - text: apache-iotdb
+                - generic [ref=e622]:
+                  - link "Barmar's user avatar" [ref=e623] [cursor=pointer]:
+                    - /url: /users/1491895/barmar
+                    - img "Barmar's user avatar" [ref=e625]
+                  - generic [ref=e626]:
+                    - link "Barmar" [ref=e628] [cursor=pointer]:
+                      - /url: /users/1491895/barmar
+                    - list [ref=e629]:
+                      - listitem [ref=e630]: 791k
+                  - time [ref=e631]:
+                    - link "modified 23 mins ago" [ref=e632] [cursor=pointer]:
+                      - /url: /questions/79943064/null-and-non-result-set-values-both-return-null-when-using-in-subquery-in-ap?lastactivity
+          - generic [ref=e634]:
+            - generic [ref=e635]:
+              - generic "Score of 529" [ref=e636]:
+                - generic [ref=e637]: "529"
+                - generic [ref=e638]: votes
+              - generic "one of the answers was accepted as the correct answer" [ref=e639]:
+                - img [ref=e640]
+                - generic [ref=e642]: "12"
+                - generic [ref=e643]: answers
+              - generic "209695 views" [ref=e644]:
+                - generic [ref=e645]: 210k
+                - generic [ref=e646]: views
+            - generic [ref=e647]:
+              - heading "What does \"nonlocal\" do in Python 3?" [level=3] [ref=e648]:
+                - link "What does \"nonlocal\" do in Python 3?" [ref=e649] [cursor=pointer]:
+                  - /url: /questions/1261875/what-does-nonlocal-do-in-python-3
+              - generic [ref=e650]: What does nonlocal do in Python 3.x? To close debugging questions where OP needs nonlocal and doesn't realize it, please use Is it possible to modify variable in python that is in outer, but not ...
+              - generic [ref=e651]:
+                - list [ref=e653]:
+                  - listitem [ref=e654]:
+                    - link "show questions tagged 'python'" [ref=e655] [cursor=pointer]:
+                      - /url: /questions/tagged/python
+                      - text: python
+                  - listitem [ref=e656]:
+                    - link "show questions tagged 'closures'" [ref=e657] [cursor=pointer]:
+                      - /url: /questions/tagged/closures
+                      - text: closures
+                  - listitem [ref=e658]:
+                    - link "show questions tagged 'global'" [ref=e659] [cursor=pointer]:
+                      - /url: /questions/tagged/global
+                      - text: global
+                  - listitem [ref=e660]:
+                    - link "show questions tagged 'nested-function'" [ref=e661] [cursor=pointer]:
+                      - /url: /questions/tagged/nested-function
+                      - text: nested-function
+                  - listitem [ref=e662]:
+                    - link "show questions tagged 'python-nonlocal'" [ref=e663] [cursor=pointer]:
+                      - /url: /questions/tagged/python-nonlocal
+                      - text: python-nonlocal
+                - generic [ref=e664]:
+                  - link "saolof's user avatar" [ref=e665] [cursor=pointer]:
+                    - /url: /users/6425831/saolof
+                    - img "saolof's user avatar" [ref=e667]
+                  - generic [ref=e668]:
+                    - link "saolof" [ref=e670] [cursor=pointer]:
+                      - /url: /users/6425831/saolof
+                    - list [ref=e671]:
+                      - listitem [ref=e672]: 1,804
+                  - time [ref=e673]:
+                    - link "answered 28 mins ago" [ref=e674] [cursor=pointer]:
+                      - /url: /questions/1261875/what-does-nonlocal-do-in-python-3?lastactivity
+          - generic [ref=e676]:
+            - generic [ref=e677]:
+              - generic "Score of 0" [ref=e678]:
+                - generic [ref=e679]: "0"
+                - generic [ref=e680]: votes
+              - generic "0 answers" [ref=e681]:
+                - generic [ref=e682]: "0"
+                - generic [ref=e683]: answers
+              - generic "20 views" [ref=e684]:
+                - generic [ref=e685]: "20"
+                - generic [ref=e686]: views
+            - generic [ref=e687]:
+              - heading "WordPress header UI break issues with the event calander and DIVI 5" [level=3] [ref=e688]:
+                - link "WordPress header UI break issues with the event calander and DIVI 5" [ref=e689] [cursor=pointer]:
+                  - /url: /questions/79943121/wordpress-header-ui-break-issues-with-the-event-calander-and-divi-5
+              - generic [ref=e690]: "I am facing a strange issue with Divi 5 + The Events Calendar on my WordPress site. Issue: The main event archive page /event/ breaks the Divi header UI/layout. Single event pages like /event/sample-..."
+              - generic [ref=e691]:
+                - generic [ref=e692]:
+                  - link [ref=e693] [cursor=pointer]:
+                    - /url: /collectives/php
+                  - list [ref=e694]:
+                    - listitem [ref=e695]:
+                      - link "show questions tagged 'javascript'" [ref=e696] [cursor=pointer]:
+                        - /url: /questions/tagged/javascript
+                        - text: javascript
+                    - listitem [ref=e697]:
+                      - link "show questions tagged 'php'" [ref=e698] [cursor=pointer]:
+                        - /url: /questions/tagged/php
+                        - text: php
+                    - listitem [ref=e699]:
+                      - link "show questions tagged 'css'" [ref=e700] [cursor=pointer]:
+                        - /url: /questions/tagged/css
+                        - text: css
+                    - listitem [ref=e701]:
+                      - link "show questions tagged 'wordpress'" [ref=e702] [cursor=pointer]:
+                        - /url: /questions/tagged/wordpress
+                        - text: wordpress
+                    - listitem [ref=e703]:
+                      - link "show questions tagged 'divi'" [ref=e704] [cursor=pointer]:
+                        - /url: /questions/tagged/divi
+                        - text: divi
+                - generic [ref=e705]:
+                  - link "Laxman singh's user avatar" [ref=e706] [cursor=pointer]:
+                    - /url: /users/32742737/laxman-singh
+                    - img "Laxman singh's user avatar" [ref=e708]
+                  - generic [ref=e709]:
+                    - link "Laxman singh" [ref=e711] [cursor=pointer]:
+                      - /url: /users/32742737/laxman-singh
+                    - list [ref=e712]:
+                      - listitem [ref=e713]: "1"
+                  - time [ref=e714]:
+                    - link "asked 38 mins ago" [ref=e715] [cursor=pointer]:
+                      - /url: /questions/79943121/wordpress-header-ui-break-issues-with-the-event-calander-and-divi-5
+          - generic [ref=e717]:
+            - generic [ref=e718]:
+              - generic [ref=e719]:
+                - img [ref=e720]
+                - text: Advice
+              - generic "Score of 1" [ref=e722]:
+                - generic [ref=e723]: "1"
+                - generic [ref=e724]: vote
+              - generic "# replies" [ref=e725]:
+                - generic [ref=e726]: "8"
+                - generic [ref=e727]: replies
+              - generic "80 views" [ref=e728]:
+                - generic [ref=e729]: "80"
+                - generic [ref=e730]: views
+            - generic [ref=e731]:
+              - heading "coordinate proximity for likert scale analysis (php)" [level=3] [ref=e732]:
+                - link "coordinate proximity for likert scale analysis (php)" [ref=e733] [cursor=pointer]:
+                  - /url: /questions/79942743/coordinate-proximity-for-likert-scale-analysis-php
+              - generic [ref=e734]: this is a project in php but i am happy with any suggestions, regardless of language. the coding is less the issue than a missing piece in logic i am struggling with. users answer a series of 7-point ...
+              - generic [ref=e735]:
+                - generic [ref=e736]:
+                  - link [ref=e737] [cursor=pointer]:
+                    - /url: /collectives/php
+                  - list [ref=e738]:
+                    - listitem [ref=e739]:
+                      - link "show questions tagged 'php'" [ref=e740] [cursor=pointer]:
+                        - /url: /questions/tagged/php
+                        - text: php
+                    - listitem [ref=e741]:
+                      - link "show questions tagged 'algorithm'" [ref=e742] [cursor=pointer]:
+                        - /url: /questions/tagged/algorithm
+                        - text: algorithm
+                    - listitem [ref=e743]:
+                      - link "show questions tagged 'statistics'" [ref=e744] [cursor=pointer]:
+                        - /url: /questions/tagged/statistics
+                        - text: statistics
+                    - listitem [ref=e745]:
+                      - link "show questions tagged 'likert'" [ref=e746] [cursor=pointer]:
+                        - /url: /questions/tagged/likert
+                        - text: likert
+                - generic [ref=e747]:
+                  - link "Avi Sato's user avatar" [ref=e748] [cursor=pointer]:
+                    - /url: /users/16567025/avi-sato
+                    - img "Avi Sato's user avatar" [ref=e750]
+                  - generic [ref=e751]:
+                    - link "Avi Sato" [ref=e753] [cursor=pointer]:
+                      - /url: /users/16567025/avi-sato
+                    - list [ref=e754]:
+                      - listitem [ref=e755]: "45"
+                  - time [ref=e756]:
+                    - link "answered 45 mins ago" [ref=e757] [cursor=pointer]:
+                      - /url: /questions/79942743/coordinate-proximity-for-likert-scale-analysis-php?lastactivity
+        - generic [ref=e758]:
+          - link "15" [ref=e759] [cursor=pointer]:
+            - /url: /questions?tab=active&pagesize=15
+          - link "30" [ref=e760] [cursor=pointer]:
+            - /url: /questions?tab=active&pagesize=30
+          - link "50" [ref=e761] [cursor=pointer]:
+            - /url: /questions?tab=active&pagesize=50
+          - generic [ref=e762]: per page
+        - generic [ref=e763]:
+          - generic [ref=e764]: "1"
+          - link "2" [ref=e765] [cursor=pointer]:
+            - /url: /questions?tab=active&page=2
+          - link "3" [ref=e766] [cursor=pointer]:
+            - /url: /questions?tab=active&page=3
+          - link "4" [ref=e767] [cursor=pointer]:
+            - /url: /questions?tab=active&page=4
+          - link "5" [ref=e768] [cursor=pointer]:
+            - /url: /questions?tab=active&page=5
+          - generic [ref=e769]: …
+          - link "1610283" [ref=e770] [cursor=pointer]:
+            - /url: /questions?tab=active&page=1610283
+          - link "Next" [ref=e771] [cursor=pointer]:
+            - /url: /questions?tab=active&page=2
+      - complementary "sidebar" [ref=e772]:
+        - list [ref=e774]:
+          - listitem [ref=e775]: The Overflow Blog
+          - listitem [ref=e776]:
+            - img [ref=e778]
+            - link "Observability and human intuition in an AI world" [ref=e782] [cursor=pointer]:
+              - /url: https://stackoverflow.blog/2026/05/15/observability-and-human-intuition-in-an-ai-world/?cb=1
+          - listitem [ref=e783]: Featured on Meta
+          - listitem [ref=e784]:
+            - generic "Meta Stack Exchange" [ref=e786]
+            - link "(Almost) One year of Challenges" [ref=e788] [cursor=pointer]:
+              - /url: https://meta.stackexchange.com/questions/418261/almost-one-year-of-challenges?cb=1
+          - listitem [ref=e789]:
+            - generic "Meta Stack Overflow" [ref=e791]
+            - 'link "Policy: Generative AI (e.g., ChatGPT) is banned" [ref=e793] [cursor=pointer]':
+              - /url: https://meta.stackoverflow.com/questions/421831/policy-generative-ai-e-g-chatgpt-is-banned?cb=1
+        - generic [ref=e794]:
+          - heading "Custom Filters" [level=2] [ref=e795]
+          - list [ref=e796]:
+            - listitem [ref=e797]:
+              - button "Create a custom filter" [ref=e798] [cursor=pointer]
+        - generic [ref=e799]:
+          - generic [ref=e800]:
+            - generic [ref=e801]:
+              - heading "Watched Tags" [level=2] [ref=e802]
+              - link "edit your watched tags" [ref=e803] [cursor=pointer]:
+                - /url: /users/tag-notifications/32742720#watching-1
+                - text: edit
+            - generic [ref=e805]:
+              - link "show questions tagged 'backend'" [ref=e807] [cursor=pointer]:
+                - /url: /questions/tagged/backend
+                - text: backend
+              - link "show questions tagged 'java'" [ref=e809] [cursor=pointer]:
+                - /url: /questions/tagged/java
+                - text: java
+              - link "show questions tagged 'kotlin'" [ref=e811] [cursor=pointer]:
+                - /url: /questions/tagged/kotlin
+                - text: kotlin
+          - generic [ref=e812]:
+            - heading "Ignored Tags" [level=2] [ref=e814]
+            - button "Add an ignored tag" [ref=e816] [cursor=pointer]
+        - generic [ref=e817]:
+          - generic [ref=e818]:
+            - text: Collectives
+            - link "see all" [ref=e819] [cursor=pointer]:
+              - /url: /collectives-all
+          - generic [ref=e820]:
+            - generic [ref=e822]:
+              - generic [ref=e825]:
+                - heading "Google Cloud" [level=1] [ref=e826]:
+                  - link "Google Cloud" [ref=e827] [cursor=pointer]:
+                    - /url: /collectives/google-cloud
+                - generic [ref=e828]: 68k Members
+              - button "Join" [ref=e831] [cursor=pointer]
+            - generic [ref=e832]: A collective for developers who utilize Google Cloud’s infrastructure and platform capabilities. This collective is organized and managed by the Stack Overflow community.
+          - generic [ref=e833]:
+            - generic [ref=e835]:
+              - generic [ref=e838]:
+                - heading "Microsoft Azure" [level=1] [ref=e839]:
+                  - link "Microsoft Azure" [ref=e840] [cursor=pointer]:
+                    - /url: /collectives/azure
+                - generic [ref=e841]: 31k Members
+              - button "Join" [ref=e844] [cursor=pointer]
+            - generic [ref=e845]: A collective for developers to engage, share, and learn about Microsoft Azure’s open-source frameworks, languages, and platform. This collective is organized and managed by the Stack Overflow community.
+          - generic [ref=e846]:
+            - generic [ref=e848]:
+              - generic [ref=e851]:
+                - heading "PHP" [level=1] [ref=e852]:
+                  - link "PHP" [ref=e853] [cursor=pointer]:
+                    - /url: /collectives/php
+                - generic [ref=e854]: 18k Members
+              - button "Join" [ref=e857] [cursor=pointer]
+            - generic [ref=e858]: A collective where developers working with PHP can learn and connect about the open source scripting language.
+        - generic [ref=e860]:
+          - heading "Hot Network Questions" [level=4] [ref=e861]:
+            - link "Hot Network Questions" [ref=e862] [cursor=pointer]:
+              - /url: https://stackexchange.com/questions?tab=hot
+          - list [ref=e863]:
+            - listitem [ref=e864]:
+              - generic "Biblical Hermeneutics Stack Exchange" [ref=e865]
+              - link "In Mark 1:1, is the gospel _about_ Jesus? or is it \"the gospel of which Jesus preached\"?" [ref=e866] [cursor=pointer]:
+                - /url: https://hermeneutics.stackexchange.com/questions/116460/in-mark-11-is-the-gospel-about-jesus-or-is-it-the-gospel-of-which-jesus-pr
+            - listitem [ref=e867]:
+              - generic "Worldbuilding Stack Exchange" [ref=e868]
+              - link "Would Uric Acid be Useful to Medieval People?" [ref=e869] [cursor=pointer]:
+                - /url: https://worldbuilding.stackexchange.com/questions/273470/would-uric-acid-be-useful-to-medieval-people
+            - listitem [ref=e870]:
+              - generic "TeX - LaTeX Stack Exchange" [ref=e871]
+              - link "Relabeling ticks on my number line" [ref=e872] [cursor=pointer]:
+                - /url: https://tex.stackexchange.com/questions/762845/relabeling-ticks-on-my-number-line
+            - listitem [ref=e873]:
+              - generic "Travel Stack Exchange" [ref=e874]
+              - link "Transit through Frankfurt for Indian citizens" [ref=e875] [cursor=pointer]:
+                - /url: https://travel.stackexchange.com/questions/203749/transit-through-frankfurt-for-indian-citizens
+            - listitem [ref=e876]:
+              - generic "Bicycles Stack Exchange" [ref=e877]
+              - link "Is a new Shimano SM-UG51 plate supposed to be slightly bent?" [ref=e878] [cursor=pointer]:
+                - /url: https://bicycles.stackexchange.com/questions/100287/is-a-new-shimano-sm-ug51-plate-supposed-to-be-slightly-bent
+            - listitem [ref=e879]:
+              - generic "Philosophy Stack Exchange" [ref=e880]
+              - link "Is it possible that monotheism came from the misunderstanding of polytheists about pantheism?" [ref=e881] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138467/is-it-possible-that-monotheism-came-from-the-misunderstanding-of-polytheists-abo
+            - listitem [ref=e882]:
+              - generic "English Language & Usage Stack Exchange" [ref=e883]
+              - link "How do phonetic rules govern the pronunciation of newly formed acronyms (like \"GOOB\")?" [ref=e884] [cursor=pointer]:
+                - /url: https://english.stackexchange.com/questions/639752/how-do-phonetic-rules-govern-the-pronunciation-of-newly-formed-acronyms-like-g
+            - listitem [ref=e885]:
+              - generic "Stack Overflow" [ref=e886]
+              - link "What is the deal with CA1070 \"Do not declare event fields as virtual\"?" [ref=e887] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/79942091/what-is-the-deal-with-ca1070-do-not-declare-event-fields-as-virtual
+            - listitem [ref=e888]:
+              - generic "Home Improvement Stack Exchange" [ref=e889]
+              - link "Need advice on new foundation tolerances" [ref=e890] [cursor=pointer]:
+                - /url: https://diy.stackexchange.com/questions/330569/need-advice-on-new-foundation-tolerances
+            - listitem [ref=e891]:
+              - generic "Christianity Stack Exchange" [ref=e892]
+              - link "Why does Revelation 14:12 emphasize keeping God’s commandments if the Law is not essential for salvation?" [ref=e893] [cursor=pointer]:
+                - /url: https://christianity.stackexchange.com/questions/113842/why-does-revelation-1412-emphasize-keeping-god-s-commandments-if-the-law-is-not
+            - listitem [ref=e894]:
+              - generic "TeX - LaTeX Stack Exchange" [ref=e895]
+              - link "How to convert a custom macro for marking angles with multiple arcs into a TikZ style?" [ref=e896] [cursor=pointer]:
+                - /url: https://tex.stackexchange.com/questions/762847/how-to-convert-a-custom-macro-for-marking-angles-with-multiple-arcs-into-a-tikz
+            - listitem [ref=e897]:
+              - generic "Cross Validated" [ref=e898]
+              - link "Does the infinite product ∏(1 - λ₀/(1 + i/τ)) converge to a value strictly less than 1?" [ref=e899] [cursor=pointer]:
+                - /url: https://stats.stackexchange.com/questions/675990/does-the-infinite-product-%e2%88%8f1-%ce%bb%e2%82%80-1-i-%cf%84-converge-to-a-value-strictly-less
+          - link "more hot questions" [ref=e900] [cursor=pointer]:
+            - /url: "#"
+  - contentinfo [ref=e901]:
+    - generic [ref=e902]:
+      - link "Stack Overflow" [ref=e904] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e905]
+      - navigation "Footer" [ref=e907]:
+        - generic [ref=e908]:
+          - heading "Stack Overflow" [level=5] [ref=e909]:
+            - link "Stack Overflow" [ref=e910] [cursor=pointer]:
+              - /url: https://stackoverflow.com
+          - list [ref=e911]:
+            - listitem [ref=e912]:
+              - link "Questions" [ref=e913] [cursor=pointer]:
+                - /url: /questions
+            - listitem [ref=e914]:
+              - link "Help" [ref=e915] [cursor=pointer]:
+                - /url: /help
+            - listitem [ref=e916]:
+              - link "Chat" [ref=e917] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+        - generic [ref=e918]:
+          - heading "Business" [level=5] [ref=e919]:
+            - link "Business" [ref=e920] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e921]:
+            - listitem [ref=e922]:
+              - link "Stack Internal" [ref=e923] [cursor=pointer]:
+                - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=teams
+            - listitem [ref=e924]:
+              - link "Stack Data Licensing" [ref=e925] [cursor=pointer]:
+                - /url: https://stackoverflow.co/data-licensing/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=data-licensing
+            - listitem [ref=e926]:
+              - link "Stack Ads" [ref=e927] [cursor=pointer]:
+                - /url: https://stackoverflow.co/advertising/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=advertising
+        - generic [ref=e928]:
+          - heading "Company" [level=5] [ref=e929]:
+            - link "Company" [ref=e930] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e931]:
+            - listitem [ref=e932]:
+              - link "About" [ref=e933] [cursor=pointer]:
+                - /url: https://stackoverflow.co/
+            - listitem [ref=e934]:
+              - link "Press" [ref=e935] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/press/
+            - listitem [ref=e936]:
+              - link "Work Here" [ref=e937] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/work-here/
+            - listitem [ref=e938]:
+              - link "Legal" [ref=e939] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal
+            - listitem [ref=e940]:
+              - link "Privacy Policy" [ref=e941] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/privacy-policy
+            - listitem [ref=e942]:
+              - link "Terms of Service" [ref=e943] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/terms-of-service/public
+            - listitem [ref=e944]:
+              - link "Contact Us" [ref=e945] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e946]:
+              - button "Cookie Settings" [ref=e947] [cursor=pointer]
+            - listitem [ref=e948]:
+              - link "Cookie Policy" [ref=e949] [cursor=pointer]:
+                - /url: https://policies.stackoverflow.co/stack-overflow/cookie-policy
+        - generic [ref=e951]:
+          - heading "Stack Exchange Network" [level=5] [ref=e952]:
+            - link "Stack Exchange Network" [ref=e953] [cursor=pointer]:
+              - /url: https://stackexchange.com
+          - list [ref=e954]:
+            - listitem [ref=e955]:
+              - link "Technology" [ref=e956] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#technology
+            - listitem [ref=e957]:
+              - link "Culture & recreation" [ref=e958] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#culturerecreation
+            - listitem [ref=e959]:
+              - link "Life & arts" [ref=e960] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#lifearts
+            - listitem [ref=e961]:
+              - link "Science" [ref=e962] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#science
+            - listitem [ref=e963]:
+              - link "Professional" [ref=e964] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#professional
+            - listitem [ref=e965]:
+              - link "Business" [ref=e966] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#business
+            - listitem [ref=e967]:
+              - link "API" [ref=e968] [cursor=pointer]:
+                - /url: https://api.stackexchange.com/
+            - listitem [ref=e969]:
+              - link "Data" [ref=e970] [cursor=pointer]:
+                - /url: https://data.stackexchange.com/
+      - generic [ref=e971]:
+        - list [ref=e972]:
+          - listitem [ref=e973]:
+            - link "Blog" [ref=e974] [cursor=pointer]:
+              - /url: https://stackoverflow.blog?blb=1
+          - listitem [ref=e975]:
+            - link "Facebook" [ref=e976] [cursor=pointer]:
+              - /url: https://www.facebook.com/officialstackoverflow/
+          - listitem [ref=e977]:
+            - link "Twitter" [ref=e978] [cursor=pointer]:
+              - /url: https://twitter.com/stackoverflow
+          - listitem [ref=e979]:
+            - link "LinkedIn" [ref=e980] [cursor=pointer]:
+              - /url: https://linkedin.com/company/stack-overflow
+          - listitem [ref=e981]:
+            - link "Instagram" [ref=e982] [cursor=pointer]:
+              - /url: https://www.instagram.com/thestackoverflow
+        - paragraph [ref=e983]:
+          - text: Site design / logo © 2026 Stack Exchange Inc; user contributions licensed under
+          - link "CC BY-SA" [ref=e984] [cursor=pointer]:
+            - /url: https://stackoverflow.com/help/licensing
+          - text: . rev 2026.5.18.43150

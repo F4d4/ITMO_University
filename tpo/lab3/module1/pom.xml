@@ -21,6 +21,14 @@
     <browser>chrome</browser>
     <headless>true</headless>
     <selenium.timeout.seconds>20</selenium.timeout.seconds>
+    <verification.wait.seconds>180</verification.wait.seconds>
+    <chrome.debuggerAddress></chrome.debuggerAddress>
+    <so.user1.cookies></so.user1.cookies>
+    <so.user2.cookies></so.user2.cookies>
+    <so.user1.email></so.user1.email>
+    <so.user1.password></so.user1.password>
+    <so.user2.email></so.user2.email>
+    <so.user2.password></so.user2.password>
   </properties>
 
   <dependencyManagement>
@@ -53,6 +61,12 @@
       <artifactId>allure-junit5</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -69,6 +83,14 @@
             <browser>${browser}</browser>
             <headless>${headless}</headless>
             <selenium.timeout.seconds>${selenium.timeout.seconds}</selenium.timeout.seconds>
+            <so.user1.cookies>${so.user1.cookies}</so.user1.cookies>
+            <so.user2.cookies>${so.user2.cookies}</so.user2.cookies>
+            <so.user1.email>${so.user1.email}</so.user1.email>
+            <so.user1.password>${so.user1.password}</so.user1.password>
+            <so.user2.email>${so.user2.email}</so.user2.email>
+            <so.user2.password>${so.user2.password}</so.user2.password>
+            <verification.wait.seconds>${verification.wait.seconds}</verification.wait.seconds>
+            <chrome.debuggerAddress>${chrome.debuggerAddress}</chrome.debuggerAddress>
             <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
           </systemPropertyVariables>
         </configuration>

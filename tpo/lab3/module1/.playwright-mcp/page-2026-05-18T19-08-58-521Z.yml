@@ -1,0 +1,65 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - generic [ref=e4]:
+      - link [ref=e5] [cursor=pointer]:
+        - /url: "#"
+      - link "Stack Overflow" [ref=e7] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e8]
+      - link "About" [ref=e10] [cursor=pointer]:
+        - /url: https://stackoverflow.co/
+        - generic [ref=e11]: About
+      - button "Products" [ref=e12] [cursor=pointer]:
+        - generic [ref=e13]: Products
+      - link "For Teams" [ref=e14] [cursor=pointer]:
+        - /url: https://stackoverflow.co/internal/
+        - generic [ref=e15]: For Teams
+      - search [ref=e16]:
+        - generic [ref=e17]:
+          - combobox "Search" [ref=e18]
+          - img
+      - navigation "Topbar" [ref=e19]:
+        - list [ref=e20]:
+          - listitem [ref=e21]:
+            - link "Help Center and other resources" [ref=e22] [cursor=pointer]:
+              - /url: /help
+              - img [ref=e23]
+          - listitem [ref=e25]:
+            - link "Site switcher" [ref=e26] [cursor=pointer]:
+              - /url: https://stackexchange.com
+              - img [ref=e27]
+          - listitem
+          - listitem
+  - generic [ref=e31]:
+    - link [ref=e33] [cursor=pointer]:
+      - /url: https://stackoverflow.com
+      - img [ref=e34]
+    - generic [ref=e36]:
+      - button "Log in with Google" [ref=e37] [cursor=pointer]:
+        - img [ref=e38]
+        - text: Log in with Google
+      - button "Log in with GitHub" [ref=e43] [cursor=pointer]:
+        - img [ref=e44]
+        - text: Log in with GitHub
+      - button "Log in with Facebook" [ref=e46] [cursor=pointer]:
+        - img [ref=e47]
+        - text: Log in with Facebook
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52] [cursor=pointer]: Email
+        - textbox "Email" [ref=e54]
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - textbox "Password" [ref=e57]
+          - img [ref=e58] [cursor=pointer]
+        - generic [ref=e60]:
+          - generic [ref=e61] [cursor=pointer]: Password
+          - link "Forgot password?" [ref=e62] [cursor=pointer]:
+            - /url: /users/account-recovery
+      - button "Log in" [ref=e64] [cursor=pointer]
+    - generic [ref=e65]:
+      - text: Don’t have an account?
+      - link "Sign up" [ref=e66] [cursor=pointer]:
+        - /url: /users/signup

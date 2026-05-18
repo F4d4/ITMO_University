@@ -1,0 +1,776 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - generic [ref=e4]:
+      - link "Stack Overflow" [ref=e5] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e6]
+      - link "About" [ref=e8] [cursor=pointer]:
+        - /url: https://stackoverflow.co/
+        - generic [ref=e9]: About
+      - button "Products" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]: Products
+      - link "For Teams" [ref=e12] [cursor=pointer]:
+        - /url: https://stackoverflow.co/internal/
+        - generic [ref=e13]: For Teams
+      - search [ref=e14]:
+        - generic [ref=e15]:
+          - combobox "Search" [ref=e16]
+          - img
+      - navigation "Topbar" [ref=e17]:
+        - list [ref=e18]:
+          - listitem
+          - listitem [ref=e19]:
+            - link "Jason Verdiev's user avatar Jason Verdiev" [ref=e20] [cursor=pointer]:
+              - /url: /users/32742720/jason-verdiev
+              - generic "Jason Verdiev" [ref=e21]:
+                - img "Jason Verdiev's user avatar" [ref=e22]
+              - generic [ref=e23]: Jason Verdiev
+              - list [ref=e25]:
+                - listitem [ref=e26]:
+                  - text: "1"
+                  - generic [ref=e27]: ", 1 reputation"
+                - listitem
+          - listitem [ref=e28]:
+            - link "Inbox (1 unread message)" [ref=e29] [cursor=pointer]:
+              - /url: https://stackexchange.com/users/46366101?tab=inbox
+              - img [ref=e30]
+              - generic [ref=e32]: "1"
+          - listitem [ref=e33]:
+            - link "Achievements" [ref=e34] [cursor=pointer]:
+              - /url: https://stackexchange.com/users/46366101?tab=reputation
+              - img [ref=e35]
+          - listitem [ref=e37]:
+            - link "Help Center and other resources" [ref=e38] [cursor=pointer]:
+              - /url: /help
+              - img [ref=e39]
+          - listitem [ref=e41]:
+            - link "Site switcher" [ref=e42] [cursor=pointer]:
+              - /url: https://stackexchange.com
+              - img [ref=e43]
+          - listitem
+  - generic [ref=e46]:
+    - generic [ref=e47]:
+      - text: How are we doing? Please help us improve Stack Overflow.
+      - link "Take our short survey" [ref=e48] [cursor=pointer]:
+        - /url: https://stackoverflow.com/survey/site-satisfaction/redirect
+    - link "dismiss" [ref=e49] [cursor=pointer]:
+      - /url: "#"
+      - img [ref=e50]
+  - generic [ref=e52]:
+    - navigation "Primary" [ref=e55]:
+      - list [ref=e56]:
+        - listitem [ref=e57]:
+          - list [ref=e58]:
+            - listitem [ref=e59]:
+              - link "Home" [ref=e60] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e61]:
+                  - img [ref=e62]
+                  - generic [ref=e64]: Home
+            - listitem [ref=e65]:
+              - link "Questions" [ref=e66] [cursor=pointer]:
+                - /url: /questions
+                - generic [ref=e67]:
+                  - img [ref=e68]
+                  - generic [ref=e70]: Questions
+            - listitem [ref=e71]:
+              - link "AI Assist" [ref=e72] [cursor=pointer]:
+                - /url: https://stackoverflow.com/ai-assist
+                - generic [ref=e73]:
+                  - img [ref=e75]
+                  - generic [ref=e77]: AI Assist
+            - listitem [ref=e78]:
+              - link "Tags" [ref=e79] [cursor=pointer]:
+                - /url: /tags
+                - generic [ref=e80]:
+                  - img [ref=e81]
+                  - generic [ref=e84]: Tags
+            - listitem [ref=e85]:
+              - link "Saves" [ref=e86] [cursor=pointer]:
+                - /url: /users/saves/32742720/all
+                - generic [ref=e87]:
+                  - img [ref=e88]
+                  - generic [ref=e90]: Saves
+            - listitem [ref=e91]
+            - listitem [ref=e92]:
+              - link "Challenges" [ref=e93] [cursor=pointer]:
+                - /url: /beta/challenges
+                - generic [ref=e94]:
+                  - img [ref=e95]
+                  - generic [ref=e97]: Challenges
+            - listitem [ref=e98]:
+              - link "Chat" [expanded] [ref=e99] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+                - img [ref=e102]
+                - generic [ref=e107]: Chat
+            - listitem [ref=e108]:
+              - link "Articles" [ref=e109] [cursor=pointer]:
+                - /url: https://stackoverflow.blog/contributed?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=so-blog&utm_content=experiment-articles
+                - generic [ref=e110]:
+                  - img [ref=e111]
+                  - generic [ref=e114]: Articles
+            - listitem [ref=e115]:
+              - link "Users" [ref=e116] [cursor=pointer]:
+                - /url: /users
+                - generic [ref=e117]:
+                  - img [ref=e118]
+                  - generic [ref=e120]: Users
+            - listitem [ref=e121]
+            - listitem [ref=e122]:
+              - link "Companies" [ref=e123] [cursor=pointer]:
+                - /url: https://stackoverflow.com/jobs/companies?so_medium=stackoverflow&so_source=SiteNav
+                - generic [ref=e124]:
+                  - img [ref=e125]
+                  - generic [ref=e127]: Companies
+            - listitem [ref=e128]:
+              - button "Collectives" [ref=e130] [cursor=pointer]:
+                - generic [ref=e131]: Collectives
+                - img [ref=e133]
+            - listitem [ref=e135]:
+              - paragraph [ref=e136]:
+                - text: Communities for your favorite technologies.
+                - link "Explore all Collectives" [ref=e137] [cursor=pointer]:
+                  - /url: /collectives-all
+        - listitem [ref=e138]:
+          - button "Dismiss this promotion" [ref=e139] [cursor=pointer]:
+            - img [ref=e140]
+          - generic [ref=e142]: Stack Internal
+          - generic [ref=e143]:
+            - img [ref=e144]
+            - paragraph [ref=e158]:
+              - text: Stack Overflow for Teams is now called
+              - strong [ref=e159]: Stack Internal
+              - text: . Bring the best of human thought and AI automation together at your work.
+            - link "Try for free" [ref=e160] [cursor=pointer]:
+              - /url: https://stackoverflowteams.com/teams/create/free/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+            - link "Learn more" [ref=e161] [cursor=pointer]:
+              - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+        - listitem [ref=e162]:
+          - paragraph [ref=e163]:
+            - text: Looking for
+            - button "Stack Internal was moved popover" [ref=e164] [cursor=pointer]: your teams?
+    - generic [ref=e167]:
+      - generic [ref=e168]:
+        - heading "Can std::array of std::byte or unsigned char be used to implicitly create objects and provide storage?" [level=1] [ref=e169]:
+          - link "Can std::array of std::byte or unsigned char be used to implicitly create objects and provide storage?" [ref=e170] [cursor=pointer]:
+            - /url: /questions/79943013/can-stdarray-of-stdbyte-or-unsigned-char-be-used-to-implicitly-create-object
+        - link "Ask Question" [ref=e173] [cursor=pointer]:
+          - /url: /questions/ask
+      - generic [ref=e174]:
+        - generic "2026-05-18 13:57:19Z" [ref=e175]:
+          - text: Asked
+          - time [ref=e176]: today
+        - generic [ref=e177]:
+          - text: Modified
+          - link "today" [ref=e178] [cursor=pointer]:
+            - /url: "?lastactivity"
+        - generic "Viewed 110 times" [ref=e179]
+      - main "question and answers" [ref=e180]:
+        - generic [ref=e182]:
+          - generic [ref=e184]:
+            - button "Up vote" [ref=e185] [cursor=pointer]:
+              - img [ref=e186]
+            - generic [ref=e188]: "0"
+            - button "Down vote" [ref=e189] [cursor=pointer]:
+              - img [ref=e190]
+            - button "Save" [ref=e192] [cursor=pointer]:
+              - img [ref=e193]
+            - link "Timeline" [ref=e195] [cursor=pointer]:
+              - /url: /posts/79943013/timeline
+              - img [ref=e196]
+          - generic [ref=e198]:
+            - generic [ref=e199]:
+              - paragraph [ref=e200]:
+                - text: Under
+                - link "https://eel.is/c++draft/intro.object#16" [ref=e201] [cursor=pointer]:
+                  - /url: https://eel.is/c++draft/intro.object#16
+                - text: (see below) does the creation of a std::array of std::byte or unsigned char implicitly create objects?
+              - blockquote [ref=e202]:
+                - paragraph [ref=e203]:
+                  - text: Except during constant evaluation, an operation that begins the lifetime of an array of unsigned char or std::byte implicitly creates objects within the region of storage occupied by the array.
+                  - text: "[Note 5: The array object provides storage for these objects. — end note]"
+                  - text: Except during constant evaluation, any implicit or explicit invocation of a function named operator new or operator new[] implicitly creates objects in the returned region of storage and returns a pointer to a suitable created object.
+              - paragraph [ref=e204]:
+                - text: Besides can they
+                - link "provide storage" [ref=e205] [cursor=pointer]:
+                  - /url: https://eel.is/c++draft/intro.object#3
+                - text: "?"
+              - blockquote [ref=e206]:
+                - paragraph [ref=e207]: If a complete object is created ([expr.new]) in storage associated with another object e of type “array of N unsigned char” or of type “array of N std::byte” ([cstddef.syn]), that array provides storage for the created object if
+                - list [ref=e208]:
+                  - listitem [ref=e209]: the lifetime of e has begun and not ended, and
+                  - listitem [ref=e210]: the storage for the new object fits entirely within e, and
+                  - listitem [ref=e211]: there is no array object that satisfies these constraints nested within e.
+              - paragraph [ref=e212]:
+                - text: I'm not aware of any
+                - code [ref=e213]: std::array
+                - text: implementation which is not using internally a plain array but
+                - link "https://eel.is/c++draft/sequences#array" [ref=e214] [cursor=pointer]:
+                  - /url: https://eel.is/c++draft/sequences#array
+                - text: does not seem to mandate that. The closest to the existence of this array is hinted by the
+                - code [ref=e215]: data()
+                - text: "member that guarantees that pointer arithmetic is valid:"
+              - blockquote [ref=e216]:
+                - paragraph [ref=e217]: "Returns: A pointer such that [data(), data() + size()) is a valid range."
+            - list [ref=e221]:
+              - listitem [ref=e222]:
+                - link "show questions tagged 'c++'" [ref=e223] [cursor=pointer]:
+                  - /url: /questions/tagged/c%2b%2b
+                  - text: c++
+              - listitem [ref=e224]:
+                - link "show questions tagged 'language-lawyer'" [ref=e225] [cursor=pointer]:
+                  - /url: /questions/tagged/language-lawyer
+                  - text: language-lawyer
+              - listitem [ref=e226]:
+                - link "show questions tagged 'stdarray'" [ref=e227] [cursor=pointer]:
+                  - /url: /questions/tagged/stdarray
+                  - text: stdarray
+              - listitem [ref=e228]:
+                - link "show questions tagged 'implicit-lifetime'" [ref=e229] [cursor=pointer]:
+                  - /url: /questions/tagged/implicit-lifetime
+                  - text: implicit-lifetime
+            - generic [ref=e231]:
+              - generic [ref=e234]:
+                - link "Share" [ref=e236] [cursor=pointer]:
+                  - /url: /q/79943013/32742720
+                - link "Edit" [ref=e238] [cursor=pointer]:
+                  - /url: /posts/79943013/edit
+                - button "Follow" [ref=e240] [cursor=pointer]
+              - link "edited 3 hours ago" [ref=e245] [cursor=pointer]:
+                - /url: /posts/79943013/revisions
+              - generic [ref=e248]:
+                - generic [ref=e250]: asked 5 hours ago
+                - link "Oersted's user avatar" [ref=e252] [cursor=pointer]:
+                  - /url: /users/21691539/oersted
+                  - img "Oersted's user avatar" [ref=e254]
+                - generic [ref=e255]:
+                  - link "Oersted" [ref=e256] [cursor=pointer]:
+                    - /url: /users/21691539/oersted
+                  - generic [ref=e257]:
+                    - text: 5,092
+                    - generic [ref=e258]: "11"
+                    - generic [ref=e260]: 11 silver badges
+                    - generic [ref=e261]: "40"
+                    - generic [ref=e263]: 40 bronze badges
+          - generic [ref=e264]:
+            - list [ref=e266]:
+              - listitem [ref=e267]:
+                - button "Upvote Comment" [ref=e271] [cursor=pointer]:
+                  - img [ref=e272]
+                - generic [ref=e275]:
+                  - generic [ref=e276]:
+                    - generic [ref=e277]:
+                      - text: "\"...An"
+                      - link "array" [ref=e278] [cursor=pointer]:
+                        - /url: https://eel.is/c++draft/sequences#array.overview-3
+                      - text: meets all of the requirements of a ...
+                      - link "contiguous container" [ref=e279] [cursor=pointer]:
+                        - /url: https://eel.is/c++draft/container.reqmts#def:container,contiguous
+                      - text: ..."
+                    - text: . "
+                    - generic [ref=e280]:
+                      - text: ... A contiguous container is a ... and model
+                      - link "contiguous_iterator" [ref=e281] [cursor=pointer]:
+                        - /url: https://eel.is/c++draft/iterator.concept.contiguous#concept:contiguous_iterator
+                      - text: ..."
+                    - text: "\"The contiguous_iterator concept provides a guarantee that the denoted elements are stored contiguously in memory. ...\""
+                  - generic [ref=e282]:
+                    - text: –
+                    - link "Richard Critten" [ref=e283] [cursor=pointer]:
+                      - /url: /users/3370124/richard-critten
+                  - link "Commented 5 hours ago" [ref=e285] [cursor=pointer]:
+                    - /url: "#comment141062875_79943013"
+                    - generic [ref=e286]: Commented
+                    - text: 5 hours ago
+                  - generic "this comment was edited 1 time" [ref=e287]:
+                    - img [ref=e288]
+              - listitem [ref=e291]:
+                - button "Upvote Comment" [ref=e295] [cursor=pointer]:
+                  - img [ref=e296]
+                - generic [ref=e299]:
+                  - text: How would you work with a range if you cannot write down both of its bounds?
+                  - generic [ref=e300]:
+                    - text: –
+                    - link "n. m. could be an AI" [ref=e301] [cursor=pointer]:
+                      - /url: /users/775806/n-m-could-be-an-ai
+                  - link "Commented 4 hours ago" [ref=e303] [cursor=pointer]:
+                    - /url: "#comment141062902_79943013"
+                    - generic [ref=e304]: Commented
+                    - text: 4 hours ago
+              - listitem [ref=e305]:
+                - button "Upvote Comment" [ref=e309] [cursor=pointer]:
+                  - img [ref=e310]
+                - generic [ref=e313]:
+                  - text: "@n.m. makes sense, sorry (I'll remove the nitpicking that is thus useless for the question)"
+                  - generic [ref=e314]:
+                    - text: –
+                    - link "Oersted" [ref=e315] [cursor=pointer]:
+                      - /url: /users/21691539/oersted
+                  - link "Commented 4 hours ago" [ref=e317] [cursor=pointer]:
+                    - /url: "#comment141062905_79943013"
+                    - generic [ref=e318]: Commented
+                    - text: 4 hours ago
+              - listitem [ref=e319]:
+                - button "Upvote Comment" [ref=e323] [cursor=pointer]:
+                  - img [ref=e324]
+                - generic [ref=e327]:
+                  - generic [ref=e328]:
+                    - text: "@RichardCritten implicit object creations speaks about arrays as in"
+                    - link "eel.is/c++draft/basic.compound#3" [ref=e329] [cursor=pointer]:
+                      - /url: https://eel.is/c++draft/basic.compound#3
+                    - text: ", not"
+                    - code [ref=e330]: std::array
+                    - text: though, as I said, I don't know implementation that wouldn't be based on a plain array. Besides does contiguous container implies the existence of an array object? I can't think about a way to produce such contiguous layout without a plain array, yet it is not straightforward, thus my question...
+                  - generic [ref=e331]:
+                    - text: –
+                    - link "Oersted" [ref=e332] [cursor=pointer]:
+                      - /url: /users/21691539/oersted
+                  - link "Commented 4 hours ago" [ref=e334] [cursor=pointer]:
+                    - /url: "#comment141062907_79943013"
+                    - generic [ref=e335]: Commented
+                    - text: 4 hours ago
+              - listitem [ref=e336]:
+                - button "Upvote Comment" [ref=e340] [cursor=pointer]:
+                  - img [ref=e341]
+                - generic [ref=e344]:
+                  - generic [ref=e345]:
+                    - text: Since it's not mentioned, I wouldn't count on it. Even if it's hard to implement
+                    - code [ref=e346]: std::array
+                    - text: according to spec today without using a plain C array as a member, they may want to be able to make changes in the future that makes it possible to implement it in some other way.
+                  - generic [ref=e347]:
+                    - text: –
+                    - link "Ted Lyngmo" [ref=e348] [cursor=pointer]:
+                      - /url: /users/7582247/ted-lyngmo
+                  - link "Commented 3 hours ago" [ref=e350] [cursor=pointer]:
+                    - /url: "#comment141062933_79943013"
+                    - generic [ref=e351]: Commented
+                    - text: 3 hours ago
+            - generic [ref=e352]:
+              - button "Add a comment" [ref=e353] [cursor=pointer]
+              - text: "|"
+              - button "Show 1 more comment" [ref=e354] [cursor=pointer]
+        - generic [ref=e355]:
+          - generic [ref=e356]: Related questions
+          - generic [ref=e357]:
+            - link "1223 What is std::move(), and when should it be used?" [ref=e359] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used?rq=2
+              - generic [ref=e360]: "1223"
+              - generic "What is std::move(), and when should it be used?" [ref=e362]
+            - link "1 Does implicit object creation necessarily happen at storage return location?" [ref=e364] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/79940643/does-implicit-object-creation-necessarily-happen-at-storage-return-location?rq=2
+              - generic [ref=e365]: "1"
+              - generic "Does implicit object creation necessarily happen at storage return location?" [ref=e367]
+            - link "1 How can a array provide storage?" [ref=e369] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/69922029/how-can-a-array-provide-storage?rq=2
+              - generic [ref=e370]: "1"
+              - generic "How can a array provide storage?" [ref=e372]
+        - generic [ref=e374] [cursor=pointer]:
+          - img [ref=e375]
+          - text: Load 6 more related questions
+        - generic [ref=e377]:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]
+          - heading "Know someone who can answer? Share a link to this question via email, Twitter, or Facebook." [level=2] [ref=e378]:
+            - text: Know someone who can answer? Share a link to this
+            - link "question" [ref=e379] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/79943013/can-stdarray-of-stdbyte-or-unsigned-char-be-used-to-implicitly-create-object
+            - text: via
+            - link "email" [ref=e380] [cursor=pointer]:
+              - /url: mailto:?subject=Stack%20Overflow%20Question&body=Can%20std%3a%3aarray%20of%20std%3a%3abyte%20or%20unsigned%20char%20be%20used%20to%20implicitly%20create%20objects%20and%20provide%20storage%3f%0Ahttps%3a%2f%2fstackoverflow.com%2fq%2f79943013%2f32742720%3fsem%3d2
+            - text: ","
+            - link "Twitter" [ref=e381] [cursor=pointer]:
+              - /url: https://twitter.com/share?url=https%3a%2f%2fstackoverflow.com%2fq%2f79943013%2f32742720%3fstw%3d2
+            - text: ", or"
+            - link "Facebook" [ref=e382] [cursor=pointer]:
+              - /url: https://www.facebook.com/sharer.php?u=https%3a%2f%2fstackoverflow.com%2fq%2f79943013%2f32742720%3fsfb%3d2
+            - text: .
+          - generic [ref=e383]:
+            - heading "Your Answer" [level=2] [ref=e384]
+            - generic [ref=e387]:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                      - generic:
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                      - generic:
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                      - generic:
+                        - link:
+                          - /url: "#"
+            - button "Post Your Answer" [ref=e389] [cursor=pointer]
+          - generic [ref=e390]:
+            - generic [ref=e392]:
+              - paragraph [ref=e393]: Start asking to get answers
+              - paragraph [ref=e394]: Find the answer to your question by asking.
+              - link "Ask question" [ref=e395] [cursor=pointer]:
+                - /url: /questions/ask
+            - generic [ref=e397]:
+              - paragraph [ref=e398]: Explore related questions
+              - list [ref=e400]:
+                - listitem [ref=e401]:
+                  - link "show questions tagged 'c++'" [ref=e402] [cursor=pointer]:
+                    - /url: /questions/tagged/c%2b%2b
+                    - text: c++
+                - listitem [ref=e403]:
+                  - link "show questions tagged 'language-lawyer'" [ref=e404] [cursor=pointer]:
+                    - /url: /questions/tagged/language-lawyer
+                    - text: language-lawyer
+                - listitem [ref=e405]:
+                  - link "show questions tagged 'stdarray'" [ref=e406] [cursor=pointer]:
+                    - /url: /questions/tagged/stdarray
+                    - text: stdarray
+                - listitem [ref=e407]:
+                  - link "show questions tagged 'implicit-lifetime'" [ref=e408] [cursor=pointer]:
+                    - /url: /questions/tagged/implicit-lifetime
+                    - text: implicit-lifetime
+              - paragraph [ref=e409]: See similar questions with these tags.
+      - complementary "sidebar" [ref=e410]:
+        - generic [ref=e411]:
+          - generic [ref=e412]: Hello World!
+          - generic [ref=e413]:
+            - paragraph [ref=e414]: This is a collaboratively edited question and answer site for professional and enthusiast programmers. It's 100% free.
+            - paragraph [ref=e415]:
+              - text: Got a question about the site itself?
+              - link "meta" [ref=e416] [cursor=pointer]:
+                - /url: https://meta.stackoverflow.com
+              - text: is the place to talk about things like what questions are appropriate, what tags we should use, etc.
+          - generic [ref=e417]:
+            - link "About" [ref=e418] [cursor=pointer]:
+              - /url: /tour?mnu=1
+            - link "Help" [ref=e419] [cursor=pointer]:
+              - /url: /help?mnu=1
+            - link "Meta" [ref=e420] [cursor=pointer]:
+              - /url: https://meta.stackoverflow.com
+        - list [ref=e422]:
+          - listitem [ref=e423]: The Overflow Blog
+          - listitem [ref=e424]:
+            - img [ref=e426]
+            - link "Observability and human intuition in an AI world" [ref=e430] [cursor=pointer]:
+              - /url: https://stackoverflow.blog/2026/05/15/observability-and-human-intuition-in-an-ai-world/?cb=1
+          - listitem [ref=e431]: Featured on Meta
+          - listitem [ref=e432]:
+            - generic "Meta Stack Exchange" [ref=e434]
+            - link "(Almost) One year of Challenges" [ref=e436] [cursor=pointer]:
+              - /url: https://meta.stackexchange.com/questions/418261/almost-one-year-of-challenges?cb=1
+          - listitem [ref=e437]:
+            - generic "Meta Stack Overflow" [ref=e439]
+            - 'link "Policy: Generative AI (e.g., ChatGPT) is banned" [ref=e441] [cursor=pointer]':
+              - /url: https://meta.stackoverflow.com/questions/421831/policy-generative-ai-e-g-chatgpt-is-banned?cb=1
+        - generic [ref=e442]:
+          - heading "Cast your votes this week!" [level=3] [ref=e444]
+          - generic [ref=e446]:
+            - generic [ref=e447]:
+              - generic [ref=e448]: 0/5
+              - img [ref=e451]
+              - img [ref=e455]
+              - img [ref=e459]
+              - img [ref=e463]
+              - img [ref=e467]
+            - paragraph [ref=e470]:
+              - text: Vote on content that is interesting, well-researched and helpful! You have 5 votes a week without reputation.
+              - link "Learn more about free votes" [ref=e471] [cursor=pointer]:
+                - /url: /help/whats-free-votes
+        - generic [ref=e477]:
+          - generic [ref=e478]:
+            - generic [ref=e479]: Community activity
+            - generic [ref=e480]: Last 1 hr
+          - list [ref=e481]:
+            - listitem [ref=e482]:
+              - generic [ref=e484]: Users online activity
+              - generic [ref=e485]: 5218 users online
+            - listitem [ref=e486]:
+              - generic [ref=e487]:
+                - img "Number of questions asked" [ref=e488]
+                - text: 6 questions
+            - listitem [ref=e490]:
+              - generic [ref=e491]:
+                - img "Number of questions that received an answer" [ref=e492]
+                - text: 11 answers
+            - listitem [ref=e494]:
+              - generic [ref=e495]:
+                - img "Number of comments posted" [ref=e496]
+                - text: 41 comments
+            - listitem [ref=e498]:
+              - generic [ref=e499]:
+                - img "Number of upvotes on posts" [ref=e500]
+                - text: 119 upvotes
+          - generic [ref=e502]:
+            - generic [ref=e503]:
+              - img "Popular tags" [ref=e504]
+              - paragraph [ref=e507]: Popular tags
+            - generic [ref=e508]:
+              - link "algorithm" [ref=e509] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/algorithm
+              - link "javascript" [ref=e510] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/javascript
+              - link "php" [ref=e511] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/php
+              - link "android" [ref=e512] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/android
+              - link "python" [ref=e513] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/python
+              - link "sql-server" [ref=e514] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/sql-server
+          - generic [ref=e515]:
+            - generic [ref=e516]:
+              - img "Popular unanswered question" [ref=e517]
+              - paragraph [ref=e520]: Popular unanswered question
+            - link "Install application wrapper script wrap.sh" [ref=e522] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/44935575
+            - generic [ref=e523]:
+              - link "android" [ref=e524] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/android
+              - link "android-ndk" [ref=e525] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/android-ndk
+              - link "apk" [ref=e526] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/apk
+              - link "android-package-managers" [ref=e527] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/tagged/android-package-managers
+            - generic [ref=e528]:
+              - link "User avatar" [ref=e529] [cursor=pointer]:
+                - /url: https://stackoverflow.com/users/2878070
+                - img "User avatar" [ref=e530]
+              - generic [ref=e531]:
+                - link "Sergio" [ref=e532] [cursor=pointer]:
+                  - /url: https://stackoverflow.com/users/2878070
+                - list [ref=e533]:
+                  - listitem [ref=e534]: 8.2k
+              - time [ref=e535]: 3,239 days ago
+        - generic [ref=e536]:
+          - heading "Hot Network Questions" [level=4] [ref=e537]:
+            - link "Hot Network Questions" [ref=e538] [cursor=pointer]:
+              - /url: https://stackexchange.com/questions?tab=hot
+          - list [ref=e539]:
+            - listitem [ref=e540]:
+              - generic "Skeptics Stack Exchange" [ref=e541]
+              - link "Do the UAE contributions make up 44% of the total aid to Gaza?" [ref=e542] [cursor=pointer]:
+                - /url: https://skeptics.stackexchange.com/questions/60573/do-the-uae-contributions-make-up-44-of-the-total-aid-to-gaza
+            - listitem [ref=e543]:
+              - generic "Electrical Engineering Stack Exchange" [ref=e544]
+              - link "Identify part with marking code W3E" [ref=e545] [cursor=pointer]:
+                - /url: https://electronics.stackexchange.com/questions/769052/identify-part-with-marking-code-w3e
+            - listitem [ref=e546]:
+              - generic "Academia Stack Exchange" [ref=e547]
+              - link "Review period of conference is ended but still my submission did not have any review" [ref=e548] [cursor=pointer]:
+                - /url: https://academia.stackexchange.com/questions/226726/review-period-of-conference-is-ended-but-still-my-submission-did-not-have-any-re
+            - listitem [ref=e549]:
+              - generic "English Language & Usage Stack Exchange" [ref=e550]
+              - link "How do phonetic rules govern the pronunciation of newly formed acronyms (like \"GOOB\")?" [ref=e551] [cursor=pointer]:
+                - /url: https://english.stackexchange.com/questions/639752/how-do-phonetic-rules-govern-the-pronunciation-of-newly-formed-acronyms-like-g
+            - listitem [ref=e552]:
+              - generic "Home Improvement Stack Exchange" [ref=e553]
+              - link "Gap on side of panel in wood door" [ref=e554] [cursor=pointer]:
+                - /url: https://diy.stackexchange.com/questions/330571/gap-on-side-of-panel-in-wood-door
+            - listitem [ref=e555]:
+              - generic "Information Security Stack Exchange" [ref=e556]
+              - link "Does the yellowkey exploit work against bitlocker with PIN only, no TPM" [ref=e557] [cursor=pointer]:
+                - /url: https://security.stackexchange.com/questions/286969/does-the-yellowkey-exploit-work-against-bitlocker-with-pin-only-no-tpm
+            - listitem [ref=e558]:
+              - generic "Mathematica Stack Exchange" [ref=e559]
+              - link "Format numbers on vertical axis in DateListPlot" [ref=e560] [cursor=pointer]:
+                - /url: https://mathematica.stackexchange.com/questions/319431/format-numbers-on-vertical-axis-in-datelistplot
+            - listitem [ref=e561]:
+              - generic "Role-playing Games Stack Exchange" [ref=e562]
+              - link "Would a caster casting antimagic field also affects its familiar?" [ref=e563] [cursor=pointer]:
+                - /url: https://rpg.stackexchange.com/questions/219349/would-a-caster-casting-antimagic-field-also-affects-its-familiar
+            - listitem [ref=e564]:
+              - generic "Worldbuilding Stack Exchange" [ref=e565]
+              - link "Would Uric Acid be Useful to Medieval People?" [ref=e566] [cursor=pointer]:
+                - /url: https://worldbuilding.stackexchange.com/questions/273470/would-uric-acid-be-useful-to-medieval-people
+            - listitem [ref=e567]:
+              - generic "Arqade" [ref=e568]
+              - link "What is required to obtain the 'Pierced Butterfly' keepsake, other than enough nectar?" [ref=e569] [cursor=pointer]:
+                - /url: https://gaming.stackexchange.com/questions/418844/what-is-required-to-obtain-the-pierced-butterfly-keepsake-other-than-enough-n
+            - listitem [ref=e570]:
+              - generic "Role-playing Games Stack Exchange" [ref=e571]
+              - link "Does the number of eyes change a race's vision?" [ref=e572] [cursor=pointer]:
+                - /url: https://rpg.stackexchange.com/questions/219341/does-the-number-of-eyes-change-a-races-vision
+            - listitem [ref=e573]:
+              - generic "Ask Ubuntu" [ref=e574]
+              - link "Google Chrome update broken" [ref=e575] [cursor=pointer]:
+                - /url: https://askubuntu.com/questions/1566925/google-chrome-update-broken
+            - listitem [ref=e576]:
+              - generic "Electrical Engineering Stack Exchange" [ref=e577]
+              - link "How can I realistically simulate a push-pull SMPS and design a compensator?" [ref=e578] [cursor=pointer]:
+                - /url: https://electronics.stackexchange.com/questions/769037/how-can-i-realistically-simulate-a-push-pull-smps-and-design-a-compensator
+            - listitem [ref=e579]:
+              - generic "Philosophy Stack Exchange" [ref=e580]
+              - link "Regarding Dawid's defense that it is reasonable to accept string theory as credible without experimental evidence" [ref=e581] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138452/regarding-dawids-defense-that-it-is-reasonable-to-accept-string-theory-as-credi
+            - listitem [ref=e582]:
+              - generic "Electrical Engineering Stack Exchange" [ref=e583]
+              - link "Driving 3x 3-Digit White LED Common Cathode Displays with STM32F030K6T and 74HC595 — Is There a Simpler Way?" [ref=e584] [cursor=pointer]:
+                - /url: https://electronics.stackexchange.com/questions/769048/driving-3x-3-digit-white-led-common-cathode-displays-with-stm32f030k6t-and-74hc5
+            - listitem [ref=e585]:
+              - generic "MathOverflow" [ref=e586]
+              - link "Is the stepwise Smith normal form a complete isomorphism invariant for persistence modules over Z?" [ref=e587] [cursor=pointer]:
+                - /url: https://mathoverflow.net/questions/511371/is-the-stepwise-smith-normal-form-a-complete-isomorphism-invariant-for-persisten
+            - listitem [ref=e588]:
+              - generic "Science Fiction & Fantasy Stack Exchange" [ref=e589]
+              - link "Tiny black hole falls to the center of Earth and starts eating it up" [ref=e590] [cursor=pointer]:
+                - /url: https://scifi.stackexchange.com/questions/304494/tiny-black-hole-falls-to-the-center-of-earth-and-starts-eating-it-up
+            - listitem [ref=e591]:
+              - generic "English Language Learners Stack Exchange" [ref=e592]
+              - link "What is the antecedent of \"which\" in this sentence from an EFL textbook?" [ref=e593] [cursor=pointer]:
+                - /url: https://ell.stackexchange.com/questions/374888/what-is-the-antecedent-of-which-in-this-sentence-from-an-efl-textbook
+            - listitem [ref=e594]:
+              - generic "Philosophy Stack Exchange" [ref=e595]
+              - link "How can free will be free from what a logician might say, both A and not-A?" [ref=e596] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138491/how-can-free-will-be-free-from-what-a-logician-might-say-both-a-and-not-a
+            - listitem [ref=e597]:
+              - generic "Physics Stack Exchange" [ref=e598]
+              - link "State of photons in weak coherent pulses" [ref=e599] [cursor=pointer]:
+                - /url: https://physics.stackexchange.com/questions/872465/state-of-photons-in-weak-coherent-pulses
+            - listitem [ref=e600]:
+              - generic "Bicycles Stack Exchange" [ref=e601]
+              - link "Shimano Alivio 9 speed shifter indicator suddenly wonky" [ref=e602] [cursor=pointer]:
+                - /url: https://bicycles.stackexchange.com/questions/100285/shimano-alivio-9-speed-shifter-indicator-suddenly-wonky
+            - listitem [ref=e603]:
+              - generic "Software Engineering Stack Exchange" [ref=e604]
+              - link "Should I run separate APIs for my frontend and public API?" [ref=e605] [cursor=pointer]:
+                - /url: https://softwareengineering.stackexchange.com/questions/461192/should-i-run-separate-apis-for-my-frontend-and-public-api
+            - listitem [ref=e606]:
+              - generic "Unix & Linux Stack Exchange" [ref=e607]
+              - 'link "How to get zsh to not treat \"word\" as literal in \"${var:?word}\"" [ref=e608] [cursor=pointer]':
+                - /url: https://unix.stackexchange.com/questions/806035/how-to-get-zsh-to-not-treat-word-as-literal-in-varword
+            - listitem [ref=e609]:
+              - generic "Puzzling Stack Exchange" [ref=e610]
+              - link "Regular heptagon and scissors" [ref=e611] [cursor=pointer]:
+                - /url: https://puzzling.stackexchange.com/questions/138130/regular-heptagon-and-scissors
+        - link "Question feed" [ref=e613] [cursor=pointer]:
+          - /url: /feeds/question/79943013
+          - img [ref=e614]
+          - text: Question feed
+  - contentinfo [ref=e616]:
+    - generic [ref=e617]:
+      - link "Stack Overflow" [ref=e619] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e620]
+      - navigation "Footer" [ref=e622]:
+        - generic [ref=e623]:
+          - heading "Stack Overflow" [level=5] [ref=e624]:
+            - link "Stack Overflow" [ref=e625] [cursor=pointer]:
+              - /url: https://stackoverflow.com
+          - list [ref=e626]:
+            - listitem [ref=e627]:
+              - link "Questions" [ref=e628] [cursor=pointer]:
+                - /url: /questions
+            - listitem [ref=e629]:
+              - link "Help" [ref=e630] [cursor=pointer]:
+                - /url: /help
+            - listitem [ref=e631]:
+              - link "Chat" [ref=e632] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+        - generic [ref=e633]:
+          - heading "Business" [level=5] [ref=e634]:
+            - link "Business" [ref=e635] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e636]:
+            - listitem [ref=e637]:
+              - link "Stack Internal" [ref=e638] [cursor=pointer]:
+                - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=teams
+            - listitem [ref=e639]:
+              - link "Stack Data Licensing" [ref=e640] [cursor=pointer]:
+                - /url: https://stackoverflow.co/data-licensing/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=data-licensing
+            - listitem [ref=e641]:
+              - link "Stack Ads" [ref=e642] [cursor=pointer]:
+                - /url: https://stackoverflow.co/advertising/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=advertising
+        - generic [ref=e643]:
+          - heading "Company" [level=5] [ref=e644]:
+            - link "Company" [ref=e645] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e646]:
+            - listitem [ref=e647]:
+              - link "About" [ref=e648] [cursor=pointer]:
+                - /url: https://stackoverflow.co/
+            - listitem [ref=e649]:
+              - link "Press" [ref=e650] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/press/
+            - listitem [ref=e651]:
+              - link "Work Here" [ref=e652] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/work-here/
+            - listitem [ref=e653]:
+              - link "Legal" [ref=e654] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal
+            - listitem [ref=e655]:
+              - link "Privacy Policy" [ref=e656] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/privacy-policy
+            - listitem [ref=e657]:
+              - link "Terms of Service" [ref=e658] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/terms-of-service/public
+            - listitem [ref=e659]:
+              - link "Contact Us" [ref=e660] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e661]:
+              - button "Cookie Settings" [ref=e662] [cursor=pointer]
+            - listitem [ref=e663]:
+              - link "Cookie Policy" [ref=e664] [cursor=pointer]:
+                - /url: https://policies.stackoverflow.co/stack-overflow/cookie-policy
+        - generic [ref=e666]:
+          - heading "Stack Exchange Network" [level=5] [ref=e667]:
+            - link "Stack Exchange Network" [ref=e668] [cursor=pointer]:
+              - /url: https://stackexchange.com
+          - list [ref=e669]:
+            - listitem [ref=e670]:
+              - link "Technology" [ref=e671] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#technology
+            - listitem [ref=e672]:
+              - link "Culture & recreation" [ref=e673] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#culturerecreation
+            - listitem [ref=e674]:
+              - link "Life & arts" [ref=e675] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#lifearts
+            - listitem [ref=e676]:
+              - link "Science" [ref=e677] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#science
+            - listitem [ref=e678]:
+              - link "Professional" [ref=e679] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#professional
+            - listitem [ref=e680]:
+              - link "Business" [ref=e681] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#business
+            - listitem [ref=e682]:
+              - link "API" [ref=e683] [cursor=pointer]:
+                - /url: https://api.stackexchange.com/
+            - listitem [ref=e684]:
+              - link "Data" [ref=e685] [cursor=pointer]:
+                - /url: https://data.stackexchange.com/
+      - generic [ref=e686]:
+        - list [ref=e687]:
+          - listitem [ref=e688]:
+            - link "Blog" [ref=e689] [cursor=pointer]:
+              - /url: https://stackoverflow.blog?blb=1
+          - listitem [ref=e690]:
+            - link "Facebook" [ref=e691] [cursor=pointer]:
+              - /url: https://www.facebook.com/officialstackoverflow/
+          - listitem [ref=e692]:
+            - link "Twitter" [ref=e693] [cursor=pointer]:
+              - /url: https://twitter.com/stackoverflow
+          - listitem [ref=e694]:
+            - link "LinkedIn" [ref=e695] [cursor=pointer]:
+              - /url: https://linkedin.com/company/stack-overflow
+          - listitem [ref=e696]:
+            - link "Instagram" [ref=e697] [cursor=pointer]:
+              - /url: https://www.instagram.com/thestackoverflow
+        - paragraph [ref=e698]:
+          - text: Site design / logo © 2026 Stack Exchange Inc; user contributions licensed under
+          - link "CC BY-SA" [ref=e699] [cursor=pointer]:
+            - /url: https://stackoverflow.com/help/licensing
+          - text: . rev 2026.5.18.43150

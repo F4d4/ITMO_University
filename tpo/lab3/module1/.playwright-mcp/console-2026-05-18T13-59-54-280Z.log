@@ -1,0 +1,5 @@
+[     341ms] [WARNING] Error with Feature-Policy header: Unrecognized feature: 'speaker'. @ :0
+[    1483ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://securepubads.g.doubleclick.net/tag/js/gpt.js:0
+[    1483ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://htlbid.com/v3/mapping.base/htlbid.js?v=1.4:0
+[    1669ms] [ERROR] Not signed in with the identity provider. @ https://stackoverflow.com/questions:0
+[    3384ms] [ERROR] [GSI_LOGGER]: FedCM get() rejects with NetworkError: Error retrieving a token. @ https://accounts.google.com/gsi/client:85

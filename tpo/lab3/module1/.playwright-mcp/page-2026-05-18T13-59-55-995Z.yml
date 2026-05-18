@@ -1,0 +1,1052 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - generic [ref=e4]:
+      - link "Stack Overflow" [ref=e5] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e6]
+      - link "About" [ref=e8] [cursor=pointer]:
+        - /url: https://stackoverflow.co/
+        - generic [ref=e9]: About
+      - button "Products" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]: Products
+      - link "For Teams" [ref=e12] [cursor=pointer]:
+        - /url: https://stackoverflow.co/internal/
+        - generic [ref=e13]: For Teams
+      - search [ref=e14]:
+        - generic [ref=e15]:
+          - combobox "Search" [ref=e16]
+          - img
+      - navigation "Topbar" [ref=e17]:
+        - list [ref=e18]:
+          - listitem [ref=e19]:
+            - link "Help Center and other resources" [ref=e20] [cursor=pointer]:
+              - /url: /help
+              - img [ref=e21]
+          - listitem [ref=e23]:
+            - link "Site switcher" [ref=e24] [cursor=pointer]:
+              - /url: https://stackexchange.com
+              - img [ref=e25]
+          - listitem
+          - listitem
+          - listitem [ref=e27]:
+            - link "Log in" [ref=e28] [cursor=pointer]:
+              - /url: https://stackoverflow.com/users/login?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions
+          - listitem [ref=e29]:
+            - link "Sign up" [ref=e30] [cursor=pointer]:
+              - /url: https://stackoverflow.com/users/signup?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions
+  - generic [ref=e31]:
+    - navigation "Primary" [ref=e34]:
+      - list [ref=e35]:
+        - listitem [ref=e36]:
+          - list [ref=e37]:
+            - listitem [ref=e38]:
+              - link "Home" [ref=e39] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e40]:
+                  - img [ref=e41]
+                  - generic [ref=e43]: Home
+            - listitem [ref=e44]:
+              - link "Questions" [ref=e45] [cursor=pointer]:
+                - /url: /questions
+                - generic [ref=e46]:
+                  - img [ref=e47]
+                  - generic [ref=e49]: Questions
+            - listitem [ref=e50]:
+              - link "AI Assist" [ref=e51] [cursor=pointer]:
+                - /url: https://stackoverflow.com/ai-assist
+                - generic [ref=e52]:
+                  - img [ref=e54]
+                  - generic [ref=e56]: AI Assist
+            - listitem [ref=e57]:
+              - link "Tags" [ref=e58] [cursor=pointer]:
+                - /url: /tags
+                - generic [ref=e59]:
+                  - img [ref=e60]
+                  - generic [ref=e63]: Tags
+            - listitem [ref=e64]
+            - listitem [ref=e65]:
+              - link "Challenges" [ref=e66] [cursor=pointer]:
+                - /url: /beta/challenges
+                - generic [ref=e67]:
+                  - img [ref=e68]
+                  - generic [ref=e70]: Challenges
+            - listitem [ref=e71]:
+              - link "Chat" [expanded] [ref=e72] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+                - img [ref=e75]
+                - generic [ref=e80]: Chat
+            - listitem [ref=e81]:
+              - link "Articles" [ref=e82] [cursor=pointer]:
+                - /url: https://stackoverflow.blog/contributed?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=so-blog&utm_content=experiment-articles
+                - generic [ref=e83]:
+                  - img [ref=e84]
+                  - generic [ref=e87]: Articles
+            - listitem [ref=e88]:
+              - link "Users" [ref=e89] [cursor=pointer]:
+                - /url: /users
+                - generic [ref=e90]:
+                  - img [ref=e91]
+                  - generic [ref=e93]: Users
+            - listitem [ref=e94]
+            - listitem [ref=e95]:
+              - link "Companies" [ref=e96] [cursor=pointer]:
+                - /url: https://stackoverflow.com/jobs/companies?so_medium=stackoverflow&so_source=SiteNav
+                - generic [ref=e97]:
+                  - img [ref=e98]
+                  - generic [ref=e100]: Companies
+            - listitem [ref=e101]:
+              - button "Collectives" [ref=e103] [cursor=pointer]:
+                - generic [ref=e104]: Collectives
+                - img [ref=e106]
+            - listitem [ref=e108]:
+              - paragraph [ref=e109]:
+                - text: Communities for your favorite technologies.
+                - link "Explore all Collectives" [ref=e110] [cursor=pointer]:
+                  - /url: /collectives-all
+        - listitem [ref=e111]:
+          - generic [ref=e112]: Stack Internal
+          - generic [ref=e113]:
+            - img [ref=e114]
+            - paragraph [ref=e128]:
+              - text: Stack Overflow for Teams is now called
+              - strong [ref=e129]: Stack Internal
+              - text: . Bring the best of human thought and AI automation together at your work.
+            - link "Try for free" [ref=e130] [cursor=pointer]:
+              - /url: https://stackoverflowteams.com/teams/create/free/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+            - link "Learn more" [ref=e131] [cursor=pointer]:
+              - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+    - generic [ref=e132]:
+      - main [ref=e133]:
+        - generic [ref=e134]:
+          - heading "Newest Questions" [level=1] [ref=e135]
+          - link "Ask Question" [ref=e137] [cursor=pointer]:
+            - /url: /questions/ask
+        - generic [ref=e139]:
+          - generic [ref=e140]: 24,154,218 questions
+          - generic [ref=e142]:
+            - generic [ref=e143]:
+              - link "Newest" [ref=e144] [cursor=pointer]:
+                - /url: /questions?tab=Newest
+                - generic [ref=e145]: Newest
+              - link "Active" [ref=e146] [cursor=pointer]:
+                - /url: /questions?tab=Active
+                - generic [ref=e147]: Active
+              - link "Bountied 5" [ref=e148] [cursor=pointer]:
+                - /url: /questions?tab=Bounties
+                - generic [ref=e149]: Bountied
+                - generic [ref=e150]: "5"
+              - link "Unanswered" [ref=e151] [cursor=pointer]:
+                - /url: /questions?tab=Unanswered
+                - generic [ref=e152]: Unanswered
+              - button "More" [ref=e153] [cursor=pointer]:
+                - generic [ref=e154]: More
+            - button "Filter" [ref=e156] [cursor=pointer]:
+              - img [ref=e157]
+              - text: Filter
+        - generic [ref=e160]:
+          - generic [ref=e162]:
+            - generic [ref=e163]:
+              - generic "Score of 0" [ref=e164]:
+                - generic [ref=e165]: "0"
+                - generic [ref=e166]: votes
+              - generic "0 answers" [ref=e167]:
+                - generic [ref=e168]: "0"
+                - generic [ref=e169]: answers
+              - generic "2 views" [ref=e170]:
+                - generic [ref=e171]: "2"
+                - generic [ref=e172]: views
+            - generic [ref=e173]:
+              - heading "Does the creation of a std::array of std::bytes or unsigned char implicitly create objects?" [level=3] [ref=e174]:
+                - link "Does the creation of a std::array of std::bytes or unsigned char implicitly create objects?" [ref=e175] [cursor=pointer]:
+                  - /url: /questions/79943013/does-the-creation-of-a-stdarray-of-stdbytes-or-unsigned-char-implicitly-crea
+              - generic [ref=e176]: Under https://eel.is/c++draft/intro.object#16 (see below) does the creation of a std::array of std::bytes or unsigned char implicitly create objects? Except during constant evaluation, an operation ...
+              - generic [ref=e177]:
+                - list [ref=e179]:
+                  - listitem [ref=e180]:
+                    - link "show questions tagged 'c++'" [ref=e181] [cursor=pointer]:
+                      - /url: /questions/tagged/c%2b%2b
+                      - text: c++
+                  - listitem [ref=e182]:
+                    - link "show questions tagged 'language-lawyer'" [ref=e183] [cursor=pointer]:
+                      - /url: /questions/tagged/language-lawyer
+                      - text: language-lawyer
+                  - listitem [ref=e184]:
+                    - link "show questions tagged 'stdarray'" [ref=e185] [cursor=pointer]:
+                      - /url: /questions/tagged/stdarray
+                      - text: stdarray
+                  - listitem [ref=e186]:
+                    - link "show questions tagged 'implicit-lifetime'" [ref=e187] [cursor=pointer]:
+                      - /url: /questions/tagged/implicit-lifetime
+                      - text: implicit-lifetime
+                - generic [ref=e188]:
+                  - link "Oersted's user avatar" [ref=e189] [cursor=pointer]:
+                    - /url: /users/21691539/oersted
+                    - img "Oersted's user avatar" [ref=e191]
+                  - generic [ref=e192]:
+                    - link "Oersted" [ref=e194] [cursor=pointer]:
+                      - /url: /users/21691539/oersted
+                    - list [ref=e195]:
+                      - listitem [ref=e196]: 5,074
+                  - time [ref=e197]: asked 2 mins ago
+          - generic [ref=e199]:
+            - generic [ref=e200]:
+              - generic "Score of 0" [ref=e201]:
+                - generic [ref=e202]: "0"
+                - generic [ref=e203]: votes
+              - generic "0 answers" [ref=e204]:
+                - generic [ref=e205]: "0"
+                - generic [ref=e206]: answers
+              - generic "7 views" [ref=e207]:
+                - generic [ref=e208]: "7"
+                - generic [ref=e209]: views
+            - generic [ref=e210]:
+              - heading "Disabling Users after a certain timeframe" [level=3] [ref=e211]:
+                - link "Disabling Users after a certain timeframe" [ref=e212] [cursor=pointer]:
+                  - /url: /questions/79943012/disabling-users-after-a-certain-timeframe
+              - generic [ref=e213]: I'm working on Keycloak's workflow (new to it) and I'm trying to create a workflow that disables users after a certain time period. I have it set to 1 minute in milliseconds but after waiting for the ...
+              - generic [ref=e214]:
+                - list [ref=e216]:
+                  - listitem [ref=e217]:
+                    - link "show questions tagged 'keycloak'" [ref=e218] [cursor=pointer]:
+                      - /url: /questions/tagged/keycloak
+                      - text: keycloak
+                - generic [ref=e219]:
+                  - link "King's user avatar" [ref=e220] [cursor=pointer]:
+                    - /url: /users/13248371/king
+                    - img "King's user avatar" [ref=e222]
+                  - generic [ref=e223]:
+                    - link "King" [ref=e225] [cursor=pointer]:
+                      - /url: /users/13248371/king
+                    - list [ref=e226]:
+                      - listitem [ref=e227]: "29"
+                  - time [ref=e228]: asked 4 mins ago
+          - generic [ref=e230]:
+            - generic [ref=e231]:
+              - generic [ref=e232]:
+                - img [ref=e233]
+                - text: Advice
+              - generic "Score of 0" [ref=e235]:
+                - generic [ref=e236]: "0"
+                - generic [ref=e237]: votes
+              - generic "# replies" [ref=e238]:
+                - generic [ref=e239]: "0"
+                - generic [ref=e240]: replies
+              - generic "18 views" [ref=e241]:
+                - generic [ref=e242]: "18"
+                - generic [ref=e243]: views
+            - generic [ref=e244]:
+              - heading "hwmon/lm-sensor virtual device" [level=3] [ref=e245]:
+                - link "hwmon/lm-sensor virtual device" [ref=e246] [cursor=pointer]:
+                  - /url: /questions/79943009/hwmon-lm-sensor-virtual-device
+              - generic [ref=e247]: I have a custom fan control (based on a rpi2040-zero), which provides a custom JSON API via serial connection. Now i want to integrate that into hwmon/lm-sensors. I want to read & control each fan,...
+              - generic [ref=e248]:
+                - list [ref=e250]:
+                  - listitem [ref=e251]:
+                    - link "show questions tagged 'linux'" [ref=e252] [cursor=pointer]:
+                      - /url: /questions/tagged/linux
+                      - text: linux
+                  - listitem [ref=e253]:
+                    - link "show questions tagged 'kernel-module'" [ref=e254] [cursor=pointer]:
+                      - /url: /questions/tagged/kernel-module
+                      - text: kernel-module
+                  - listitem [ref=e255]:
+                    - link "show questions tagged 'fuse'" [ref=e256] [cursor=pointer]:
+                      - /url: /questions/tagged/fuse
+                      - text: fuse
+                - generic [ref=e257]:
+                  - link "Marc's user avatar" [ref=e258] [cursor=pointer]:
+                    - /url: /users/5781499/marc
+                    - img "Marc's user avatar" [ref=e260]
+                  - generic [ref=e261]:
+                    - link "Marc" [ref=e263] [cursor=pointer]:
+                      - /url: /users/5781499/marc
+                    - list [ref=e264]:
+                      - listitem [ref=e265]: 3,947
+                  - time [ref=e266]: asked 15 mins ago
+          - generic [ref=e268]:
+            - generic [ref=e269]:
+              - generic [ref=e270]:
+                - img [ref=e271]
+                - text: Advice
+              - generic "Score of 0" [ref=e273]:
+                - generic [ref=e274]: "0"
+                - generic [ref=e275]: votes
+              - generic "# replies" [ref=e276]:
+                - generic [ref=e277]: "0"
+                - generic [ref=e278]: replies
+              - generic "19 views" [ref=e279]:
+                - generic [ref=e280]: "19"
+                - generic [ref=e281]: views
+            - generic [ref=e282]:
+              - heading "Working with a .NET DLL from C++, that DLL loading two different versions of another DLL, why is that a problem?" [level=3] [ref=e283]:
+                - link "Working with a .NET DLL from C++, that DLL loading two different versions of another DLL, why is that a problem?" [ref=e284] [cursor=pointer]:
+                  - /url: /questions/79943007/working-with-a-net-dll-from-c-that-dll-loading-two-different-versions-of-ano
+              - generic [ref=e285]: "A colleague has created a .NET8 DLL, which refers to `Microsoft.Extensions.Logging.Abstractions.dll`. Apparently, when you load such a DLL and you start using functions from the export list, while ..."
+              - generic [ref=e286]:
+                - list [ref=e288]:
+                  - listitem [ref=e289]:
+                    - link "show questions tagged 'c++'" [ref=e290] [cursor=pointer]:
+                      - /url: /questions/tagged/c%2b%2b
+                      - text: c++
+                  - listitem [ref=e291]:
+                    - link "show questions tagged '.net'" [ref=e292] [cursor=pointer]:
+                      - /url: /questions/tagged/.net
+                      - text: .net
+                  - listitem [ref=e293]:
+                    - link "show questions tagged 'dll'" [ref=e294] [cursor=pointer]:
+                      - /url: /questions/tagged/dll
+                      - text: dll
+                  - listitem [ref=e295]:
+                    - link "show questions tagged '.net-8.0'" [ref=e296] [cursor=pointer]:
+                      - /url: /questions/tagged/.net-8.0
+                      - text: .net-8.0
+                  - listitem [ref=e297]:
+                    - link "show questions tagged 'loadlibrary'" [ref=e298] [cursor=pointer]:
+                      - /url: /questions/tagged/loadlibrary
+                      - text: loadlibrary
+                - generic [ref=e299]:
+                  - link "Dominique's user avatar" [ref=e300] [cursor=pointer]:
+                    - /url: /users/4279155/dominique
+                    - img "Dominique's user avatar" [ref=e302]
+                  - generic [ref=e303]:
+                    - link "Dominique" [ref=e305] [cursor=pointer]:
+                      - /url: /users/4279155/dominique
+                    - list [ref=e306]:
+                      - listitem [ref=e307]: 17.5k
+                  - time [ref=e308]: asked 24 mins ago
+          - generic [ref=e310]:
+            - generic [ref=e311]:
+              - generic [ref=e312]:
+                - img [ref=e313]
+                - text: Advice
+              - generic "Score of 0" [ref=e315]:
+                - generic [ref=e316]: "0"
+                - generic [ref=e317]: votes
+              - generic "# replies" [ref=e318]:
+                - generic [ref=e319]: "1"
+                - generic [ref=e320]: replies
+              - generic "30 views" [ref=e321]:
+                - generic [ref=e322]: "30"
+                - generic [ref=e323]: views
+            - generic [ref=e324]:
+              - heading "How to make a batch file make a .txt file unless the file is already made where it will just edit it" [level=3] [ref=e325]:
+                - link "How to make a batch file make a .txt file unless the file is already made where it will just edit it" [ref=e326] [cursor=pointer]:
+                  - /url: /questions/79943002/how-to-make-a-batch-file-make-a-txt-file-unless-the-file-is-already-made-where
+              - generic [ref=e327]: Please can someone help me in my batch file that I am making. It is running on start-up already, however I would like it to make a .txt file or if the .txt file is already in that directory, edit it ...
+              - generic [ref=e328]:
+                - list [ref=e330]:
+                  - listitem [ref=e331]:
+                    - link "show questions tagged 'batch-file'" [ref=e332] [cursor=pointer]:
+                      - /url: /questions/tagged/batch-file
+                      - text: batch-file
+                  - listitem [ref=e333]:
+                    - link "show questions tagged 'batch-processing'" [ref=e334] [cursor=pointer]:
+                      - /url: /questions/tagged/batch-processing
+                      - text: batch-processing
+                - generic [ref=e335]:
+                  - link "Fire Alarm's user avatar" [ref=e336] [cursor=pointer]:
+                    - /url: /users/32741636/fire-alarm
+                    - img "Fire Alarm's user avatar" [ref=e338]
+                  - generic [ref=e339]:
+                    - link "Fire Alarm" [ref=e341] [cursor=pointer]:
+                      - /url: /users/32741636/fire-alarm
+                    - list [ref=e342]:
+                      - listitem [ref=e343]: "1"
+                  - time [ref=e344]: asked 41 mins ago
+          - generic [ref=e346]:
+            - generic [ref=e347]:
+              - generic "Score of -1" [ref=e348]:
+                - generic [ref=e349]: "-1"
+                - generic [ref=e350]: votes
+              - generic "0 answers" [ref=e351]:
+                - generic [ref=e352]: "0"
+                - generic [ref=e353]: answers
+              - generic "32 views" [ref=e354]:
+                - generic [ref=e355]: "32"
+                - generic [ref=e356]: views
+            - generic [ref=e357]:
+              - 'heading "iOS Chrome: position:fixed bottom bar and sticky header scroll with page on first load" [level=3] [ref=e358]':
+                - 'link "iOS Chrome: position:fixed bottom bar and sticky header scroll with page on first load" [ref=e359] [cursor=pointer]':
+                  - /url: /questions/79942995/ios-chrome-positionfixed-bottom-bar-and-sticky-header-scroll-with-page-on-firs
+              - generic [ref=e360]: "Problem On iOS Chrome (26), my position: fixed; bottom: 0 tab bar and position: sticky; top: 0 header both scroll with the page content instead of staying pinned. The entire viewport appears to shift —..."
+              - generic [ref=e361]:
+                - generic [ref=e362]:
+                  - link [ref=e363] [cursor=pointer]:
+                    - /url: /collectives/mobile-dev
+                  - list [ref=e364]:
+                    - listitem [ref=e365]:
+                      - link "show questions tagged 'css'" [ref=e366] [cursor=pointer]:
+                        - /url: /questions/tagged/css
+                        - text: css
+                    - listitem [ref=e367]:
+                      - link "show questions tagged 'ios'" [ref=e368] [cursor=pointer]:
+                        - /url: /questions/tagged/ios
+                        - text: ios
+                    - listitem [ref=e369]:
+                      - link "show questions tagged 'google-chrome'" [ref=e370] [cursor=pointer]:
+                        - /url: /questions/tagged/google-chrome
+                        - text: google-chrome
+                    - listitem [ref=e371]:
+                      - link "show questions tagged 'nuxt.js'" [ref=e372] [cursor=pointer]:
+                        - /url: /questions/tagged/nuxt.js
+                        - text: nuxt.js
+                    - listitem [ref=e373]:
+                      - link "show questions tagged 'position'" [ref=e374] [cursor=pointer]:
+                        - /url: /questions/tagged/position
+                        - text: position
+                - generic [ref=e375]:
+                  - link "Webpanda's user avatar" [ref=e376] [cursor=pointer]:
+                    - /url: /users/32741533/webpanda
+                    - img "Webpanda's user avatar" [ref=e378]
+                  - generic [ref=e379]:
+                    - link "Webpanda" [ref=e381] [cursor=pointer]:
+                      - /url: /users/32741533/webpanda
+                    - list [ref=e382]:
+                      - listitem [ref=e383]: "1"
+                  - time [ref=e384]: asked 1 hour ago
+          - generic [ref=e386]:
+            - generic [ref=e387]:
+              - generic "Score of 0" [ref=e388]:
+                - generic [ref=e389]: "0"
+                - generic [ref=e390]: votes
+              - generic "0 answers" [ref=e391]:
+                - generic [ref=e392]: "0"
+                - generic [ref=e393]: answers
+              - generic "30 views" [ref=e394]:
+                - generic [ref=e395]: "30"
+                - generic [ref=e396]: views
+            - generic [ref=e397]:
+              - heading "Why do extra consumers dramatically slow down processing over buffered channels" [level=3] [ref=e398]:
+                - link "Why do extra consumers dramatically slow down processing over buffered channels" [ref=e399] [cursor=pointer]:
+                  - /url: /questions/79942991/why-do-extra-consumers-dramatically-slow-down-processing-over-buffered-channels
+              - generic [ref=e400]: In a single producer, multiple consumer scenario, compared to other languages, I noticed performance disappoints in case the jobs consumers take on are trivial. Obviously, performance is not going to ...
+              - generic [ref=e401]:
+                - list [ref=e403]:
+                  - listitem [ref=e404]:
+                    - link "show questions tagged 'kotlin'" [ref=e405] [cursor=pointer]:
+                      - /url: /questions/tagged/kotlin
+                      - text: kotlin
+                  - listitem [ref=e406]:
+                    - link "show questions tagged 'kotlin-coroutines'" [ref=e407] [cursor=pointer]:
+                      - /url: /questions/tagged/kotlin-coroutines
+                      - text: kotlin-coroutines
+                - generic [ref=e408]:
+                  - link "Stein's user avatar" [ref=e409] [cursor=pointer]:
+                    - /url: /users/106275/stein
+                    - img "Stein's user avatar" [ref=e411]
+                  - generic [ref=e412]:
+                    - link "Stein" [ref=e414] [cursor=pointer]:
+                      - /url: /users/106275/stein
+                    - list [ref=e415]:
+                      - listitem [ref=e416]: 1,682
+                  - time [ref=e417]: asked 1 hour ago
+          - generic [ref=e419]:
+            - generic [ref=e420]:
+              - generic "Score of -3" [ref=e421]:
+                - generic [ref=e422]: "-3"
+                - generic [ref=e423]: votes
+              - generic "0 answers" [ref=e424]:
+                - generic [ref=e425]: "0"
+                - generic [ref=e426]: answers
+              - generic "41 views" [ref=e427]:
+                - generic [ref=e428]: "41"
+                - generic [ref=e429]: views
+            - generic [ref=e430]:
+              - heading "Tiktok inApp Browser Crash [closed]" [level=3] [ref=e431]:
+                - link "Tiktok inApp Browser Crash [closed]" [ref=e432] [cursor=pointer]:
+                  - /url: /questions/79942990/tiktok-inapp-browser-crash
+              - generic [ref=e433]: I have a critical issue on my website the issue starts when i share link of my website in TikTok Bio , it loads normally and fine but the big problem when i try to scroll or click anything it gives me ...
+              - generic [ref=e434]:
+                - list [ref=e436]:
+                  - listitem [ref=e437]:
+                    - link "show questions tagged 'javascript'" [ref=e438] [cursor=pointer]:
+                      - /url: /questions/tagged/javascript
+                      - text: javascript
+                  - listitem [ref=e439]:
+                    - link "show questions tagged 'reactjs'" [ref=e440] [cursor=pointer]:
+                      - /url: /questions/tagged/reactjs
+                      - text: reactjs
+                  - listitem [ref=e441]:
+                    - link "show questions tagged 'next.js'" [ref=e442] [cursor=pointer]:
+                      - /url: /questions/tagged/next.js
+                      - text: next.js
+                  - listitem [ref=e443]:
+                    - link "show questions tagged 'inappbrowser'" [ref=e444] [cursor=pointer]:
+                      - /url: /questions/tagged/inappbrowser
+                      - text: inappbrowser
+                - generic [ref=e445]:
+                  - link "Youssef Hussein's user avatar" [ref=e446] [cursor=pointer]:
+                    - /url: /users/17675594/youssef-hussein
+                    - img "Youssef Hussein's user avatar" [ref=e448]
+                  - generic [ref=e449]:
+                    - link "Youssef Hussein" [ref=e451] [cursor=pointer]:
+                      - /url: /users/17675594/youssef-hussein
+                    - list [ref=e452]:
+                      - listitem [ref=e453]: "19"
+                  - time [ref=e454]: asked 1 hour ago
+          - generic [ref=e456]:
+            - generic [ref=e457]:
+              - generic [ref=e458]:
+                - img [ref=e459]
+                - text: Best practices
+              - generic "Score of 1" [ref=e461]:
+                - generic [ref=e462]: "1"
+                - generic [ref=e463]: vote
+              - generic "# replies" [ref=e464]:
+                - generic [ref=e465]: "0"
+                - generic [ref=e466]: replies
+              - generic "23 views" [ref=e467]:
+                - generic [ref=e468]: "23"
+                - generic [ref=e469]: views
+            - generic [ref=e470]:
+              - heading "Managing Python Packages on Offline Systems – Best Practices?" [level=3] [ref=e471]:
+                - link "Managing Python Packages on Offline Systems – Best Practices?" [ref=e472] [cursor=pointer]:
+                  - /url: /questions/79942989/managing-python-packages-on-offline-systems-best-practices
+              - generic [ref=e473]: I work on an offline/air-gapped system with no internet access, and I frequently face issues while installing Python packages and libraries manually. I’ve worked with Python using Spyder and Anaconda, ...
+              - generic [ref=e474]:
+                - list [ref=e476]:
+                  - listitem [ref=e477]:
+                    - link "show questions tagged 'python'" [ref=e478] [cursor=pointer]:
+                      - /url: /questions/tagged/python
+                      - text: python
+                  - listitem [ref=e479]:
+                    - link "show questions tagged 'anaconda'" [ref=e480] [cursor=pointer]:
+                      - /url: /questions/tagged/anaconda
+                      - text: anaconda
+                  - listitem [ref=e481]:
+                    - link "show questions tagged 'spyder'" [ref=e482] [cursor=pointer]:
+                      - /url: /questions/tagged/spyder
+                      - text: spyder
+                - generic [ref=e483]:
+                  - link "ZEESHAN 's user avatar" [ref=e484] [cursor=pointer]:
+                    - /url: /users/8443929/zeeshan
+                    - img "ZEESHAN 's user avatar" [ref=e486]
+                  - generic [ref=e487]:
+                    - link "ZEESHAN" [ref=e489] [cursor=pointer]:
+                      - /url: /users/8443929/zeeshan
+                    - list [ref=e490]:
+                      - listitem [ref=e491]: "317"
+                  - time [ref=e492]: asked 1 hour ago
+          - generic [ref=e494]:
+            - generic [ref=e495]:
+              - generic "Score of -1" [ref=e496]:
+                - generic [ref=e497]: "-1"
+                - generic [ref=e498]: votes
+              - generic "0 answers" [ref=e499]:
+                - generic [ref=e500]: "0"
+                - generic [ref=e501]: answers
+              - generic "18 views" [ref=e502]:
+                - generic [ref=e503]: "18"
+                - generic [ref=e504]: views
+            - generic [ref=e505]:
+              - heading "Failed to Create a Maven Project [closed]" [level=3] [ref=e506]:
+                - link "Failed to Create a Maven Project [closed]" [ref=e507] [cursor=pointer]:
+                  - /url: /questions/79942988/failed-to-create-a-maven-project
+              - generic [ref=e508]: I am unable to create a Maven Project in my Eclipse. Please help me with this error Failed to Create Project Creating maven-archetypes- quickstart has encountered a problem
+              - generic [ref=e509]:
+                - list [ref=e511]:
+                  - listitem [ref=e512]:
+                    - link "show questions tagged 'maven-plugin'" [ref=e513] [cursor=pointer]:
+                      - /url: /questions/tagged/maven-plugin
+                      - text: maven-plugin
+                - generic [ref=e514]:
+                  - link "Ajinkya Jadhav's user avatar" [ref=e515] [cursor=pointer]:
+                    - /url: /users/32741397/ajinkya-jadhav
+                    - img "Ajinkya Jadhav's user avatar" [ref=e517]
+                  - generic [ref=e518]:
+                    - link "Ajinkya Jadhav" [ref=e520] [cursor=pointer]:
+                      - /url: /users/32741397/ajinkya-jadhav
+                    - list [ref=e521]:
+                      - listitem [ref=e522]: "1"
+                  - time [ref=e523]: asked 1 hour ago
+          - generic [ref=e525]:
+            - generic [ref=e526]:
+              - generic "Score of 0" [ref=e527]:
+                - generic [ref=e528]: "0"
+                - generic [ref=e529]: votes
+              - generic "0 answers" [ref=e530]:
+                - generic [ref=e531]: "0"
+                - generic [ref=e532]: answers
+              - generic "12 views" [ref=e533]:
+                - generic [ref=e534]: "12"
+                - generic [ref=e535]: views
+            - generic [ref=e536]:
+              - heading "Xpages and select2 listbox not working in IE" [level=3] [ref=e537]:
+                - link "Xpages and select2 listbox not working in IE" [ref=e538] [cursor=pointer]:
+                  - /url: /questions/79942987/xpages-and-select2-listbox-not-working-in-ie
+              - generic [ref=e539]: Standard list box, with select2. Clicking in chrome, it opens the dropdown and clicking outside the dropdown closes it. In IE, clicking outside it doesn't close the dropdown, you have to select one of ...
+              - generic [ref=e540]:
+                - list [ref=e542]:
+                  - listitem [ref=e543]:
+                    - link "show questions tagged 'jquery-select2'" [ref=e544] [cursor=pointer]:
+                      - /url: /questions/tagged/jquery-select2
+                      - text: jquery-select2
+                  - listitem [ref=e545]:
+                    - link "show questions tagged 'xpages'" [ref=e546] [cursor=pointer]:
+                      - /url: /questions/tagged/xpages
+                      - text: xpages
+                  - listitem [ref=e547]:
+                    - link "show questions tagged 'lotus-domino'" [ref=e548] [cursor=pointer]:
+                      - /url: /questions/tagged/lotus-domino
+                      - text: lotus-domino
+                - generic [ref=e549]:
+                  - link "Chris Richards's user avatar" [ref=e550] [cursor=pointer]:
+                    - /url: /users/4690780/chris-richards
+                    - img "Chris Richards's user avatar" [ref=e552]
+                  - generic [ref=e553]:
+                    - link "Chris Richards" [ref=e555] [cursor=pointer]:
+                      - /url: /users/4690780/chris-richards
+                    - list [ref=e556]:
+                      - listitem [ref=e557]: "705"
+                  - time [ref=e558]: asked 1 hour ago
+          - generic [ref=e560]:
+            - generic [ref=e561]:
+              - generic "Score of 0" [ref=e562]:
+                - generic [ref=e563]: "0"
+                - generic [ref=e564]: votes
+              - generic "one of the answers was accepted as the correct answer" [ref=e565]:
+                - img [ref=e566]
+                - generic [ref=e568]: "1"
+                - generic [ref=e569]: answer
+              - generic "24 views" [ref=e570]:
+                - generic [ref=e571]: "24"
+                - generic [ref=e572]: views
+            - generic [ref=e573]:
+              - heading "Pivot a DataFrame to include header name" [level=3] [ref=e574]:
+                - link "Pivot a DataFrame to include header name" [ref=e575] [cursor=pointer]:
+                  - /url: /questions/79942986/pivot-a-dataframe-to-include-header-name
+              - generic [ref=e576]: "Trying to import an Excel sheet where each Product an enterprise sells is specified, along with what company sell its. Every company does not sell every product. The data looks like this: Product ..."
+              - generic [ref=e577]:
+                - list [ref=e579]:
+                  - listitem [ref=e580]:
+                    - link "show questions tagged 'python'" [ref=e581] [cursor=pointer]:
+                      - /url: /questions/tagged/python
+                      - text: python
+                  - listitem [ref=e582]:
+                    - link "show questions tagged 'pandas'" [ref=e583] [cursor=pointer]:
+                      - /url: /questions/tagged/pandas
+                      - text: pandas
+                - generic [ref=e584]:
+                  - link "Cenderze's user avatar" [ref=e585] [cursor=pointer]:
+                    - /url: /users/2074697/cenderze
+                    - img "Cenderze's user avatar" [ref=e587]
+                  - generic [ref=e588]:
+                    - link "Cenderze" [ref=e590] [cursor=pointer]:
+                      - /url: /users/2074697/cenderze
+                    - list [ref=e591]:
+                      - listitem [ref=e592]: 1,244
+                  - time [ref=e593]: asked 1 hour ago
+          - generic [ref=e595]:
+            - generic [ref=e596]:
+              - generic "Score of 0" [ref=e597]:
+                - generic [ref=e598]: "0"
+                - generic [ref=e599]: votes
+              - generic "0 answers" [ref=e600]:
+                - generic [ref=e601]: "0"
+                - generic [ref=e602]: answers
+              - generic "18 views" [ref=e603]:
+                - generic [ref=e604]: "18"
+                - generic [ref=e605]: views
+            - generic [ref=e606]:
+              - heading "Google Speech-to-Text V2 chirp_3 streaming never returns interim results ( isFinal=false )" [level=3] [ref=e607]:
+                - link "Google Speech-to-Text V2 chirp_3 streaming never returns interim results ( isFinal=false )" [ref=e608] [cursor=pointer]:
+                  - /url: /questions/79942983/google-speech-to-text-v2-chirp-3-streaming-never-returns-interim-results-isfin
+              - generic [ref=e609]: I'm using Google Cloud Speech-to-Text V2 streaming recognition with the chirp_3 model over gRPC. I enabled interim results, but I only ever receive final results ( isFinal=true ). I never receive any ...
+              - generic [ref=e610]:
+                - generic [ref=e611]:
+                  - link [ref=e612] [cursor=pointer]:
+                    - /url: /collectives/google-cloud
+                  - list [ref=e613]:
+                    - listitem [ref=e614]:
+                      - link "show questions tagged 'google-cloud-platform'" [ref=e615] [cursor=pointer]:
+                        - /url: /questions/tagged/google-cloud-platform
+                        - text: google-cloud-platform
+                    - listitem [ref=e616]:
+                      - link "show questions tagged 'streaming'" [ref=e617] [cursor=pointer]:
+                        - /url: /questions/tagged/streaming
+                        - text: streaming
+                    - listitem [ref=e618]:
+                      - link "show questions tagged 'speech-to-text'" [ref=e619] [cursor=pointer]:
+                        - /url: /questions/tagged/speech-to-text
+                        - text: speech-to-text
+                    - listitem [ref=e620]:
+                      - link "show questions tagged 'google-speech-to-text-api'" [ref=e621] [cursor=pointer]:
+                        - /url: /questions/tagged/google-speech-to-text-api
+                        - text: google-speech-to-text-api
+                - generic [ref=e622]:
+                  - link "fz Z's user avatar" [ref=e623] [cursor=pointer]:
+                    - /url: /users/32741287/fz-z
+                    - img "fz Z's user avatar" [ref=e625]
+                  - generic [ref=e626]:
+                    - link "fz Z" [ref=e628] [cursor=pointer]:
+                      - /url: /users/32741287/fz-z
+                    - list [ref=e629]:
+                      - listitem [ref=e630]: "1"
+                  - time [ref=e631]: asked 1 hour ago
+          - generic [ref=e633]:
+            - generic [ref=e634]:
+              - generic "Score of -2" [ref=e635]:
+                - generic [ref=e636]: "-2"
+                - generic [ref=e637]: votes
+              - generic "0 answers" [ref=e638]:
+                - generic [ref=e639]: "0"
+                - generic [ref=e640]: answers
+              - generic "37 views" [ref=e641]:
+                - generic [ref=e642]: "37"
+                - generic [ref=e643]: views
+            - generic [ref=e644]:
+              - heading "What are the (typical) examples (other than instances of pp-number) of valid preprocessing tokens, which are invalid tokens?" [level=3] [ref=e645]:
+                - link "What are the (typical) examples (other than instances of pp-number) of valid preprocessing tokens, which are invalid tokens?" [ref=e646] [cursor=pointer]:
+                  - /url: /questions/79942981/what-are-the-typical-examples-other-than-instances-of-pp-number-of-valid-pre
+              - generic [ref=e647]: "Other than instances of pp-number (e.g. 0xe+1), what are the (typical) examples of valid preprocessing tokens, which are invalid tokens? Extra question: is it correct that all tokens are valid ..."
+              - generic [ref=e648]:
+                - list [ref=e650]:
+                  - listitem [ref=e651]:
+                    - link "show questions tagged 'c'" [ref=e652] [cursor=pointer]:
+                      - /url: /questions/tagged/c
+                      - text: c
+                  - listitem [ref=e653]:
+                    - link "show questions tagged 'language-lawyer'" [ref=e654] [cursor=pointer]:
+                      - /url: /questions/tagged/language-lawyer
+                      - text: language-lawyer
+                  - listitem [ref=e655]:
+                    - link "show questions tagged 'token'" [ref=e656] [cursor=pointer]:
+                      - /url: /questions/tagged/token
+                      - text: token
+                  - listitem [ref=e657]:
+                    - link "show questions tagged 'c-preprocessor'" [ref=e658] [cursor=pointer]:
+                      - /url: /questions/tagged/c-preprocessor
+                      - text: c-preprocessor
+                - generic [ref=e659]:
+                  - link "pmor's user avatar" [ref=e660] [cursor=pointer]:
+                    - /url: /users/1778275/pmor
+                    - img "pmor's user avatar" [ref=e662]
+                  - generic [ref=e663]:
+                    - link "pmor" [ref=e665] [cursor=pointer]:
+                      - /url: /users/1778275/pmor
+                    - list [ref=e666]:
+                      - listitem [ref=e667]: 6,933
+                  - time [ref=e668]: asked 1 hour ago
+          - generic [ref=e670]:
+            - generic [ref=e671]:
+              - generic [ref=e672]:
+                - img [ref=e673]
+                - text: Best practices
+              - generic "Score of 0" [ref=e675]:
+                - generic [ref=e676]: "0"
+                - generic [ref=e677]: votes
+              - generic "# replies" [ref=e678]:
+                - generic [ref=e679]: "0"
+                - generic [ref=e680]: replies
+              - generic "17 views" [ref=e681]:
+                - generic [ref=e682]: "17"
+                - generic [ref=e683]: views
+            - generic [ref=e684]:
+              - heading "watchOS List Scaling Effect" [level=3] [ref=e685]:
+                - link "watchOS List Scaling Effect" [ref=e686] [cursor=pointer]:
+                  - /url: /questions/79942979/watchos-list-scaling-effect
+              - generic [ref=e687]: "How to achieve this effect when the selected item of the list is full size and others are shrunk like in the Mindfulness app? Which view would you use as a root: TabView, List, Form? (My post isn't ..."
+              - generic [ref=e688]:
+                - list [ref=e690]:
+                  - listitem [ref=e691]:
+                    - link "show questions tagged 'swiftui'" [ref=e692] [cursor=pointer]:
+                      - /url: /questions/tagged/swiftui
+                      - text: swiftui
+                  - listitem [ref=e693]:
+                    - link "show questions tagged 'watchos'" [ref=e694] [cursor=pointer]:
+                      - /url: /questions/tagged/watchos
+                      - text: watchos
+                - generic [ref=e695]:
+                  - link "kelin's user avatar" [ref=e696] [cursor=pointer]:
+                    - /url: /users/1746142/kelin
+                    - img "kelin's user avatar" [ref=e698]
+                  - generic [ref=e699]:
+                    - link "kelin" [ref=e701] [cursor=pointer]:
+                      - /url: /users/1746142/kelin
+                    - list [ref=e702]:
+                      - listitem [ref=e703]: 12.2k
+                  - time [ref=e704]: asked 1 hour ago
+        - generic [ref=e705]:
+          - link "15" [ref=e706] [cursor=pointer]:
+            - /url: /questions?tab=newest&pagesize=15
+          - link "30" [ref=e707] [cursor=pointer]:
+            - /url: /questions?tab=newest&pagesize=30
+          - link "50" [ref=e708] [cursor=pointer]:
+            - /url: /questions?tab=newest&pagesize=50
+          - generic [ref=e709]: per page
+        - generic [ref=e710]:
+          - generic [ref=e711]: "1"
+          - link "2" [ref=e712] [cursor=pointer]:
+            - /url: /questions?tab=newest&page=2
+          - link "3" [ref=e713] [cursor=pointer]:
+            - /url: /questions?tab=newest&page=3
+          - link "4" [ref=e714] [cursor=pointer]:
+            - /url: /questions?tab=newest&page=4
+          - link "5" [ref=e715] [cursor=pointer]:
+            - /url: /questions?tab=newest&page=5
+          - generic [ref=e716]: …
+          - link "1610282" [ref=e717] [cursor=pointer]:
+            - /url: /questions?tab=newest&page=1610282
+          - link "Next" [ref=e718] [cursor=pointer]:
+            - /url: /questions?tab=newest&page=2
+      - complementary "sidebar" [ref=e719]:
+        - list [ref=e721]:
+          - listitem [ref=e722]: The Overflow Blog
+          - listitem [ref=e723]:
+            - img [ref=e725]
+            - link "Observability and human intuition in an AI world" [ref=e729] [cursor=pointer]:
+              - /url: https://stackoverflow.blog/2026/05/15/observability-and-human-intuition-in-an-ai-world/?cb=1
+          - listitem [ref=e730]: Featured on Meta
+          - listitem [ref=e731]:
+            - generic "Meta Stack Exchange" [ref=e733]
+            - link "(Almost) One year of Challenges" [ref=e735] [cursor=pointer]:
+              - /url: https://meta.stackexchange.com/questions/418261/almost-one-year-of-challenges?cb=1
+          - listitem [ref=e736]:
+            - generic "Meta Stack Overflow" [ref=e738]
+            - 'link "Policy: Generative AI (e.g., ChatGPT) is banned" [ref=e740] [cursor=pointer]':
+              - /url: https://meta.stackoverflow.com/questions/421831/policy-generative-ai-e-g-chatgpt-is-banned?cb=1
+        - generic [ref=e741]:
+          - generic [ref=e742]:
+            - text: Collectives
+            - link "see all" [ref=e743] [cursor=pointer]:
+              - /url: /collectives-all
+          - generic [ref=e744]:
+            - generic [ref=e746]:
+              - generic [ref=e749]:
+                - heading "Google Cloud" [level=1] [ref=e750]:
+                  - link "Google Cloud" [ref=e751] [cursor=pointer]:
+                    - /url: /collectives/google-cloud
+                - generic [ref=e752]: 68k Members
+              - button "Join" [ref=e755] [cursor=pointer]
+            - generic [ref=e756]: A collective for developers who utilize Google Cloud’s infrastructure and platform capabilities. This collective is organized and managed by the Stack Overflow community.
+          - generic [ref=e757]:
+            - generic [ref=e759]:
+              - generic [ref=e762]:
+                - heading "CI/CD" [level=1] [ref=e763]:
+                  - link "CI/CD" [ref=e764] [cursor=pointer]:
+                    - /url: /collectives/ci-cd
+                - generic [ref=e765]: 24k Members
+              - button "Join" [ref=e768] [cursor=pointer]
+            - generic [ref=e769]: A collective where developers focused on continuous integration, delivery, and deployment can find, share, and learn about simultaneous development.
+          - generic [ref=e770]:
+            - generic [ref=e772]:
+              - generic [ref=e775]:
+                - heading "NLP" [level=1] [ref=e776]:
+                  - link "NLP" [ref=e777] [cursor=pointer]:
+                    - /url: /collectives/nlp
+                - generic [ref=e778]: 13k Members
+              - button "Join" [ref=e781] [cursor=pointer]
+            - generic [ref=e782]: A collective focused on NLP (natural language processing), the transformation or extraction of useful information from natural language data.
+        - generic [ref=e784]:
+          - heading "Hot Network Questions" [level=4] [ref=e785]:
+            - link "Hot Network Questions" [ref=e786] [cursor=pointer]:
+              - /url: https://stackexchange.com/questions?tab=hot
+          - list [ref=e787]:
+            - listitem [ref=e788]:
+              - generic "Mathematica Stack Exchange" [ref=e789]
+              - link "DSolve gives solution to first order ode which seems not to satisfy the initial condition" [ref=e790] [cursor=pointer]:
+                - /url: https://mathematica.stackexchange.com/questions/319414/dsolve-gives-solution-to-first-order-ode-which-seems-not-to-satisfy-the-initial
+            - listitem [ref=e791]:
+              - generic "Mathematica Stack Exchange" [ref=e792]
+              - link "Format numbers on vertical axis in DateListPlot" [ref=e793] [cursor=pointer]:
+                - /url: https://mathematica.stackexchange.com/questions/319431/format-numbers-on-vertical-axis-in-datelistplot
+            - listitem [ref=e794]:
+              - generic "TeX - LaTeX Stack Exchange" [ref=e795]
+              - link "Relabeling ticks on my number line" [ref=e796] [cursor=pointer]:
+                - /url: https://tex.stackexchange.com/questions/762845/relabeling-ticks-on-my-number-line
+            - listitem [ref=e797]:
+              - generic "Personal Finance & Money Stack Exchange" [ref=e798]
+              - link "Accidental dividend overpayment received" [ref=e799] [cursor=pointer]:
+                - /url: https://money.stackexchange.com/questions/169600/accidental-dividend-overpayment-received
+            - listitem [ref=e800]:
+              - generic "Bicycles Stack Exchange" [ref=e801]
+              - link "Shimano Alivio 9 speed shifter indicator suddenly wonky" [ref=e802] [cursor=pointer]:
+                - /url: https://bicycles.stackexchange.com/questions/100285/shimano-alivio-9-speed-shifter-indicator-suddenly-wonky
+            - listitem [ref=e803]:
+              - generic "Role-playing Games Stack Exchange" [ref=e804]
+              - link "Does the number of eyes change a race's vision?" [ref=e805] [cursor=pointer]:
+                - /url: https://rpg.stackexchange.com/questions/219341/does-the-number-of-eyes-change-a-races-vision
+            - listitem [ref=e806]:
+              - generic "Biblical Hermeneutics Stack Exchange" [ref=e807]
+              - link "Where Was the 'House of the LORD\" in 2 Sam. 12:20" [ref=e808] [cursor=pointer]:
+                - /url: https://hermeneutics.stackexchange.com/questions/116480/where-was-the-house-of-the-lord-in-2-sam-1220
+            - listitem [ref=e809]:
+              - generic "Stack Overflow" [ref=e810]
+              - link "Do sealed interfaces in Java enable any specific JVM optimisations, or are they purely a compile‑time exhaustiveness feature" [ref=e811] [cursor=pointer]:
+                - /url: https://stackoverflow.com/questions/79942223/do-sealed-interfaces-in-java-enable-any-specific-jvm-optimisations-or-are-they
+            - listitem [ref=e812]:
+              - generic "Philosophy Stack Exchange" [ref=e813]
+              - link "Why does it seem to be the prerogative of western philosophical thought to solve contradictions?" [ref=e814] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138492/why-does-it-seem-to-be-the-prerogative-of-western-philosophical-thought-to-solve
+            - listitem [ref=e815]:
+              - generic "TeX - LaTeX Stack Exchange" [ref=e816]
+              - link "Effects of \"intertext\" within \"align\"" [ref=e817] [cursor=pointer]:
+                - /url: https://tex.stackexchange.com/questions/762865/effects-of-intertext-within-align
+            - listitem [ref=e818]:
+              - generic "Cross Validated" [ref=e819]
+              - link "Are there any reasons why ANOVA tables don't come with a mandatory figure to visualize if the residuals are distributing normally?" [ref=e820] [cursor=pointer]:
+                - /url: https://stats.stackexchange.com/questions/675986/are-there-any-reasons-why-anova-tables-dont-come-with-a-mandatory-figure-to-vis
+            - listitem [ref=e821]:
+              - generic "Mathematics Stack Exchange" [ref=e822]
+              - 'link "Conjecture: The probability that a line through two random points in a prism with convex bases intersects neither base is 1/2." [ref=e823] [cursor=pointer]':
+                - /url: https://math.stackexchange.com/questions/5137196/conjecture-the-probability-that-a-line-through-two-random-points-in-a-prism-wit
+            - listitem [ref=e824]:
+              - generic "MathOverflow" [ref=e825]
+              - link "Is the stepwise Smith normal form a complete isomorphism invariant for persistence modules over Z?" [ref=e826] [cursor=pointer]:
+                - /url: https://mathoverflow.net/questions/511371/is-the-stepwise-smith-normal-form-a-complete-isomorphism-invariant-for-persisten
+            - listitem [ref=e827]:
+              - generic "Unix & Linux Stack Exchange" [ref=e828]
+              - link "Open all files from find command" [ref=e829] [cursor=pointer]:
+                - /url: https://unix.stackexchange.com/questions/805995/open-all-files-from-find-command
+            - listitem [ref=e830]:
+              - generic "Philosophy Stack Exchange" [ref=e831]
+              - link "Inverted colour spectrum argument and death?" [ref=e832] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138504/inverted-colour-spectrum-argument-and-death
+            - listitem [ref=e833]:
+              - generic "Puzzling Stack Exchange" [ref=e834]
+              - link "English is Evil" [ref=e835] [cursor=pointer]:
+                - /url: https://puzzling.stackexchange.com/questions/138107/english-is-evil
+            - listitem [ref=e836]:
+              - generic "Latin Language Stack Exchange" [ref=e837]
+              - link "How to say \"I am glad that I... (verb), thank you for... (verb)\" in Latin?" [ref=e838] [cursor=pointer]:
+                - /url: https://latin.stackexchange.com/questions/27197/how-to-say-i-am-glad-that-i-verb-thank-you-for-verb-in-latin
+            - listitem [ref=e839]:
+              - generic "Travel Stack Exchange" [ref=e840]
+              - link "Urgent help needed-Someone has taken my cabin luggage at Heathrow and is in Kenya" [ref=e841] [cursor=pointer]:
+                - /url: https://travel.stackexchange.com/questions/203746/urgent-help-needed-someone-has-taken-my-cabin-luggage-at-heathrow-and-is-in-keny
+            - listitem [ref=e842]:
+              - generic "Puzzling Stack Exchange" [ref=e843]
+              - link "Largest regular hexagon inside a bigger regular hexagon with corners removed" [ref=e844] [cursor=pointer]:
+                - /url: https://puzzling.stackexchange.com/questions/138074/largest-regular-hexagon-inside-a-bigger-regular-hexagon-with-corners-removed
+            - listitem [ref=e845]:
+              - generic "Science Fiction & Fantasy Stack Exchange" [ref=e846]
+              - link "How real are Loki’s illusions?" [ref=e847] [cursor=pointer]:
+                - /url: https://scifi.stackexchange.com/questions/304509/how-real-are-loki-s-illusions
+            - listitem [ref=e848]:
+              - generic "Earth Science Stack Exchange" [ref=e849]
+              - link "How was samarium isolated from samarskite when samarskite doesn’t contain samarium?" [ref=e850] [cursor=pointer]:
+                - /url: https://earthscience.stackexchange.com/questions/27300/how-was-samarium-isolated-from-samarskite-when-samarskite-doesn-t-contain-samari
+            - listitem [ref=e851]:
+              - generic "Philosophy Stack Exchange" [ref=e852]
+              - link "How can free will be free from what a logician might say, both A and not-A?" [ref=e853] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138491/how-can-free-will-be-free-from-what-a-logician-might-say-both-a-and-not-a
+          - link "more hot questions" [ref=e854] [cursor=pointer]:
+            - /url: "#"
+  - contentinfo [ref=e855]:
+    - generic [ref=e856]:
+      - link "Stack Overflow" [ref=e858] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e859]
+      - navigation "Footer" [ref=e861]:
+        - generic [ref=e862]:
+          - heading "Stack Overflow" [level=5] [ref=e863]:
+            - link "Stack Overflow" [ref=e864] [cursor=pointer]:
+              - /url: https://stackoverflow.com
+          - list [ref=e865]:
+            - listitem [ref=e866]:
+              - link "Questions" [ref=e867] [cursor=pointer]:
+                - /url: /questions
+            - listitem [ref=e868]:
+              - link "Help" [ref=e869] [cursor=pointer]:
+                - /url: /help
+            - listitem [ref=e870]:
+              - link "Chat" [ref=e871] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+        - generic [ref=e872]:
+          - heading "Business" [level=5] [ref=e873]:
+            - link "Business" [ref=e874] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e875]:
+            - listitem [ref=e876]:
+              - link "Stack Internal" [ref=e877] [cursor=pointer]:
+                - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=teams
+            - listitem [ref=e878]:
+              - link "Stack Data Licensing" [ref=e879] [cursor=pointer]:
+                - /url: https://stackoverflow.co/data-licensing/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=data-licensing
+            - listitem [ref=e880]:
+              - link "Stack Ads" [ref=e881] [cursor=pointer]:
+                - /url: https://stackoverflow.co/advertising/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=advertising
+        - generic [ref=e882]:
+          - heading "Company" [level=5] [ref=e883]:
+            - link "Company" [ref=e884] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e885]:
+            - listitem [ref=e886]:
+              - link "About" [ref=e887] [cursor=pointer]:
+                - /url: https://stackoverflow.co/
+            - listitem [ref=e888]:
+              - link "Press" [ref=e889] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/press/
+            - listitem [ref=e890]:
+              - link "Work Here" [ref=e891] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/work-here/
+            - listitem [ref=e892]:
+              - link "Legal" [ref=e893] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal
+            - listitem [ref=e894]:
+              - link "Privacy Policy" [ref=e895] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/privacy-policy
+            - listitem [ref=e896]:
+              - link "Terms of Service" [ref=e897] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/terms-of-service/public
+            - listitem [ref=e898]:
+              - link "Contact Us" [ref=e899] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e900]:
+              - button "Cookie Settings" [ref=e901] [cursor=pointer]
+            - listitem [ref=e902]:
+              - link "Cookie Policy" [ref=e903] [cursor=pointer]:
+                - /url: https://policies.stackoverflow.co/stack-overflow/cookie-policy
+        - generic [ref=e905]:
+          - heading "Stack Exchange Network" [level=5] [ref=e906]:
+            - link "Stack Exchange Network" [ref=e907] [cursor=pointer]:
+              - /url: https://stackexchange.com
+          - list [ref=e908]:
+            - listitem [ref=e909]:
+              - link "Technology" [ref=e910] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#technology
+            - listitem [ref=e911]:
+              - link "Culture & recreation" [ref=e912] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#culturerecreation
+            - listitem [ref=e913]:
+              - link "Life & arts" [ref=e914] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#lifearts
+            - listitem [ref=e915]:
+              - link "Science" [ref=e916] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#science
+            - listitem [ref=e917]:
+              - link "Professional" [ref=e918] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#professional
+            - listitem [ref=e919]:
+              - link "Business" [ref=e920] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#business
+            - listitem [ref=e921]:
+              - link "API" [ref=e922] [cursor=pointer]:
+                - /url: https://api.stackexchange.com/
+            - listitem [ref=e923]:
+              - link "Data" [ref=e924] [cursor=pointer]:
+                - /url: https://data.stackexchange.com/
+      - generic [ref=e925]:
+        - list [ref=e926]:
+          - listitem [ref=e927]:
+            - link "Blog" [ref=e928] [cursor=pointer]:
+              - /url: https://stackoverflow.blog?blb=1
+          - listitem [ref=e929]:
+            - link "Facebook" [ref=e930] [cursor=pointer]:
+              - /url: https://www.facebook.com/officialstackoverflow/
+          - listitem [ref=e931]:
+            - link "Twitter" [ref=e932] [cursor=pointer]:
+              - /url: https://twitter.com/stackoverflow
+          - listitem [ref=e933]:
+            - link "LinkedIn" [ref=e934] [cursor=pointer]:
+              - /url: https://linkedin.com/company/stack-overflow
+          - listitem [ref=e935]:
+            - link "Instagram" [ref=e936] [cursor=pointer]:
+              - /url: https://www.instagram.com/thestackoverflow
+        - paragraph [ref=e937]:
+          - text: Site design / logo © 2026 Stack Exchange Inc; user contributions licensed under
+          - link "CC BY-SA" [ref=e938] [cursor=pointer]:
+            - /url: https://stackoverflow.com/help/licensing
+          - text: . rev 2026.5.13.43074

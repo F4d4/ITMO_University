@@ -1,0 +1,599 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - generic [ref=e4]:
+      - link "Stack Overflow" [ref=e5] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e6]
+      - link "About" [ref=e8] [cursor=pointer]:
+        - /url: https://stackoverflow.co/
+        - generic [ref=e9]: About
+      - button "Products" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]: Products
+      - link "For Teams" [ref=e12] [cursor=pointer]:
+        - /url: https://stackoverflow.co/internal/
+        - generic [ref=e13]: For Teams
+      - search [ref=e14]:
+        - generic [ref=e15]:
+          - combobox "Search" [ref=e16]
+          - img
+      - navigation "Topbar" [ref=e17]:
+        - list [ref=e18]:
+          - listitem [ref=e19]:
+            - link "Help Center and other resources" [ref=e20] [cursor=pointer]:
+              - /url: /help
+              - img [ref=e21]
+          - listitem [ref=e23]:
+            - link "Site switcher" [ref=e24] [cursor=pointer]:
+              - /url: https://stackexchange.com
+              - img [ref=e25]
+          - listitem
+          - listitem
+          - listitem [ref=e27]:
+            - link "Log in" [ref=e28] [cursor=pointer]:
+              - /url: https://stackoverflow.com/users/login?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2f79943013%2fdoes-the-creation-of-a-stdarray-of-stdbytes-or-unsigned-char-implicitly-crea
+          - listitem [ref=e29]:
+            - link "Sign up" [ref=e30] [cursor=pointer]:
+              - /url: https://stackoverflow.com/users/signup?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2f79943013%2fdoes-the-creation-of-a-stdarray-of-stdbytes-or-unsigned-char-implicitly-crea
+  - generic [ref=e32]:
+    - generic [ref=e33]:
+      - text: How are we doing? Please help us improve Stack Overflow.
+      - link "Take our short survey" [ref=e34] [cursor=pointer]:
+        - /url: https://stackoverflow.com/survey/site-satisfaction/redirect
+    - link "dismiss" [ref=e35] [cursor=pointer]:
+      - /url: "#"
+      - img [ref=e36]
+  - generic [ref=e38]:
+    - navigation "Primary" [ref=e41]:
+      - list [ref=e42]:
+        - listitem [ref=e43]:
+          - list [ref=e44]:
+            - listitem [ref=e45]:
+              - link "Home" [ref=e46] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e47]:
+                  - img [ref=e48]
+                  - generic [ref=e50]: Home
+            - listitem [ref=e51]:
+              - link "Questions" [ref=e52] [cursor=pointer]:
+                - /url: /questions
+                - generic [ref=e53]:
+                  - img [ref=e54]
+                  - generic [ref=e56]: Questions
+            - listitem [ref=e57]:
+              - link "AI Assist" [ref=e58] [cursor=pointer]:
+                - /url: https://stackoverflow.com/ai-assist
+                - generic [ref=e59]:
+                  - img [ref=e61]
+                  - generic [ref=e63]: AI Assist
+            - listitem [ref=e64]:
+              - link "Tags" [ref=e65] [cursor=pointer]:
+                - /url: /tags
+                - generic [ref=e66]:
+                  - img [ref=e67]
+                  - generic [ref=e70]: Tags
+            - listitem [ref=e71]
+            - listitem [ref=e72]:
+              - link "Challenges" [ref=e73] [cursor=pointer]:
+                - /url: /beta/challenges
+                - generic [ref=e74]:
+                  - img [ref=e75]
+                  - generic [ref=e77]: Challenges
+            - listitem [ref=e78]:
+              - link "Chat" [expanded] [ref=e79] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+                - img [ref=e82]
+                - generic [ref=e87]: Chat
+            - listitem [ref=e88]:
+              - link "Articles" [ref=e89] [cursor=pointer]:
+                - /url: https://stackoverflow.blog/contributed?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=so-blog&utm_content=experiment-articles
+                - generic [ref=e90]:
+                  - img [ref=e91]
+                  - generic [ref=e94]: Articles
+            - listitem [ref=e95]:
+              - link "Users" [ref=e96] [cursor=pointer]:
+                - /url: /users
+                - generic [ref=e97]:
+                  - img [ref=e98]
+                  - generic [ref=e100]: Users
+            - listitem [ref=e101]
+            - listitem [ref=e102]:
+              - link "Companies" [ref=e103] [cursor=pointer]:
+                - /url: https://stackoverflow.com/jobs/companies?so_medium=stackoverflow&so_source=SiteNav
+                - generic [ref=e104]:
+                  - img [ref=e105]
+                  - generic [ref=e107]: Companies
+            - listitem [ref=e108]:
+              - button "Collectives" [ref=e110] [cursor=pointer]:
+                - generic [ref=e111]: Collectives
+                - img [ref=e113]
+            - listitem [ref=e115]:
+              - paragraph [ref=e116]:
+                - text: Communities for your favorite technologies.
+                - link "Explore all Collectives" [ref=e117] [cursor=pointer]:
+                  - /url: /collectives-all
+        - listitem [ref=e118]:
+          - generic [ref=e119]: Stack Internal
+          - generic [ref=e120]:
+            - img [ref=e121]
+            - paragraph [ref=e135]:
+              - text: Stack Overflow for Teams is now called
+              - strong [ref=e136]: Stack Internal
+              - text: . Bring the best of human thought and AI automation together at your work.
+            - link "Try for free" [ref=e137] [cursor=pointer]:
+              - /url: https://stackoverflowteams.com/teams/create/free/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+            - link "Learn more" [ref=e138] [cursor=pointer]:
+              - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+    - generic [ref=e141]:
+      - generic [ref=e142]:
+        - heading "Does the creation of a std::array of std::bytes or unsigned char implicitly create objects?" [level=1] [ref=e143]:
+          - link "Does the creation of a std::array of std::bytes or unsigned char implicitly create objects?" [ref=e144] [cursor=pointer]:
+            - /url: /questions/79943013/does-the-creation-of-a-stdarray-of-stdbytes-or-unsigned-char-implicitly-crea
+        - link "Ask Question" [ref=e147] [cursor=pointer]:
+          - /url: /questions/ask
+      - generic [ref=e148]:
+        - generic "2026-05-18 13:57:19Z" [ref=e149]:
+          - text: Asked
+          - time [ref=e150]: today
+        - generic [ref=e151]:
+          - text: Modified
+          - link "today" [ref=e152] [cursor=pointer]:
+            - /url: "?lastactivity"
+        - generic "Viewed 5 times" [ref=e153]
+      - main "question and answers" [ref=e154]:
+        - generic [ref=e156]:
+          - generic [ref=e158]:
+            - button "Up vote" [ref=e159] [cursor=pointer]:
+              - img [ref=e160]
+            - generic [ref=e162]: "0"
+            - button "Down vote" [ref=e163] [cursor=pointer]:
+              - img [ref=e164]
+            - button "Save" [ref=e166] [cursor=pointer]:
+              - img [ref=e167]
+            - link "Timeline" [ref=e169] [cursor=pointer]:
+              - /url: /posts/79943013/timeline
+              - img [ref=e170]
+          - generic [ref=e172]:
+            - generic [ref=e173]:
+              - paragraph [ref=e174]:
+                - text: Under
+                - link "https://eel.is/c++draft/intro.object#16" [ref=e175] [cursor=pointer]:
+                  - /url: https://eel.is/c++draft/intro.object#16
+                - text: (see below) does the creation of a std::array of std::bytes or unsigned char implicitly create objects?
+              - blockquote [ref=e176]:
+                - paragraph [ref=e177]:
+                  - text: Except during constant evaluation, an operation that begins the lifetime of an array of unsigned char or std::byte implicitly creates objects within the region of storage occupied by the array.
+                  - text: "[Note 5: The array object provides storage for these objects. — end note]"
+                  - text: Except during constant evaluation, any implicit or explicit invocation of a function named operator new or operator new[] implicitly creates objects in the returned region of storage and returns a pointer to a suitable created object.
+              - paragraph [ref=e178]:
+                - text: I'm not aware of any
+                - code [ref=e179]: std::array
+                - text: implementation which is not using internally a plain array but
+                - link "https://eel.is/c++draft/sequences#array" [ref=e180] [cursor=pointer]:
+                  - /url: https://eel.is/c++draft/sequences#array
+                - text: does not seem to mandate that. The closest to the existence of this array is hinted by the
+                - code [ref=e181]: data()
+                - text: "member that guarantees that pointer arithmetic is valid:"
+              - blockquote [ref=e182]:
+                - paragraph [ref=e183]: "Returns: A pointer such that [data(), data() + size()) is a valid range."
+              - paragraph [ref=e184]:
+                - text: "Nitpicking: it does not say that"
+                - code [ref=e185]: data()+size()
+                - text: can be evaluated (not dereferenced) which would be required by a true pointer arithmetic.
+            - list [ref=e189]:
+              - listitem [ref=e190]:
+                - link "show questions tagged 'c++'" [ref=e191] [cursor=pointer]:
+                  - /url: /questions/tagged/c%2b%2b
+                  - text: c++
+              - listitem [ref=e192]:
+                - link "show questions tagged 'language-lawyer'" [ref=e193] [cursor=pointer]:
+                  - /url: /questions/tagged/language-lawyer
+                  - text: language-lawyer
+              - listitem [ref=e194]:
+                - link "show questions tagged 'stdarray'" [ref=e195] [cursor=pointer]:
+                  - /url: /questions/tagged/stdarray
+                  - text: stdarray
+              - listitem [ref=e196]:
+                - link "show questions tagged 'implicit-lifetime'" [ref=e197] [cursor=pointer]:
+                  - /url: /questions/tagged/implicit-lifetime
+                  - text: implicit-lifetime
+            - generic [ref=e199]:
+              - generic [ref=e202]:
+                - link "Share" [ref=e204] [cursor=pointer]:
+                  - /url: /q/79943013
+                - button "Follow" [ref=e206] [cursor=pointer]
+              - generic [ref=e208]:
+                - generic [ref=e210]: asked 4 mins ago
+                - link "Oersted's user avatar" [ref=e212] [cursor=pointer]:
+                  - /url: /users/21691539/oersted
+                  - img "Oersted's user avatar" [ref=e214]
+                - generic [ref=e215]:
+                  - link "Oersted" [ref=e216] [cursor=pointer]:
+                    - /url: /users/21691539/oersted
+                  - generic [ref=e217]:
+                    - text: 5,074
+                    - generic [ref=e218]: "11"
+                    - generic [ref=e220]: 11 silver badges
+                    - generic [ref=e221]: "40"
+                    - generic [ref=e223]: 40 bronze badges
+          - button "Add a comment" [ref=e226] [cursor=pointer]
+        - generic [ref=e227]:
+          - generic [ref=e228]: Related questions
+          - generic [ref=e229]:
+            - link "1 Does implicit object creation necessarily happen at storage return location?" [ref=e231] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/79940643/does-implicit-object-creation-necessarily-happen-at-storage-return-location?rq=2
+              - generic [ref=e232]: "1"
+              - generic "Does implicit object creation necessarily happen at storage return location?" [ref=e234]
+            - link "2 lifetime of an array created element by element" [ref=e236] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/79928693/lifetime-of-an-array-created-element-by-element?rq=2
+              - generic [ref=e237]: "2"
+              - generic "lifetime of an array created element by element" [ref=e239]
+            - link "8 Does implicit lifetime creation apply recursively?" [ref=e241] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/79914075/does-implicit-lifetime-creation-apply-recursively?rq=2
+              - generic [ref=e242]: "8"
+              - generic "Does implicit lifetime creation apply recursively?" [ref=e244]
+        - generic [ref=e246] [cursor=pointer]:
+          - img [ref=e247]
+          - text: Load 5 more related questions
+        - generic [ref=e249]:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]
+          - heading "Know someone who can answer? Share a link to this question via email, Twitter, or Facebook." [level=2] [ref=e250]:
+            - text: Know someone who can answer? Share a link to this
+            - link "question" [ref=e251] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/79943013/does-the-creation-of-a-stdarray-of-stdbytes-or-unsigned-char-implicitly-crea
+            - text: via
+            - link "email" [ref=e252] [cursor=pointer]:
+              - /url: mailto:?subject=Stack%20Overflow%20Question&body=Does%20the%20creation%20of%20a%20std%3a%3aarray%20of%20std%3a%3abytes%20or%20unsigned%20char%20implicitly%20create%20objects%3f%0Ahttps%3a%2f%2fstackoverflow.com%2fq%2f79943013%3fsem%3d2
+            - text: ","
+            - link "Twitter" [ref=e253] [cursor=pointer]:
+              - /url: https://twitter.com/share?url=https%3a%2f%2fstackoverflow.com%2fq%2f79943013%3fstw%3d2
+            - text: ", or"
+            - link "Facebook" [ref=e254] [cursor=pointer]:
+              - /url: https://www.facebook.com/sharer.php?u=https%3a%2f%2fstackoverflow.com%2fq%2f79943013%3fsfb%3d2
+            - text: .
+          - generic [ref=e255]:
+            - heading "Your Answer" [level=2] [ref=e256]
+            - generic [ref=e259]:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                      - generic:
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                      - generic:
+                        - button [disabled]
+                        - button [disabled]
+                        - button [disabled]
+                      - generic:
+                        - link:
+                          - /url: "#"
+            - generic [ref=e262]:
+              - generic [ref=e263]:
+                - heading "Sign up or log in" [level=3] [ref=e264]:
+                  - text: Sign up or
+                  - link "log in" [ref=e265] [cursor=pointer]:
+                    - /url: /users/login?ssrc=question_page&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2f79943013%2fdoes-the-creation-of-a-stdarray-of-stdbytes-or-unsigned-char-implicitly-crea%23new-answer
+                - generic [ref=e266] [cursor=pointer]:
+                  - img [ref=e267]
+                  - text: Sign up using Google
+                - generic [ref=e272] [cursor=pointer]:
+                  - img [ref=e273]
+                  - text: Sign up using Email and Password
+              - generic [ref=e276]:
+                - heading "Post as a guest" [level=3] [ref=e277]
+                - generic [ref=e279]:
+                  - generic [ref=e280] [cursor=pointer]: Name
+                  - textbox "Name" [ref=e282]:
+                    - /placeholder: ""
+                - generic [ref=e284]:
+                  - generic [ref=e286]:
+                    - generic [ref=e287] [cursor=pointer]: Email
+                    - paragraph [ref=e288]: Required, but never shown
+                  - textbox "Email" [ref=e290]:
+                    - /placeholder: ""
+            - generic [ref=e291]:
+              - button "Post Your Answer" [ref=e292] [cursor=pointer]
+              - paragraph [ref=e293]:
+                - text: By clicking “Post Your Answer”, you agree to our
+                - link "terms of service" [ref=e294] [cursor=pointer]:
+                  - /url: https://stackoverflow.com/legal/terms-of-service/public
+                - text: and acknowledge you have read our
+                - link "privacy policy" [ref=e295] [cursor=pointer]:
+                  - /url: https://stackoverflow.com/legal/privacy-policy
+                - text: .
+          - generic [ref=e296]:
+            - generic [ref=e298]:
+              - paragraph [ref=e299]: Start asking to get answers
+              - paragraph [ref=e300]: Find the answer to your question by asking.
+              - link "Ask question" [ref=e301] [cursor=pointer]:
+                - /url: /questions/ask
+            - generic [ref=e303]:
+              - paragraph [ref=e304]: Explore related questions
+              - list [ref=e306]:
+                - listitem [ref=e307]:
+                  - link "show questions tagged 'c++'" [ref=e308] [cursor=pointer]:
+                    - /url: /questions/tagged/c%2b%2b
+                    - text: c++
+                - listitem [ref=e309]:
+                  - link "show questions tagged 'language-lawyer'" [ref=e310] [cursor=pointer]:
+                    - /url: /questions/tagged/language-lawyer
+                    - text: language-lawyer
+                - listitem [ref=e311]:
+                  - link "show questions tagged 'stdarray'" [ref=e312] [cursor=pointer]:
+                    - /url: /questions/tagged/stdarray
+                    - text: stdarray
+                - listitem [ref=e313]:
+                  - link "show questions tagged 'implicit-lifetime'" [ref=e314] [cursor=pointer]:
+                    - /url: /questions/tagged/implicit-lifetime
+                    - text: implicit-lifetime
+              - paragraph [ref=e315]: See similar questions with these tags.
+      - complementary "sidebar" [ref=e316]:
+        - list [ref=e318]:
+          - listitem [ref=e319]: The Overflow Blog
+          - listitem [ref=e320]:
+            - img [ref=e322]
+            - link "Observability and human intuition in an AI world" [ref=e326] [cursor=pointer]:
+              - /url: https://stackoverflow.blog/2026/05/15/observability-and-human-intuition-in-an-ai-world/?cb=1
+          - listitem [ref=e327]: Featured on Meta
+          - listitem [ref=e328]:
+            - generic "Meta Stack Exchange" [ref=e330]
+            - link "(Almost) One year of Challenges" [ref=e332] [cursor=pointer]:
+              - /url: https://meta.stackexchange.com/questions/418261/almost-one-year-of-challenges?cb=1
+          - listitem [ref=e333]:
+            - generic "Meta Stack Overflow" [ref=e335]
+            - 'link "Policy: Generative AI (e.g., ChatGPT) is banned" [ref=e337] [cursor=pointer]':
+              - /url: https://meta.stackoverflow.com/questions/421831/policy-generative-ai-e-g-chatgpt-is-banned?cb=1
+        - generic [ref=e338]:
+          - heading "Hot Network Questions" [level=4] [ref=e339]:
+            - link "Hot Network Questions" [ref=e340] [cursor=pointer]:
+              - /url: https://stackexchange.com/questions?tab=hot
+          - list [ref=e341]:
+            - listitem [ref=e342]:
+              - generic "Code Golf Stack Exchange" [ref=e343]
+              - link "Sum of powers of polynomial roots" [ref=e344] [cursor=pointer]:
+                - /url: https://codegolf.stackexchange.com/questions/288244/sum-of-powers-of-polynomial-roots
+            - listitem [ref=e345]:
+              - generic "Philosophy Stack Exchange" [ref=e346]
+              - link "Regarding Dawid's defense that it is reasonable to accept string theory as credible without experimental evidence" [ref=e347] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138452/regarding-dawids-defense-that-it-is-reasonable-to-accept-string-theory-as-credi
+            - listitem [ref=e348]:
+              - generic "Ask Ubuntu" [ref=e349]
+              - link "I've borked my Ubuntu 26.04 installation - no desktop" [ref=e350] [cursor=pointer]:
+                - /url: https://askubuntu.com/questions/1566904/ive-borked-my-ubuntu-26-04-installation-no-desktop
+            - listitem [ref=e351]:
+              - generic "Cross Validated" [ref=e352]
+              - link "Does the infinite product ∏(1 - λ₀/(1 + i/τ)) converge to a value strictly less than 1?" [ref=e353] [cursor=pointer]:
+                - /url: https://stats.stackexchange.com/questions/675990/does-the-infinite-product-%e2%88%8f1-%ce%bb%e2%82%80-1-i-%cf%84-converge-to-a-value-strictly-less
+            - listitem [ref=e354]:
+              - generic "Skeptics Stack Exchange" [ref=e355]
+              - link "Do the UAE contributions make up 44% of the total aid to Gaza?" [ref=e356] [cursor=pointer]:
+                - /url: https://skeptics.stackexchange.com/questions/60573/do-the-uae-contributions-make-up-44-of-the-total-aid-to-gaza
+            - listitem [ref=e357]:
+              - generic "Electrical Engineering Stack Exchange" [ref=e358]
+              - link "Simple testing jig for wire harness" [ref=e359] [cursor=pointer]:
+                - /url: https://electronics.stackexchange.com/questions/768992/simple-testing-jig-for-wire-harness
+            - listitem [ref=e360]:
+              - generic "Role-playing Games Stack Exchange" [ref=e361]
+              - link "Does the number of eyes change a race's vision?" [ref=e362] [cursor=pointer]:
+                - /url: https://rpg.stackexchange.com/questions/219341/does-the-number-of-eyes-change-a-races-vision
+            - listitem [ref=e363]:
+              - generic "Mathematics Stack Exchange" [ref=e364]
+              - link "What is wrong in my Taylor series approximation?" [ref=e365] [cursor=pointer]:
+                - /url: https://math.stackexchange.com/questions/5137165/what-is-wrong-in-my-taylor-series-approximation
+            - listitem [ref=e366]:
+              - generic "MathOverflow" [ref=e367]
+              - link "Is the stepwise Smith normal form a complete isomorphism invariant for persistence modules over Z?" [ref=e368] [cursor=pointer]:
+                - /url: https://mathoverflow.net/questions/511371/is-the-stepwise-smith-normal-form-a-complete-isomorphism-invariant-for-persisten
+            - listitem [ref=e369]:
+              - generic "Role-playing Games Stack Exchange" [ref=e370]
+              - link "Would a caster casting antimagic field also affects its familiar?" [ref=e371] [cursor=pointer]:
+                - /url: https://rpg.stackexchange.com/questions/219349/would-a-caster-casting-antimagic-field-also-affects-its-familiar
+            - listitem [ref=e372]:
+              - generic "Gardening & Landscaping Stack Exchange" [ref=e373]
+              - link "What is wrong with my geranium plant?" [ref=e374] [cursor=pointer]:
+                - /url: https://gardening.stackexchange.com/questions/70780/what-is-wrong-with-my-geranium-plant
+            - listitem [ref=e375]:
+              - generic "TeX - LaTeX Stack Exchange" [ref=e376]
+              - link "Detect whether or not DocumentMetadata was set?" [ref=e377] [cursor=pointer]:
+                - /url: https://tex.stackexchange.com/questions/762862/detect-whether-or-not-documentmetadata-was-set
+            - listitem [ref=e378]:
+              - generic "Mathematica Stack Exchange" [ref=e379]
+              - link "How to remove artifacts in ContourPlot" [ref=e380] [cursor=pointer]:
+                - /url: https://mathematica.stackexchange.com/questions/319435/how-to-remove-artifacts-in-contourplot
+            - listitem [ref=e381]:
+              - generic "TeX - LaTeX Stack Exchange" [ref=e382]
+              - 'link "Why are `{` and `}` printed as `-` and `\"` instead of as themselves when their category codes are changed to normal letters?" [ref=e383] [cursor=pointer]':
+                - /url: https://tex.stackexchange.com/questions/762867/why-are-and-printed-as-and-instead-of-as-themselves-when-their-c
+            - listitem [ref=e384]:
+              - generic "Academia Stack Exchange" [ref=e385]
+              - link "What should I do if the journal cannot find referees willing to review my paper?" [ref=e386] [cursor=pointer]:
+                - /url: https://academia.stackexchange.com/questions/226717/what-should-i-do-if-the-journal-cannot-find-referees-willing-to-review-my-paper
+            - listitem [ref=e387]:
+              - generic "Puzzling Stack Exchange" [ref=e388]
+              - link "Create Hidato with unique solution without diagonal sequence" [ref=e389] [cursor=pointer]:
+                - /url: https://puzzling.stackexchange.com/questions/138061/create-hidato-with-unique-solution-without-diagonal-sequence
+            - listitem [ref=e390]:
+              - generic "Electrical Engineering Stack Exchange" [ref=e391]
+              - link "How can I realistically simulate a push-pull SMPS and design a compensator?" [ref=e392] [cursor=pointer]:
+                - /url: https://electronics.stackexchange.com/questions/769037/how-can-i-realistically-simulate-a-push-pull-smps-and-design-a-compensator
+            - listitem [ref=e393]:
+              - generic "Philosophy Stack Exchange" [ref=e394]
+              - link "Inverted colour spectrum argument and death?" [ref=e395] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138504/inverted-colour-spectrum-argument-and-death
+            - listitem [ref=e396]:
+              - generic "Mi Yodeya" [ref=e397]
+              - link "Rabbi Benjamin of Tudela on usage of gutterals by Samaritans" [ref=e398] [cursor=pointer]:
+                - /url: https://judaism.stackexchange.com/questions/156162/rabbi-benjamin-of-tudela-on-usage-of-gutterals-by-samaritans
+            - listitem [ref=e399]:
+              - generic "Mathematics Stack Exchange" [ref=e400]
+              - link "Maximum sum of values in a grid" [ref=e401] [cursor=pointer]:
+                - /url: https://math.stackexchange.com/questions/5137067/maximum-sum-of-values-in-a-grid
+            - listitem [ref=e402]:
+              - generic "Academia Stack Exchange" [ref=e403]
+              - link "What should I do when my friend thinks he is enough accomplished to do research without even a quantum mechanics course?" [ref=e404] [cursor=pointer]:
+                - /url: https://academia.stackexchange.com/questions/226712/what-should-i-do-when-my-friend-thinks-he-is-enough-accomplished-to-do-research
+            - listitem [ref=e405]:
+              - generic "TeX - LaTeX Stack Exchange" [ref=e406]
+              - link "Relabeling ticks on my number line" [ref=e407] [cursor=pointer]:
+                - /url: https://tex.stackexchange.com/questions/762845/relabeling-ticks-on-my-number-line
+            - listitem [ref=e408]:
+              - generic "Puzzling Stack Exchange" [ref=e409]
+              - link "Not Your Typical Murder Mystery" [ref=e410] [cursor=pointer]:
+                - /url: https://puzzling.stackexchange.com/questions/138122/not-your-typical-murder-mystery
+            - listitem [ref=e411]:
+              - generic "Mathematics Stack Exchange" [ref=e412]
+              - link "In constructive math, is the powerset of a finite set finite?" [ref=e413] [cursor=pointer]:
+                - /url: https://math.stackexchange.com/questions/5137253/in-constructive-math-is-the-powerset-of-a-finite-set-finite
+        - link "Question feed" [ref=e415] [cursor=pointer]:
+          - /url: /feeds/question/79943013
+          - img [ref=e416]
+          - text: Question feed
+  - contentinfo [ref=e418]:
+    - generic [ref=e419]:
+      - link "Stack Overflow" [ref=e421] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e422]
+      - navigation "Footer" [ref=e424]:
+        - generic [ref=e425]:
+          - heading "Stack Overflow" [level=5] [ref=e426]:
+            - link "Stack Overflow" [ref=e427] [cursor=pointer]:
+              - /url: https://stackoverflow.com
+          - list [ref=e428]:
+            - listitem [ref=e429]:
+              - link "Questions" [ref=e430] [cursor=pointer]:
+                - /url: /questions
+            - listitem [ref=e431]:
+              - link "Help" [ref=e432] [cursor=pointer]:
+                - /url: /help
+            - listitem [ref=e433]:
+              - link "Chat" [ref=e434] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+        - generic [ref=e435]:
+          - heading "Business" [level=5] [ref=e436]:
+            - link "Business" [ref=e437] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e438]:
+            - listitem [ref=e439]:
+              - link "Stack Internal" [ref=e440] [cursor=pointer]:
+                - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=teams
+            - listitem [ref=e441]:
+              - link "Stack Data Licensing" [ref=e442] [cursor=pointer]:
+                - /url: https://stackoverflow.co/data-licensing/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=data-licensing
+            - listitem [ref=e443]:
+              - link "Stack Ads" [ref=e444] [cursor=pointer]:
+                - /url: https://stackoverflow.co/advertising/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=advertising
+        - generic [ref=e445]:
+          - heading "Company" [level=5] [ref=e446]:
+            - link "Company" [ref=e447] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e448]:
+            - listitem [ref=e449]:
+              - link "About" [ref=e450] [cursor=pointer]:
+                - /url: https://stackoverflow.co/
+            - listitem [ref=e451]:
+              - link "Press" [ref=e452] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/press/
+            - listitem [ref=e453]:
+              - link "Work Here" [ref=e454] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/work-here/
+            - listitem [ref=e455]:
+              - link "Legal" [ref=e456] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal
+            - listitem [ref=e457]:
+              - link "Privacy Policy" [ref=e458] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/privacy-policy
+            - listitem [ref=e459]:
+              - link "Terms of Service" [ref=e460] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/terms-of-service/public
+            - listitem [ref=e461]:
+              - link "Contact Us" [ref=e462] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e463]:
+              - button "Cookie Settings" [ref=e464] [cursor=pointer]
+            - listitem [ref=e465]:
+              - link "Cookie Policy" [ref=e466] [cursor=pointer]:
+                - /url: https://policies.stackoverflow.co/stack-overflow/cookie-policy
+        - generic [ref=e468]:
+          - heading "Stack Exchange Network" [level=5] [ref=e469]:
+            - link "Stack Exchange Network" [ref=e470] [cursor=pointer]:
+              - /url: https://stackexchange.com
+          - list [ref=e471]:
+            - listitem [ref=e472]:
+              - link "Technology" [ref=e473] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#technology
+            - listitem [ref=e474]:
+              - link "Culture & recreation" [ref=e475] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#culturerecreation
+            - listitem [ref=e476]:
+              - link "Life & arts" [ref=e477] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#lifearts
+            - listitem [ref=e478]:
+              - link "Science" [ref=e479] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#science
+            - listitem [ref=e480]:
+              - link "Professional" [ref=e481] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#professional
+            - listitem [ref=e482]:
+              - link "Business" [ref=e483] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#business
+            - listitem [ref=e484]:
+              - link "API" [ref=e485] [cursor=pointer]:
+                - /url: https://api.stackexchange.com/
+            - listitem [ref=e486]:
+              - link "Data" [ref=e487] [cursor=pointer]:
+                - /url: https://data.stackexchange.com/
+      - generic [ref=e488]:
+        - list [ref=e489]:
+          - listitem [ref=e490]:
+            - link "Blog" [ref=e491] [cursor=pointer]:
+              - /url: https://stackoverflow.blog?blb=1
+          - listitem [ref=e492]:
+            - link "Facebook" [ref=e493] [cursor=pointer]:
+              - /url: https://www.facebook.com/officialstackoverflow/
+          - listitem [ref=e494]:
+            - link "Twitter" [ref=e495] [cursor=pointer]:
+              - /url: https://twitter.com/stackoverflow
+          - listitem [ref=e496]:
+            - link "LinkedIn" [ref=e497] [cursor=pointer]:
+              - /url: https://linkedin.com/company/stack-overflow
+          - listitem [ref=e498]:
+            - link "Instagram" [ref=e499] [cursor=pointer]:
+              - /url: https://www.instagram.com/thestackoverflow
+        - paragraph [ref=e500]:
+          - text: Site design / logo © 2026 Stack Exchange Inc; user contributions licensed under
+          - link "CC BY-SA" [ref=e501] [cursor=pointer]:
+            - /url: https://stackoverflow.com/help/licensing
+          - text: . rev 2026.5.13.43074
+  - dialog "We Care About Your Privacy" [ref=e503]:
+    - generic [ref=e504]:
+      - generic [ref=e506]:
+        - heading "We Care About Your Privacy" [level=2] [ref=e507]
+        - generic [ref=e508]: We and our 271 partners store and access personal data, like browsing data or unique identifiers, on your device. Selecting Accept all cookies enables tracking technologies to support the purposes shown under we and our partners process data to provide. Selecting Necessary cookies only or withdrawing your consent will disable them. If trackers are disabled, some content and ads you see may not be as relevant to you. You can resurface this menu to change your choices or withdraw consent at any time by clicking the Customize Settings link on the bottom of the webpage. Your choices will have effect within our Website. For more details, refer to our Privacy Policy.
+        - generic [ref=e509]:
+          - link "Cookie Policy" [ref=e510] [cursor=pointer]:
+            - /url: https://policies.stackoverflow.co/stack-overflow/cookie-policy/
+          - text: .
+        - generic [ref=e511]:
+          - heading "We and our partners perform the following based on your settings:" [level=3] [ref=e512]
+          - paragraph [ref=e514]:
+            - text: Use precise geolocation data. Actively scan device characteristics for identification. Understand audiences through statistics or combinations of data from different sources. Store and/or access information on a device. Develop and improve services. Create profiles to personalise content. Measure content performance. Use limited data to select content. Measure advertising performance. Use limited data to select advertising. Create profiles for personalised advertising. Use profiles to select personalised advertising. Use profiles to select personalised content.
+            - button "List of Partners (vendors)" [ref=e515] [cursor=pointer]
+      - generic [ref=e517]:
+        - generic [ref=e518]:
+          - button "Accept all cookies" [ref=e519] [cursor=pointer]
+          - button "Necessary cookies only" [ref=e520] [cursor=pointer]
+        - button "Customize Settings, Opens the preference center dialog" [ref=e521] [cursor=pointer]: Customize Settings

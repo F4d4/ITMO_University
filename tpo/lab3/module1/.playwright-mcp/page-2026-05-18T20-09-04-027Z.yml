@@ -1,0 +1,431 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - generic [ref=e4]:
+      - link "Stack Overflow" [ref=e5] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e6]
+      - link "About" [ref=e8] [cursor=pointer]:
+        - /url: https://stackoverflow.co/
+        - generic [ref=e9]: About
+      - button "Products" [ref=e10] [cursor=pointer]:
+        - generic [ref=e11]: Products
+      - link "For Teams" [ref=e12] [cursor=pointer]:
+        - /url: https://stackoverflow.co/internal/
+        - generic [ref=e13]: For Teams
+      - search [ref=e14]:
+        - generic [ref=e15]:
+          - combobox "Search" [ref=e16]
+          - img
+      - navigation "Topbar" [ref=e17]:
+        - list [ref=e18]:
+          - listitem
+          - listitem [ref=e19]:
+            - link "Jason Verdiev's user avatar Jason Verdiev" [ref=e20] [cursor=pointer]:
+              - /url: /users/32742720/jason-verdiev
+              - generic "Jason Verdiev" [ref=e21]:
+                - img "Jason Verdiev's user avatar" [ref=e22]
+              - generic [ref=e23]: Jason Verdiev
+              - list [ref=e25]:
+                - listitem [ref=e26]:
+                  - text: "1"
+                  - generic [ref=e27]: ", 1 reputation"
+                - listitem
+          - listitem [ref=e28]:
+            - link "Inbox (1 unread message)" [ref=e29] [cursor=pointer]:
+              - /url: https://stackexchange.com/users/46366101?tab=inbox
+              - img [ref=e30]
+              - generic [ref=e32]: "1"
+          - listitem [ref=e33]:
+            - link "Achievements" [ref=e34] [cursor=pointer]:
+              - /url: https://stackexchange.com/users/46366101?tab=reputation
+              - img [ref=e35]
+          - listitem [ref=e37]:
+            - link "Help Center and other resources" [ref=e38] [cursor=pointer]:
+              - /url: /help
+              - img [ref=e39]
+          - listitem [ref=e41]:
+            - link "Site switcher" [ref=e42] [cursor=pointer]:
+              - /url: https://stackexchange.com
+              - img [ref=e43]
+          - listitem
+  - generic [ref=e46]:
+    - generic [ref=e47]:
+      - text: How are we doing? Please help us improve Stack Overflow.
+      - link "Take our short survey" [ref=e48] [cursor=pointer]:
+        - /url: https://stackoverflow.com/survey/site-satisfaction/redirect
+    - link "dismiss" [ref=e49] [cursor=pointer]:
+      - /url: "#"
+      - img [ref=e50]
+  - generic [ref=e52]:
+    - navigation "Primary" [ref=e55]:
+      - list [ref=e56]:
+        - listitem [ref=e57]:
+          - list [ref=e58]:
+            - listitem [ref=e59]:
+              - link "Home" [ref=e60] [cursor=pointer]:
+                - /url: /
+                - generic [ref=e61]:
+                  - img [ref=e62]
+                  - generic [ref=e64]: Home
+            - listitem [ref=e65]:
+              - link "Questions" [ref=e66] [cursor=pointer]:
+                - /url: /questions
+                - generic [ref=e67]:
+                  - img [ref=e68]
+                  - generic [ref=e70]: Questions
+            - listitem [ref=e71]:
+              - link "AI Assist" [ref=e72] [cursor=pointer]:
+                - /url: https://stackoverflow.com/ai-assist
+                - generic [ref=e73]:
+                  - img [ref=e75]
+                  - generic [ref=e77]: AI Assist
+            - listitem [ref=e78]:
+              - link "Tags" [ref=e79] [cursor=pointer]:
+                - /url: /tags
+                - generic [ref=e80]:
+                  - img [ref=e81]
+                  - generic [ref=e84]: Tags
+            - listitem [ref=e85]:
+              - link "Saves" [ref=e86] [cursor=pointer]:
+                - /url: /users/saves/32742720/all
+                - generic [ref=e87]:
+                  - img [ref=e88]
+                  - generic [ref=e90]: Saves
+            - listitem [ref=e91]
+            - listitem [ref=e92]:
+              - link "Challenges" [ref=e93] [cursor=pointer]:
+                - /url: /beta/challenges
+                - generic [ref=e94]:
+                  - img [ref=e95]
+                  - generic [ref=e97]: Challenges
+            - listitem [ref=e98]:
+              - link "Chat" [expanded] [ref=e99] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+                - img [ref=e102]
+                - generic [ref=e107]: Chat
+            - listitem [ref=e108]:
+              - link "Articles" [ref=e109] [cursor=pointer]:
+                - /url: https://stackoverflow.blog/contributed?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=so-blog&utm_content=experiment-articles
+                - generic [ref=e110]:
+                  - img [ref=e111]
+                  - generic [ref=e114]: Articles
+            - listitem [ref=e115]:
+              - link "Users" [ref=e116] [cursor=pointer]:
+                - /url: /users
+                - generic [ref=e117]:
+                  - img [ref=e118]
+                  - generic [ref=e120]: Users
+            - listitem [ref=e121]
+            - listitem [ref=e122]:
+              - link "Companies" [ref=e123] [cursor=pointer]:
+                - /url: https://stackoverflow.com/jobs/companies?so_medium=stackoverflow&so_source=SiteNav
+                - generic [ref=e124]:
+                  - img [ref=e125]
+                  - generic [ref=e127]: Companies
+            - listitem [ref=e128]:
+              - button "Collectives" [ref=e130] [cursor=pointer]:
+                - generic [ref=e131]: Collectives
+                - img [ref=e133]
+            - listitem [ref=e135]:
+              - paragraph [ref=e136]:
+                - text: Communities for your favorite technologies.
+                - link "Explore all Collectives" [ref=e137] [cursor=pointer]:
+                  - /url: /collectives-all
+        - listitem [ref=e138]:
+          - button "Dismiss this promotion" [ref=e139] [cursor=pointer]:
+            - img [ref=e140]
+          - generic [ref=e142]: Stack Internal
+          - generic [ref=e143]:
+            - img [ref=e144]
+            - paragraph [ref=e158]:
+              - text: Stack Overflow for Teams is now called
+              - strong [ref=e159]: Stack Internal
+              - text: . Bring the best of human thought and AI automation together at your work.
+            - link "Try for free" [ref=e160] [cursor=pointer]:
+              - /url: https://stackoverflowteams.com/teams/create/free/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+            - link "Learn more" [ref=e161] [cursor=pointer]:
+              - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=side-bar&utm_content=explore-teams
+        - listitem [ref=e162]:
+          - paragraph [ref=e163]:
+            - text: Looking for
+            - button "Stack Internal was moved popover" [ref=e164] [cursor=pointer]: your teams?
+    - generic [ref=e167]:
+      - generic [ref=e168]:
+        - 'heading "tpo-2422-0ea17caf: How to safely iterate over dict items in Python 3?" [level=1] [ref=e169]':
+          - 'link "tpo-2422-0ea17caf: How to safely iterate over dict items in Python 3?" [ref=e170] [cursor=pointer]':
+            - /url: /questions/79943136/tpo-2422-0ea17caf-how-to-safely-iterate-over-dict-items-in-python-3
+        - link "Ask Question" [ref=e173] [cursor=pointer]:
+          - /url: /questions/ask
+      - generic [ref=e174]:
+        - generic "2026-05-18 20:04:53Z" [ref=e175]:
+          - text: Asked
+          - time [ref=e176]: today
+        - generic [ref=e177]:
+          - text: Modified
+          - link "today" [ref=e178] [cursor=pointer]:
+            - /url: "?lastactivity"
+        - generic "Viewed 5 times" [ref=e179]
+      - main "question and answers" [ref=e180]:
+        - generic [ref=e182]:
+          - generic [ref=e184]:
+            - button "Up vote" [ref=e185] [cursor=pointer]:
+              - img [ref=e186]
+            - generic [ref=e188]: "0"
+            - button "Down vote" [ref=e189] [cursor=pointer]:
+              - img [ref=e190]
+            - button "Save" [ref=e192] [cursor=pointer]:
+              - img [ref=e193]
+            - link "Timeline" [ref=e195] [cursor=pointer]:
+              - /url: /posts/79943136/timeline
+              - img [ref=e196]
+          - generic [ref=e198]:
+            - generic [ref=e199]:
+              - status [ref=e201]:
+                - generic [ref=e203]:
+                  - img [ref=e205]
+                  - generic [ref=e209]:
+                    - text: This post is hidden. You
+                    - link "deleted" [ref=e210] [cursor=pointer]:
+                      - /url: /help/deleted-questions
+                    - text: this post
+                    - generic "May 18 at 20:07" [ref=e211]: 1 min ago
+                    - text: .
+              - paragraph [ref=e212]: I have a Python 3 dict and need to mutate it while iterating. The naive approach raises
+              - paragraph [ref=e213]:
+                - code [ref=e214]: "RuntimeError: dictionary changed size during iteration"
+                - text: ":"
+              - generic [ref=e215]:
+                - button "Copy" [ref=e217] [cursor=pointer]:
+                  - img [ref=e218]
+                  - text: Copy
+                - code [ref=e221]: "python data = {'a': 1, 'b': 2, 'c': 3} for key, value in data.items(): if value % 2 == 0: del data[key]"
+              - paragraph [ref=e222]: "What is the idiomatic way to filter a dict in place without copying the whole structure? I am aware of dict comprehensions but I need an in-place modification. Marker for automated test cleanup: tpo-2422-0ea17caf"
+              - generic [ref=e223]:
+                - button "Copy" [ref=e225] [cursor=pointer]:
+                  - img [ref=e226]
+                  - text: Copy
+                - code
+            - list [ref=e232]:
+              - listitem [ref=e233]:
+                - link "show questions tagged 'python'" [ref=e234] [cursor=pointer]:
+                  - /url: /questions/tagged/python
+                  - text: python
+            - generic [ref=e236]:
+              - generic [ref=e239]:
+                - link "Share" [ref=e241] [cursor=pointer]:
+                  - /url: /q/79943136/32742720
+                - button "Edit" [ref=e243] [cursor=pointer]
+                - button "Undelete" [ref=e245] [cursor=pointer]
+                - button "Flag" [ref=e247] [cursor=pointer]
+              - generic [ref=e248]:
+                - generic [ref=e249]:
+                  - generic [ref=e251]: asked 4 mins ago
+                  - link "Jason Verdiev's user avatar" [ref=e253] [cursor=pointer]:
+                    - /url: /users/32742720/jason-verdiev
+                    - img "Jason Verdiev's user avatar" [ref=e255]
+                  - generic [ref=e256]:
+                    - link "Jason Verdiev" [ref=e257] [cursor=pointer]:
+                      - /url: /users/32742720/jason-verdiev
+                    - generic [ref=e258]: "1"
+                - generic [ref=e261]:
+                  - img [ref=e262]
+                  - text: New contributor
+          - generic [ref=e266]: Comments disabled on deleted / locked posts / reviews
+        - generic [ref=e267]:
+          - generic [ref=e268]: Related questions
+          - generic [ref=e269]:
+            - link "4250 How can I iterate over rows in a Pandas DataFrame?" [ref=e271] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/16476924/how-can-i-iterate-over-rows-in-a-pandas-dataframe?rq=2
+              - generic [ref=e272]: "4250"
+              - generic "How can I iterate over rows in a Pandas DataFrame?" [ref=e274]
+            - link "7126 How do I merge two dictionaries in a single expression in Python?" [ref=e276] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/38987/how-do-i-merge-two-dictionaries-in-a-single-expression-in-python?rq=2
+              - generic [ref=e277]: "7126"
+              - generic "How do I merge two dictionaries in a single expression in Python?" [ref=e279]
+            - link "4709 How slicing in Python works" [ref=e281] [cursor=pointer]:
+              - /url: https://stackoverflow.com/questions/509211/how-slicing-in-python-works?rq=2
+              - generic [ref=e282]: "4709"
+              - generic "How slicing in Python works" [ref=e284]
+        - generic [ref=e286] [cursor=pointer]:
+          - img [ref=e287]
+          - text: Load 7 more related questions
+        - generic [ref=e289]:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]
+      - complementary "sidebar" [ref=e292]:
+        - list [ref=e294]:
+          - listitem [ref=e295]: The Overflow Blog
+          - listitem [ref=e296]:
+            - img [ref=e298]
+            - link "Observability and human intuition in an AI world" [ref=e302] [cursor=pointer]:
+              - /url: https://stackoverflow.blog/2026/05/15/observability-and-human-intuition-in-an-ai-world/?cb=1
+          - listitem [ref=e303]: Featured on Meta
+          - listitem [ref=e304]:
+            - generic "Meta Stack Exchange" [ref=e306]
+            - link "(Almost) One year of Challenges" [ref=e308] [cursor=pointer]:
+              - /url: https://meta.stackexchange.com/questions/418261/almost-one-year-of-challenges?cb=1
+          - listitem [ref=e309]:
+            - generic "Meta Stack Overflow" [ref=e311]
+            - 'link "Policy: Generative AI (e.g., ChatGPT) is banned" [ref=e313] [cursor=pointer]':
+              - /url: https://meta.stackoverflow.com/questions/421831/policy-generative-ai-e-g-chatgpt-is-banned?cb=1
+        - generic [ref=e314]:
+          - heading "Cast your votes this week!" [level=3] [ref=e316]
+          - generic [ref=e318]:
+            - generic [ref=e319]:
+              - generic [ref=e320]: 0/5
+              - img [ref=e323]
+              - img [ref=e327]
+              - img [ref=e331]
+              - img [ref=e335]
+              - img [ref=e339]
+            - paragraph [ref=e342]:
+              - text: Vote on content that is interesting, well-researched and helpful! You have 5 votes a week without reputation.
+              - link "Learn more about free votes" [ref=e343] [cursor=pointer]:
+                - /url: /help/whats-free-votes
+        - generic [ref=e344]:
+          - heading "Hot Network Questions" [level=4] [ref=e345]:
+            - link "Hot Network Questions" [ref=e346] [cursor=pointer]:
+              - /url: https://stackexchange.com/questions?tab=hot
+          - list [ref=e347]:
+            - listitem [ref=e348]:
+              - generic "Christianity Stack Exchange" [ref=e349]
+              - link "Why does Revelation 14:12 emphasize keeping God’s commandments if the Law is not essential for salvation?" [ref=e350] [cursor=pointer]:
+                - /url: https://christianity.stackexchange.com/questions/113842/why-does-revelation-1412-emphasize-keeping-god-s-commandments-if-the-law-is-not
+            - listitem [ref=e351]:
+              - generic "English Language & Usage Stack Exchange" [ref=e352]
+              - link "I would (have) just as soon he (had) eaten" [ref=e353] [cursor=pointer]:
+                - /url: https://english.stackexchange.com/questions/639768/i-would-have-just-as-soon-he-had-eaten
+            - listitem [ref=e354]:
+              - generic "Science Fiction & Fantasy Stack Exchange" [ref=e355]
+              - link "Short story about teen girls gorging on mysterious free sweets at the mall and finding mysterious high-tech weight loss center that tattoos customers" [ref=e356] [cursor=pointer]:
+                - /url: https://scifi.stackexchange.com/questions/304498/short-story-about-teen-girls-gorging-on-mysterious-free-sweets-at-the-mall-and-f
+            - listitem [ref=e357]:
+              - generic "Philosophy Stack Exchange" [ref=e358]
+              - link "Inverted colour spectrum argument and death?" [ref=e359] [cursor=pointer]:
+                - /url: https://philosophy.stackexchange.com/questions/138504/inverted-colour-spectrum-argument-and-death
+            - listitem [ref=e360]:
+              - generic "Bicycles Stack Exchange" [ref=e361]
+              - link "Is a new Shimano SM-UG51 plate supposed to be slightly bent?" [ref=e362] [cursor=pointer]:
+                - /url: https://bicycles.stackexchange.com/questions/100287/is-a-new-shimano-sm-ug51-plate-supposed-to-be-slightly-bent
+          - link "more hot questions" [ref=e363] [cursor=pointer]:
+            - /url: "#"
+  - contentinfo [ref=e364]:
+    - generic [ref=e365]:
+      - link "Stack Overflow" [ref=e367] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e368]
+      - navigation "Footer" [ref=e370]:
+        - generic [ref=e371]:
+          - heading "Stack Overflow" [level=5] [ref=e372]:
+            - link "Stack Overflow" [ref=e373] [cursor=pointer]:
+              - /url: https://stackoverflow.com
+          - list [ref=e374]:
+            - listitem [ref=e375]:
+              - link "Questions" [ref=e376] [cursor=pointer]:
+                - /url: /questions
+            - listitem [ref=e377]:
+              - link "Help" [ref=e378] [cursor=pointer]:
+                - /url: /help
+            - listitem [ref=e379]:
+              - link "Chat" [ref=e380] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+        - generic [ref=e381]:
+          - heading "Business" [level=5] [ref=e382]:
+            - link "Business" [ref=e383] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e384]:
+            - listitem [ref=e385]:
+              - link "Stack Internal" [ref=e386] [cursor=pointer]:
+                - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=teams
+            - listitem [ref=e387]:
+              - link "Stack Data Licensing" [ref=e388] [cursor=pointer]:
+                - /url: https://stackoverflow.co/data-licensing/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=data-licensing
+            - listitem [ref=e389]:
+              - link "Stack Ads" [ref=e390] [cursor=pointer]:
+                - /url: https://stackoverflow.co/advertising/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=advertising
+        - generic [ref=e391]:
+          - heading "Company" [level=5] [ref=e392]:
+            - link "Company" [ref=e393] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e394]:
+            - listitem [ref=e395]:
+              - link "About" [ref=e396] [cursor=pointer]:
+                - /url: https://stackoverflow.co/
+            - listitem [ref=e397]:
+              - link "Press" [ref=e398] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/press/
+            - listitem [ref=e399]:
+              - link "Work Here" [ref=e400] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/work-here/
+            - listitem [ref=e401]:
+              - link "Legal" [ref=e402] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal
+            - listitem [ref=e403]:
+              - link "Privacy Policy" [ref=e404] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/privacy-policy
+            - listitem [ref=e405]:
+              - link "Terms of Service" [ref=e406] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/terms-of-service/public
+            - listitem [ref=e407]:
+              - link "Contact Us" [ref=e408] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e409]:
+              - button "Cookie Settings" [ref=e410] [cursor=pointer]
+            - listitem [ref=e411]:
+              - link "Cookie Policy" [ref=e412] [cursor=pointer]:
+                - /url: https://policies.stackoverflow.co/stack-overflow/cookie-policy
+        - generic [ref=e414]:
+          - heading "Stack Exchange Network" [level=5] [ref=e415]:
+            - link "Stack Exchange Network" [ref=e416] [cursor=pointer]:
+              - /url: https://stackexchange.com
+          - list [ref=e417]:
+            - listitem [ref=e418]:
+              - link "Technology" [ref=e419] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#technology
+            - listitem [ref=e420]:
+              - link "Culture & recreation" [ref=e421] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#culturerecreation
+            - listitem [ref=e422]:
+              - link "Life & arts" [ref=e423] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#lifearts
+            - listitem [ref=e424]:
+              - link "Science" [ref=e425] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#science
+            - listitem [ref=e426]:
+              - link "Professional" [ref=e427] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#professional
+            - listitem [ref=e428]:
+              - link "Business" [ref=e429] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#business
+            - listitem [ref=e430]:
+              - link "API" [ref=e431] [cursor=pointer]:
+                - /url: https://api.stackexchange.com/
+            - listitem [ref=e432]:
+              - link "Data" [ref=e433] [cursor=pointer]:
+                - /url: https://data.stackexchange.com/
+      - generic [ref=e434]:
+        - list [ref=e435]:
+          - listitem [ref=e436]:
+            - link "Blog" [ref=e437] [cursor=pointer]:
+              - /url: https://stackoverflow.blog?blb=1
+          - listitem [ref=e438]:
+            - link "Facebook" [ref=e439] [cursor=pointer]:
+              - /url: https://www.facebook.com/officialstackoverflow/
+          - listitem [ref=e440]:
+            - link "Twitter" [ref=e441] [cursor=pointer]:
+              - /url: https://twitter.com/stackoverflow
+          - listitem [ref=e442]:
+            - link "LinkedIn" [ref=e443] [cursor=pointer]:
+              - /url: https://linkedin.com/company/stack-overflow
+          - listitem [ref=e444]:
+            - link "Instagram" [ref=e445] [cursor=pointer]:
+              - /url: https://www.instagram.com/thestackoverflow
+        - paragraph [ref=e446]:
+          - text: Site design / logo © 2026 Stack Exchange Inc; user contributions licensed under
+          - link "CC BY-SA" [ref=e447] [cursor=pointer]:
+            - /url: https://stackoverflow.com/help/licensing
+          - text: . rev 2026.5.18.43150

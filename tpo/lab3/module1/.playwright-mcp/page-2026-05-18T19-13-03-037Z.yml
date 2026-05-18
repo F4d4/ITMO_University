@@ -1,0 +1,315 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#content"
+    - generic [ref=e4]:
+      - link [ref=e5] [cursor=pointer]:
+        - /url: "#"
+      - link "Stack Overflow" [ref=e7] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e8]
+      - link "About" [ref=e10] [cursor=pointer]:
+        - /url: https://stackoverflow.co/
+        - generic [ref=e11]: About
+      - button "Products" [ref=e12] [cursor=pointer]:
+        - generic [ref=e13]: Products
+      - link "For Teams" [ref=e14] [cursor=pointer]:
+        - /url: https://stackoverflow.co/internal/
+        - generic [ref=e15]: For Teams
+      - search [ref=e16]:
+        - generic [ref=e17]:
+          - combobox "Search" [ref=e18]
+          - img
+      - navigation "Topbar" [ref=e19]:
+        - list [ref=e20]:
+          - listitem
+          - listitem [ref=e21]:
+            - link "Jason Verdiev's user avatar Jason Verdiev" [ref=e22] [cursor=pointer]:
+              - /url: /users/32742720/jason-verdiev
+              - generic "Jason Verdiev" [ref=e23]:
+                - img "Jason Verdiev's user avatar" [ref=e24]
+              - generic [ref=e25]: Jason Verdiev
+              - list [ref=e27]:
+                - listitem [ref=e28]:
+                  - text: "1"
+                  - generic [ref=e29]: ", 1 reputation"
+                - listitem
+          - listitem [ref=e30]:
+            - link "Inbox (1 unread message)" [ref=e31] [cursor=pointer]:
+              - /url: https://stackexchange.com/users/46366101?tab=inbox
+              - img [ref=e32]
+              - generic [ref=e34]: "1"
+          - listitem [ref=e35]:
+            - link "Achievements" [ref=e36] [cursor=pointer]:
+              - /url: https://stackexchange.com/users/46366101?tab=reputation
+              - img [ref=e37]
+          - listitem [ref=e39]:
+            - link "Help Center and other resources" [ref=e40] [cursor=pointer]:
+              - /url: /help
+              - img [ref=e41]
+          - listitem [ref=e43]:
+            - link "Site switcher" [ref=e44] [cursor=pointer]:
+              - /url: https://stackexchange.com
+              - img [ref=e45]
+          - listitem
+  - generic [ref=e48]:
+    - generic [ref=e49]:
+      - text: How are we doing? Please help us improve Stack Overflow.
+      - link "Take our short survey" [ref=e50] [cursor=pointer]:
+        - /url: https://stackoverflow.com/survey/site-satisfaction/redirect
+    - link "dismiss" [ref=e51] [cursor=pointer]:
+      - /url: "#"
+      - img [ref=e52]
+  - generic [ref=e59]:
+    - main [ref=e60]:
+      - region "Ask a question" [ref=e61]:
+        - generic [ref=e62]:
+          - generic [ref=e63]: Ask question
+          - generic [ref=e64]: Required fields *
+        - group [ref=e65]:
+          - generic [ref=e67]:
+            - generic [ref=e68]: Type*
+            - generic [ref=e69]:
+              - generic [ref=e70] [cursor=pointer]: Type
+              - combobox "Type" [ref=e72]:
+                - option "Troubleshooting / Debugging" [selected]
+                - option "Tooling recommendation"
+                - option "Best practices"
+                - option "General advice / Other"
+          - generic [ref=e74]:
+            - generic [ref=e75]: Title*
+            - generic [ref=e77]:
+              - paragraph [ref=e78]:
+                - generic [ref=e80]: Be specific and imagine you’re asking a question to another person. Min 15 characters.
+              - textbox [active] [ref=e84]
+          - generic [ref=e86]:
+            - generic [ref=e87]: Body*
+            - generic [ref=e88]: Include all the information someone would need to answer your question. Min 220 characters.
+            - generic [ref=e90]:
+              - generic [ref=e92]:
+                - generic [ref=e93]:
+                  - generic [ref=e94]:
+                    - button "Heading (Cmd-H)" [ref=e96] [cursor=pointer]
+                    - button "Bold (Cmd-B)" [ref=e98] [cursor=pointer]
+                    - button "Italic (Cmd-I)" [ref=e100] [cursor=pointer]
+                    - button "Strikethrough" [ref=e102] [cursor=pointer]
+                  - generic [ref=e104]:
+                    - button "Inline code (Cmd-K)" [ref=e105] [cursor=pointer]
+                    - button "Code block (Cmd-M)" [ref=e107] [cursor=pointer]
+                    - button "Stack Snippets (Cmd-9)" [ref=e109] [cursor=pointer]
+                  - generic [ref=e111]:
+                    - button "Link (Cmd-L)" [ref=e112] [cursor=pointer]
+                    - button "Blockquote (Cmd-Q)" [ref=e114] [cursor=pointer]
+                    - button "Image (Cmd-G)" [ref=e116] [cursor=pointer]
+                    - button "Table (Cmd-E)" [ref=e118] [cursor=pointer]
+                  - generic [ref=e120]:
+                    - button "Numbered list (Cmd-O)" [ref=e121] [cursor=pointer]
+                    - button "Bulleted list (Cmd-U)" [ref=e123] [cursor=pointer]
+                    - button "Horizontal rule (Cmd-R)" [ref=e125] [cursor=pointer]
+                    - button "More formatting" [ref=e128] [cursor=pointer]
+                  - link "Help" [ref=e131] [cursor=pointer]:
+                    - /url: /editing-help
+                - generic [ref=e134]:
+                  - radio "Rich text mode" [checked] [ref=e135]
+                  - generic "Rich text mode" [ref=e136] [cursor=pointer]:
+                    - generic [ref=e138]: Rich text mode
+                  - radio "Markdown mode" [ref=e139]
+                  - generic "Markdown mode" [ref=e140] [cursor=pointer]:
+                    - generic [ref=e142]: Markdown mode
+                  - radio "Markdown with preview mode" [ref=e143]
+                  - generic "Markdown with preview mode" [ref=e144] [cursor=pointer]:
+                    - generic [ref=e146]: Markdown with preview mode
+              - textbox [ref=e147]:
+                - paragraph [ref=e148]
+          - generic [ref=e150]:
+            - generic [ref=e151]: Tags*
+            - generic [ref=e152]: Add up to 5 tags to describe what your question is about. Start typing to see suggestions.
+            - generic [ref=e156]:
+              - generic:
+                - img
+              - searchbox "tags" [ref=e158]
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - generic [ref=e161]: Select where your question should be posted.*
+              - img [ref=e164] [cursor=pointer]
+            - generic [ref=e166]: You have an option to get community feedback to improve your question before it's publicly posted.
+            - group [ref=e167]:
+              - generic [ref=e168]:
+                - radio "Get private feedback in Staging Ground I want experienced community members to review my question. I want to improve my question. I can wait for answers." [checked] [ref=e170] [cursor=pointer]
+                - generic [ref=e171]:
+                  - generic [ref=e172]: Get private feedback in Staging Ground
+                  - list [ref=e173]:
+                    - listitem [ref=e174]: I want experienced community members to review my question.
+                    - listitem [ref=e175]: I want to improve my question.
+                    - listitem [ref=e176]: I can wait for answers.
+              - generic [ref=e177]:
+                - radio "Post question on Stack Overflow now I'm sure that my question follows all guidelines. I don't need private feedback. I need answers immediately." [ref=e179] [cursor=pointer]
+                - generic [ref=e180]:
+                  - generic [ref=e181]: Post question on Stack Overflow now
+                  - list [ref=e182]:
+                    - listitem [ref=e183]: I'm sure that my question follows all guidelines.
+                    - listitem [ref=e184]: I don't need private feedback.
+                    - listitem [ref=e185]: I need answers immediately.
+          - button "Submit to Staging Ground" [ref=e189] [cursor=pointer]
+    - generic [ref=e192]:
+      - generic [ref=e193]:
+        - generic [ref=e194]: Draft your question
+        - generic [ref=e195]:
+          - paragraph [ref=e197]: The community is here to help you with specific coding, algorithm, or language problems.
+          - list [ref=e198]:
+            - listitem [ref=e199]:
+              - button "Summarize the problem" [expanded] [ref=e200] [cursor=pointer]:
+                - generic [ref=e201]:
+                  - img [ref=e203]
+                  - generic [ref=e206]: Summarize the problem
+                - img [ref=e209]
+              - list [ref=e213]:
+                - listitem [ref=e214]: Include details about your goal
+                - listitem [ref=e215]: Describe expected and actual results
+                - listitem [ref=e216]: Include any error messages
+            - listitem [ref=e217]:
+              - button "Describe what you’ve tried" [ref=e218] [cursor=pointer]:
+                - generic [ref=e219]:
+                  - img [ref=e221]
+                  - generic [ref=e224]: Describe what you’ve tried
+                - img [ref=e227]
+            - listitem [ref=e229]:
+              - button "Show some code" [ref=e230] [cursor=pointer]:
+                - generic [ref=e231]:
+                  - img [ref=e233]
+                  - generic [ref=e236]: Show some code
+                - img [ref=e239]
+      - generic [ref=e241]:
+        - generic [ref=e242]: Helpful links
+        - generic [ref=e243]:
+          - paragraph [ref=e244]:
+            - text: Find more information about
+            - link "how to ask a good question here" [ref=e245] [cursor=pointer]:
+              - /url: /help/how-to-ask
+            - text: .
+          - paragraph [ref=e246]:
+            - text: Visit the
+            - link "help center" [ref=e247] [cursor=pointer]:
+              - /url: /help
+            - text: .
+          - paragraph [ref=e248]:
+            - text: Ask questions about the site on
+            - link "meta" [ref=e249] [cursor=pointer]:
+              - /url: https://meta.stackoverflow.com
+            - text: .
+  - contentinfo [ref=e250]:
+    - generic [ref=e251]:
+      - link "Stack Overflow" [ref=e253] [cursor=pointer]:
+        - /url: https://stackoverflow.com
+        - img [ref=e254]
+      - navigation "Footer" [ref=e256]:
+        - generic [ref=e257]:
+          - heading "Stack Overflow" [level=5] [ref=e258]:
+            - link "Stack Overflow" [ref=e259] [cursor=pointer]:
+              - /url: https://stackoverflow.com
+          - list [ref=e260]:
+            - listitem [ref=e261]:
+              - link "Questions" [ref=e262] [cursor=pointer]:
+                - /url: /questions
+            - listitem [ref=e263]:
+              - link "Help" [ref=e264] [cursor=pointer]:
+                - /url: /help
+            - listitem [ref=e265]:
+              - link "Chat" [ref=e266] [cursor=pointer]:
+                - /url: https://chat.stackoverflow.com/?tab=explore
+        - generic [ref=e267]:
+          - heading "Business" [level=5] [ref=e268]:
+            - link "Business" [ref=e269] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e270]:
+            - listitem [ref=e271]:
+              - link "Stack Internal" [ref=e272] [cursor=pointer]:
+                - /url: https://stackoverflow.co/internal/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=teams
+            - listitem [ref=e273]:
+              - link "Stack Data Licensing" [ref=e274] [cursor=pointer]:
+                - /url: https://stackoverflow.co/data-licensing/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=data-licensing
+            - listitem [ref=e275]:
+              - link "Stack Ads" [ref=e276] [cursor=pointer]:
+                - /url: https://stackoverflow.co/advertising/?utm_medium=referral&utm_source=stackoverflow-community&utm_campaign=footer&utm_content=advertising
+        - generic [ref=e277]:
+          - heading "Company" [level=5] [ref=e278]:
+            - link "Company" [ref=e279] [cursor=pointer]:
+              - /url: https://stackoverflow.co/
+          - list [ref=e280]:
+            - listitem [ref=e281]:
+              - link "About" [ref=e282] [cursor=pointer]:
+                - /url: https://stackoverflow.co/
+            - listitem [ref=e283]:
+              - link "Press" [ref=e284] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/press/
+            - listitem [ref=e285]:
+              - link "Work Here" [ref=e286] [cursor=pointer]:
+                - /url: https://stackoverflow.co/company/work-here/
+            - listitem [ref=e287]:
+              - link "Legal" [ref=e288] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal
+            - listitem [ref=e289]:
+              - link "Privacy Policy" [ref=e290] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/privacy-policy
+            - listitem [ref=e291]:
+              - link "Terms of Service" [ref=e292] [cursor=pointer]:
+                - /url: https://stackoverflow.com/legal/terms-of-service/public
+            - listitem [ref=e293]:
+              - link "Contact Us" [ref=e294] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e295]:
+              - button "Cookie Settings" [ref=e296] [cursor=pointer]
+            - listitem [ref=e297]:
+              - link "Cookie Policy" [ref=e298] [cursor=pointer]:
+                - /url: https://policies.stackoverflow.co/stack-overflow/cookie-policy
+        - generic [ref=e300]:
+          - heading "Stack Exchange Network" [level=5] [ref=e301]:
+            - link "Stack Exchange Network" [ref=e302] [cursor=pointer]:
+              - /url: https://stackexchange.com
+          - list [ref=e303]:
+            - listitem [ref=e304]:
+              - link "Technology" [ref=e305] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#technology
+            - listitem [ref=e306]:
+              - link "Culture & recreation" [ref=e307] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#culturerecreation
+            - listitem [ref=e308]:
+              - link "Life & arts" [ref=e309] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#lifearts
+            - listitem [ref=e310]:
+              - link "Science" [ref=e311] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#science
+            - listitem [ref=e312]:
+              - link "Professional" [ref=e313] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#professional
+            - listitem [ref=e314]:
+              - link "Business" [ref=e315] [cursor=pointer]:
+                - /url: https://stackexchange.com/sites#business
+            - listitem [ref=e316]:
+              - link "API" [ref=e317] [cursor=pointer]:
+                - /url: https://api.stackexchange.com/
+            - listitem [ref=e318]:
+              - link "Data" [ref=e319] [cursor=pointer]:
+                - /url: https://data.stackexchange.com/
+      - generic [ref=e320]:
+        - list [ref=e321]:
+          - listitem [ref=e322]:
+            - link "Blog" [ref=e323] [cursor=pointer]:
+              - /url: https://stackoverflow.blog?blb=1
+          - listitem [ref=e324]:
+            - link "Facebook" [ref=e325] [cursor=pointer]:
+              - /url: https://www.facebook.com/officialstackoverflow/
+          - listitem [ref=e326]:
+            - link "Twitter" [ref=e327] [cursor=pointer]:
+              - /url: https://twitter.com/stackoverflow
+          - listitem [ref=e328]:
+            - link "LinkedIn" [ref=e329] [cursor=pointer]:
+              - /url: https://linkedin.com/company/stack-overflow
+          - listitem [ref=e330]:
+            - link "Instagram" [ref=e331] [cursor=pointer]:
+              - /url: https://www.instagram.com/thestackoverflow
+        - paragraph [ref=e332]:
+          - text: Site design / logo © 2026 Stack Exchange Inc; user contributions licensed under
+          - link "CC BY-SA" [ref=e333] [cursor=pointer]:
+            - /url: https://stackoverflow.com/help/licensing
+          - text: . rev 2026.5.18.43150
