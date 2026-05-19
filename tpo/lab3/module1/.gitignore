@@ -3,4 +3,4 @@
 *.cookies.json
 credentials.properties
 *.local
-
+docs/
