@@ -9,7 +9,7 @@ import jakarta.resource.spi.ConnectionRequestInfo;
 import jakarta.resource.spi.LocalTransaction;
 import jakarta.resource.spi.ManagedConnection;
 import jakarta.resource.spi.ManagedConnectionMetaData;
-import jakarta.transaction.xa.XAResource;
+import javax.transaction.xa.XAResource;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.security.auth.Subject;

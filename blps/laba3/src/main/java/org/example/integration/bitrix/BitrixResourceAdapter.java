@@ -5,7 +5,7 @@ import jakarta.resource.spi.ActivationSpec;
 import jakarta.resource.spi.BootstrapContext;
 import jakarta.resource.spi.ResourceAdapterInternalException;
 import jakarta.resource.spi.endpoint.MessageEndpointFactory;
-import jakarta.transaction.xa.XAResource;
+import javax.transaction.xa.XAResource;
 
 import java.io.Serializable;
 
