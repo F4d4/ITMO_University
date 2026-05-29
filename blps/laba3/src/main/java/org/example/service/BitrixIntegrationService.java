@@ -26,6 +26,15 @@ public class BitrixIntegrationService {
         }
     }
 
+    public Integer getTaskStatus(Long bitrixTaskId) {
+        try (BitrixConnection connection = bitrixConnectionFactory.getConnection()) {
+            return connection.getTaskStatus(bitrixTaskId);
+        } catch (Exception e) {
+            log.error("Bitrix24: ошибка получения статуса задачи id={}: {}", bitrixTaskId, e.getMessage());
+            return null;
+        }
+    }
+
     public Long createMonetizationReviewTask(Long methodId, String adName, String adType) {
         try (BitrixConnection connection = bitrixConnectionFactory.getConnection()) {
             String title = "Проверка рекламного метода: " + adName;

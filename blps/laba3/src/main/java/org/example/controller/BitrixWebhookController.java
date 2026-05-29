@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.repository.MonetizationMethodRepository;
 import org.example.repository.VideoRepository;
+import org.example.service.BitrixIntegrationService;
 import org.example.service.MonetizationService;
 import org.example.service.VideoService;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class BitrixWebhookController {
     private final MonetizationMethodRepository monetizationMethodRepository;
     private final VideoService videoService;
     private final MonetizationService monetizationService;
+    private final BitrixIntegrationService bitrixIntegrationService;
 
     @PostMapping("/webhook")
     public ResponseEntity<Void> handleWebhook(HttpServletRequest request) {
@@ -31,25 +33,25 @@ public class BitrixWebhookController {
 
         String event = getParam(params, "event");
         String taskIdStr = getParam(params, "data[FIELDS_AFTER][ID]");
-        String statusStr = getParam(params, "data[FIELDS_AFTER][STATUS]");
 
-        log.info("Bitrix24 webhook: event={}, taskId={}, status={}", event, taskIdStr, statusStr);
+        log.info("Bitrix24 webhook: event={}, taskId={}", event, taskIdStr);
 
-        if (!"ONTASKUPDATE".equals(event) || taskIdStr == null || statusStr == null) {
+        if (!"ONTASKUPDATE".equals(event) || taskIdStr == null) {
             return ResponseEntity.ok().build();
         }
 
         try {
             Long bitrixTaskId = Long.parseLong(taskIdStr);
-            int status = Integer.parseInt(statusStr);
+            Integer status = bitrixIntegrationService.getTaskStatus(bitrixTaskId);
+            log.info("Bitrix24 webhook: taskId={} status={}", bitrixTaskId, status);
 
-            if (status == 5) {
+            if (status != null && status == 5) {
                 processApproval(bitrixTaskId);
-            } else if (status == 7) {
+            } else if (status != null && status == 6) {
                 processRejection(bitrixTaskId);
             }
         } catch (NumberFormatException e) {
-            log.warn("Bitrix24 webhook: некорректные данные taskId={} status={}", taskIdStr, statusStr);
+            log.warn("Bitrix24 webhook: некорректный taskId={}", taskIdStr);
         }
 
         return ResponseEntity.ok().build();

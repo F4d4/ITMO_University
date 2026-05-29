@@ -16,6 +16,12 @@ public class BitrixConnectionImpl implements BitrixConnection {
     }
 
     @Override
+    public Integer getTaskStatus(Long taskId) {
+        checkValid();
+        return managedConnection.getTaskStatus(taskId);
+    }
+
+    @Override
     public void close() {
         if (valid) {
             valid = false;

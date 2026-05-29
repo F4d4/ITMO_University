@@ -141,6 +141,31 @@ public class BitrixManagedConnection implements ManagedConnection {
         }
     }
 
+    public Integer getTaskStatus(Long taskId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(webhookUrl + "tasks.task.get.json?taskId=" + taskId))
+                    .GET()
+                    .timeout(Duration.ofSeconds(10))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                log.error("Bitrix24 tasks.task.get вернул статус {}", response.statusCode());
+                return null;
+            }
+
+            JsonNode json = objectMapper.readTree(response.body());
+            String statusStr = json.path("result").path("task").path("status").asText(null);
+            return statusStr != null ? Integer.parseInt(statusStr) : null;
+
+        } catch (Exception e) {
+            log.error("Ошибка получения статуса задачи Bitrix24 id={}: {}", taskId, e.getMessage(), e);
+            return null;
+        }
+    }
+
     void notifyConnectionClosed() {
         ConnectionEvent event = new ConnectionEvent(this, ConnectionEvent.CONNECTION_CLOSED);
         event.setConnectionHandle(connectionHandle);
