@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -43,8 +42,8 @@ public class MonetizationMethod {
     /**
      * Цена подписки. Заполняется только при type = SUBSCRIPTION
      */
-    @Column(name = "subscription_price", nullable = true, precision = 10, scale = 2)
-    private BigDecimal subscriptionPrice;
+    @Column(name = "subscription_price", nullable = true)
+    private Integer subscriptionPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

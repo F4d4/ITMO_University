@@ -153,11 +153,6 @@ public class MonetizationService {
                         "Для типа SUBSCRIPTION необходимо указать цену подписки"
                 );
             }
-            if (request.getSubscriptionPrice().doubleValue() < 0) {
-                throw new BusinessException(
-                        "Цена подписки не может быть отрицательной"
-                );
-            }
             method.setSubscriptionPrice(request.getSubscriptionPrice());
             // Подписка автоматически одобряется системой
             method.setStatus(MethodStatus.APPROVED);

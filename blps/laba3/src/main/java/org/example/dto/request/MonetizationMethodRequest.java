@@ -1,14 +1,12 @@
 package org.example.dto.request;
 
-import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.entity.AdType;
 import org.example.entity.MonetizationType;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -31,8 +29,8 @@ public class MonetizationMethodRequest {
     /**
      * Цена подписки. Обязательна при type = SUBSCRIPTION
      */
-    @DecimalMin(value = "0.01", message = "Цена подписки должна быть больше 0")
-    private BigDecimal subscriptionPrice;
+    @Min(value = 1, message = "Цена подписки должна быть положительным целым числом")
+    private Integer subscriptionPrice;
 
     /**
      * Теги для способа монетизации (опционально)
