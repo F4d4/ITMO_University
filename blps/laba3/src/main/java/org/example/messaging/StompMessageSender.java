@@ -4,22 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.messaging.simp.stomp.ReactorNettyTcpStompClient;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MimeType;
 
-import java.util.concurrent.TimeUnit;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class StompMessageSender {
 
-    private final ReactorNettyTcpStompClient stompClient;
-    private final ObjectMapper objectMapper;
+    @Value("${app.stomp.host}")
+    private String host;
+
+    @Value("${app.stomp.port}")
+    private int port;
 
     @Value("${app.stomp.login:admin}")
     private String login;
@@ -27,31 +31,54 @@ public class StompMessageSender {
     @Value("${app.stomp.passcode:admin}")
     private String passcode;
 
+    private final ObjectMapper objectMapper;
+
     public void sendPublicationTask(PublicationTaskMessage message) {
-        StompSession session = null;
-        try {
-            StompHeaders connectHeaders = new StompHeaders();
-            connectHeaders.setLogin(login);
-            connectHeaders.setPasscode(passcode);
+        try (Socket socket = new Socket(host, port);
+             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), false);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
 
-            session = stompClient.connectAsync(connectHeaders, new StompSessionHandlerAdapter() {})
-                    .get(5, TimeUnit.SECONDS);
+            sendFrame(writer, "CONNECT", Map.of(
+                    "login", login,
+                    "passcode", passcode,
+                    "accept-version", "1.0,1.1",
+                    "host", host
+            ), "");
+            writer.flush();
 
-            String json = objectMapper.writeValueAsString(message);
-            StompHeaders sendHeaders = new StompHeaders();
-            sendHeaders.setDestination("/queue/publication-tasks");
-            sendHeaders.setContentType(MimeType.valueOf("text/plain"));
-            session.send(sendHeaders, json);
+            readUntilNull(reader);
+
+            String body = objectMapper.writeValueAsString(message);
+            sendFrame(writer, "SEND", Map.of(
+                    "destination", "/queue/publication-tasks",
+                    "content-type", "application/json",
+                    "content-length", String.valueOf(body.getBytes(StandardCharsets.UTF_8).length)
+            ), body);
+            writer.flush();
+
+            sendFrame(writer, "DISCONNECT", Map.of(), "");
+            writer.flush();
 
             log.info("STOMP: отправлено задание на публикацию видео id={}", message.getVideoId());
+
         } catch (Exception e) {
-            log.error("STOMP: ошибка отправки задания на публикацию видео id={}: {}",
-                    message.getVideoId(), e.getMessage(), e);
+            log.error("STOMP: ошибка отправки задания для видео id={}: {}", message.getVideoId(), e.getMessage(), e);
             throw new RuntimeException("Ошибка отправки STOMP сообщения", e);
-        } finally {
-            if (session != null && session.isConnected()) {
-                session.disconnect();
-            }
+        }
+    }
+
+    private void sendFrame(PrintWriter writer, String command, Map<String, String> headers, String body) {
+        writer.print(command + "\n");
+        headers.forEach((k, v) -> writer.print(k + ":" + v + "\n"));
+        writer.print("\n");
+        writer.print(body);
+        writer.print("\0");
+    }
+
+    private void readUntilNull(BufferedReader reader) throws Exception {
+        int ch;
+        while ((ch = reader.read()) != -1) {
+            if (ch == 0) break;
         }
     }
 }

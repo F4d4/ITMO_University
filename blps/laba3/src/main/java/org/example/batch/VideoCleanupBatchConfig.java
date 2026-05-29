@@ -17,7 +17,6 @@ import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -54,7 +53,6 @@ public class VideoCleanupBatchConfig {
     }
 
     @Bean
-    @Scope("step")
     public RepositoryItemReader<Video> videoCleanupItemReader(VideoRepository videoRepository) {
         LocalDateTime cutoff = LocalDateTime.now().minusHours(timeoutHours);
         return new RepositoryItemReaderBuilder<Video>()

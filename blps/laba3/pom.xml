@@ -93,18 +93,6 @@
             <artifactId>spring-boot-starter-activemq</artifactId>
         </dependency>
 
-        <!-- Spring Messaging (STOMP TCP client) -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-messaging</artifactId>
-        </dependency>
-
-        <!-- Reactor Netty TCP transport for STOMP client -->
-        <dependency>
-            <groupId>io.projectreactor.netty</groupId>
-            <artifactId>reactor-netty-core</artifactId>
-        </dependency>
-
         <!-- Quartz Scheduler -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
