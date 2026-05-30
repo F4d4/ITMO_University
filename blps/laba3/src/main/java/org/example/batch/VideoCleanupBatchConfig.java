@@ -10,6 +10,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -26,8 +27,8 @@ import java.util.List;
 @Configuration
 public class VideoCleanupBatchConfig {
 
-    @Value("${app.cleanup.uploading-timeout-hours:24}")
-    private int timeoutHours;
+    @Value("${app.cleanup.uploading-timeout-seconds:1}")
+    private int timeoutSeconds;
 
     @Bean
     public Job videoCleanupJob(JobRepository jobRepository, Step videoCleanupStep) {
@@ -43,7 +44,7 @@ public class VideoCleanupBatchConfig {
                                   ItemProcessor<Video, Video> videoCleanupItemProcessor,
                                   ItemWriter<Video> videoCleanupItemWriter) {
         return new StepBuilder("videoCleanupStep", jobRepository)
-                .<Video, Video>chunk(10, transactionManager)
+                .<Video, Video>chunk(2, transactionManager)
                 .reader(videoCleanupItemReader)
                 .processor(videoCleanupItemProcessor)
                 .writer(videoCleanupItemWriter)
@@ -51,8 +52,9 @@ public class VideoCleanupBatchConfig {
     }
 
     @Bean
+    @StepScope
     public ItemReader<Video> videoCleanupItemReader(VideoRepository videoRepository) {
-        LocalDateTime cutoff = LocalDateTime.now().minusHours(timeoutHours);
+        LocalDateTime cutoff = LocalDateTime.now().minusSeconds(timeoutSeconds);
         List<Video> videos = videoRepository.findByStatusAndUpdatedAtBefore(VideoStatus.UPLOADING, cutoff);
         return new ListItemReader<>(videos);
     }

@@ -25,7 +25,7 @@ public class QuartzConfig {
         return TriggerBuilder.newTrigger()
                 .forJob(videoCleanupJobDetail)
                 .withIdentity("videoCleanupTrigger", "cleanup")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 2 * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0/30 * * * * ?"))
                 .build();
     }
 }
