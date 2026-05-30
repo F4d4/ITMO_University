@@ -22,12 +22,12 @@ public class BitrixManagedConnectionFactory implements ManagedConnectionFactory,
 
     @Override
     public Object createConnectionFactory(ConnectionManager cxManager) throws ResourceException {
-        return new BitrixConnectionFactoryImpl(this, cxManager);
+        return new BitrixConnectionFactoryImpl(this);
     }
 
     @Override
     public Object createConnectionFactory() throws ResourceException {
-        return new BitrixConnectionFactoryImpl(this, null);
+        return new BitrixConnectionFactoryImpl(this);
     }
 
     @Override

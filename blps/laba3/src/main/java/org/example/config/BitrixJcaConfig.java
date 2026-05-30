@@ -2,7 +2,6 @@ package org.example.config;
 
 import org.example.integration.bitrix.BitrixConnectionFactory;
 import org.example.integration.bitrix.BitrixManagedConnectionFactory;
-import org.example.integration.bitrix.BitrixResourceAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +14,6 @@ public class BitrixJcaConfig {
 
     @Value("${bitrix24.responsible-id}")
     private String responsibleId;
-
-    @Bean
-    public BitrixResourceAdapter bitrixResourceAdapter() {
-        return new BitrixResourceAdapter();
-    }
 
     @Bean
     public BitrixManagedConnectionFactory bitrixManagedConnectionFactory() {
