@@ -19,4 +19,5 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findByStatus(VideoStatus status);
     Optional<Video> findByBitrixTaskId(Long bitrixTaskId);
     Page<Video> findByStatusAndUpdatedAtBefore(VideoStatus status, LocalDateTime cutoff, Pageable pageable);
+    List<Video> findByStatusAndUpdatedAtBefore(VideoStatus status, LocalDateTime cutoff);
 }

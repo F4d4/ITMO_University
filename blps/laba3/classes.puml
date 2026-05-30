@@ -1,0 +1,270 @@
+@startuml
+title UML-диаграмма классов и пакетов
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment left
+
+' ─── ENTITIES ────────────────────────────────────────────────────────────────
+
+package "entity" {
+
+    enum VideoStatus {
+        UPLOADING
+        DRAFT
+        PENDING_PUBLICATION
+        PUBLISHED
+    }
+
+    enum MonetizationStatus {
+        APPROVED
+        REJECTED
+    }
+
+    enum MonetizationType {
+        AD
+        SUBSCRIPTION
+    }
+
+    enum MethodStatus {
+        PENDING_REVIEW
+        APPROVED
+        REJECTED
+    }
+
+    enum AdType {
+        PRE_ROLL
+        MID_ROLL
+        POST_ROLL
+    }
+
+    enum Role {
+        USER
+        MODERATOR
+        ADMIN
+    }
+
+    class User {
+        +Long id
+        +String username
+        +String email
+        +String password
+        +Role role
+        +LocalDateTime createdAt
+    }
+
+    class Video {
+        +Long id
+        +String title
+        +String description
+        +String tags
+        +String minioKey
+        +String bucketName
+        +VideoStatus status
+        +Long bitrixTaskId
+        +LocalDateTime createdAt
+        +LocalDateTime updatedAt
+    }
+
+    class Monetization {
+        +Long id
+        +String strategy
+        +String configuration
+        +MonetizationStatus status
+        +LocalDateTime createdAt
+    }
+
+    class MonetizationMethod {
+        +Long id
+        +MonetizationType type
+        +AdType adType
+        +String adName
+        +Integer subscriptionPrice
+        +MethodStatus status
+        +String tags
+        +Long bitrixTaskId
+        +LocalDateTime createdAt
+    }
+
+    User "1" --> "*" Video : владелец
+    User "1" --> "*" Monetization
+    Video "1" --> "*" Monetization
+    Monetization "1" --> "*" MonetizationMethod
+    Video --> VideoStatus
+    Monetization --> MonetizationStatus
+    MonetizationMethod --> MonetizationType
+    MonetizationMethod --> MethodStatus
+    MonetizationMethod --> AdType
+    User --> Role
+}
+
+' ─── REPOSITORY ──────────────────────────────────────────────────────────────
+
+package "repository" {
+    interface VideoRepository
+    interface UserRepository
+    interface MonetizationRepository
+    interface MonetizationMethodRepository
+}
+
+' ─── SERVICE ─────────────────────────────────────────────────────────────────
+
+package "service" {
+    class VideoService
+    class MonetizationService
+    class AuthService
+    class UserService
+    class ValidationService
+    class BitrixIntegrationService
+    class MinioService
+
+    VideoService --> VideoRepository
+    VideoService --> BitrixIntegrationService
+    VideoService --> MinioService
+    MonetizationService --> MonetizationRepository
+    MonetizationService --> MonetizationMethodRepository
+    MonetizationService --> BitrixIntegrationService
+    MonetizationService --> ValidationService
+    AuthService --> UserRepository
+}
+
+' ─── CONTROLLER ──────────────────────────────────────────────────────────────
+
+package "controller" {
+    class VideoController
+    class MonetizationController
+    class ModerationController
+    class AuthController
+    class UserController
+    class BitrixWebhookController
+
+    VideoController --> VideoService
+    MonetizationController --> MonetizationService
+    ModerationController --> VideoService
+    ModerationController --> MonetizationService
+    AuthController --> AuthService
+    UserController --> UserService
+    BitrixWebhookController --> BitrixIntegrationService
+    BitrixWebhookController --> VideoService
+    BitrixWebhookController --> MonetizationService
+    BitrixWebhookController --> VideoRepository
+    BitrixWebhookController --> MonetizationMethodRepository
+}
+
+' ─── MESSAGING ───────────────────────────────────────────────────────────────
+
+package "messaging" {
+    class StompMessageSender {
+        +sendPublicationTask(PublicationTaskMessage)
+    }
+
+    class PublicationTaskConsumer {
+        -String nodeId
+        +processPublicationTask(Message)
+    }
+
+    class PublicationTaskMessage {
+        +Long videoId
+    }
+
+    StompMessageSender --> PublicationTaskMessage
+    PublicationTaskConsumer --> VideoRepository
+    PublicationTaskConsumer --> BitrixIntegrationService
+    PublicationTaskConsumer --> ValidationService
+}
+
+VideoService --> StompMessageSender
+
+' ─── INTEGRATION/BITRIX (JCA) ────────────────────────────────────────────────
+
+package "integration.bitrix" {
+    interface BitrixConnection {
+        +createTask(String, String) : Long
+        +getTaskStatus(Long) : Integer
+        +close()
+    }
+
+    interface BitrixConnectionFactory {
+        +getConnection() : BitrixConnection
+    }
+
+    class BitrixConnectionImpl {
+        -BitrixManagedConnection managedConnection
+        -boolean valid
+    }
+
+    class BitrixConnectionFactoryImpl {
+        -BitrixManagedConnectionFactory mcf
+    }
+
+    class BitrixManagedConnection {
+        -String webhookUrl
+        -String responsibleId
+        -HttpClient httpClient
+        +createTask(String, String) : Long
+        +getTaskStatus(Long) : Integer
+        +notifyConnectionClosed()
+    }
+
+    class BitrixManagedConnectionFactory {
+        -String webhookUrl
+        -String responsibleId
+        +createManagedConnection() : ManagedConnection
+        +createConnectionFactory() : Object
+    }
+
+    BitrixConnection <|.. BitrixConnectionImpl
+    BitrixConnectionFactory <|.. BitrixConnectionFactoryImpl
+    BitrixConnectionFactoryImpl --> BitrixManagedConnectionFactory
+    BitrixConnectionImpl --> BitrixManagedConnection
+    BitrixManagedConnectionFactory --> BitrixManagedConnection
+}
+
+BitrixIntegrationService --> BitrixConnectionFactory
+
+' ─── BATCH ───────────────────────────────────────────────────────────────────
+
+package "batch" {
+    class VideoCleanupQuartzJob {
+        +execute(JobExecutionContext)
+    }
+
+    class VideoCleanupBatchConfig {
+        -int timeoutHours
+        +videoCleanupJob()
+        +videoCleanupStep()
+        +videoCleanupItemReader()
+        +videoCleanupItemProcessor()
+        +videoCleanupItemWriter()
+    }
+
+    VideoCleanupQuartzJob --> VideoCleanupBatchConfig
+}
+
+' ─── CONFIG ──────────────────────────────────────────────────────────────────
+
+package "config" {
+    class ActiveMQConfig
+    class BitrixJcaConfig
+    class QuartzConfig
+    class SecurityConfig
+    class MinioConfig
+
+    BitrixJcaConfig --> BitrixManagedConnectionFactory
+    BitrixJcaConfig --> BitrixConnectionFactory
+    QuartzConfig --> VideoCleanupQuartzJob
+}
+
+' ─── SECURITY ────────────────────────────────────────────────────────────────
+
+package "security" {
+    class JwtAuthenticationFilter
+    class JwtTokenProvider
+    class CustomUserDetailsService
+
+    JwtAuthenticationFilter --> JwtTokenProvider
+    CustomUserDetailsService --> UserRepository
+}
+
+@enduml
