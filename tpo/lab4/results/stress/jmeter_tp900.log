@@ -1,0 +1,162 @@
+2026-05-30 21:43:29,850 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2026-05-30 21:43:29,875 INFO o.a.j.JMeter: Loading user properties from: /home/studs/s413122/apache-jmeter-5.6.3/bin/user.properties
+2026-05-30 21:43:29,875 INFO o.a.j.JMeter: Loading system properties from: /home/studs/s413122/apache-jmeter-5.6.3/bin/system.properties
+2026-05-30 21:43:29,875 INFO o.a.j.JMeter: Setting JMeter property: config=2
+2026-05-30 21:43:29,876 INFO o.a.j.JMeter: Setting JMeter property: throughput=900
+2026-05-30 21:43:29,876 INFO o.a.j.JMeter: Setting JMeter property: threads=40
+2026-05-30 21:43:29,876 INFO o.a.j.JMeter: Setting JMeter property: duration=75
+2026-05-30 21:43:29,876 INFO o.a.j.JMeter: Setting JMeter property: rampup=10
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: Version 5.6.3
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: java.version=17.0.12
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: os.name=FreeBSD
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: os.arch=amd64
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: os.version=14.4-STABLE
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: file.encoding=UTF-8
+2026-05-30 21:43:29,884 INFO o.a.j.JMeter: java.awt.headless=true
+2026-05-30 21:43:29,885 INFO o.a.j.JMeter: Max memory     =2147483648
+2026-05-30 21:43:29,885 INFO o.a.j.JMeter: Available Processors =16
+2026-05-30 21:43:29,896 INFO o.a.j.JMeter: Default Locale=English (EN)
+2026-05-30 21:43:29,896 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2026-05-30 21:43:29,896 INFO o.a.j.JMeter: JMeterHome=/home/studs/s413122/apache-jmeter-5.6.3
+2026-05-30 21:43:29,896 INFO o.a.j.JMeter: user.dir  =/home/studs/s413122/lab4
+2026-05-30 21:43:29,897 INFO o.a.j.JMeter: PWD       =/home/studs/s413122/lab4
+2026-05-30 21:43:29,905 INFO o.a.j.JMeter: IP: 192.168.10.80 Name: helios.cs.ifmo.ru FullName: helios.cs.ifmo.ru
+2026-05-30 21:43:29,920 INFO o.a.j.s.FileServer: Default base='/home/studs/s413122/lab4'
+2026-05-30 21:43:29,922 INFO o.a.j.s.FileServer: Set new base='/home/studs/s413122/lab4'
+2026-05-30 21:43:30,129 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2026-05-30 21:43:30,158 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2026-05-30 21:43:30,161 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2026-05-30 21:43:30,165 INFO o.a.j.s.SaveService: Loading file: /home/studs/s413122/lab4/load-test.jmx
+2026-05-30 21:43:30,228 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-05-30 21:43:30,229 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-05-30 21:43:30,229 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-05-30 21:43:30,229 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-05-30 21:43:30,229 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2026-05-30 21:43:30,229 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2026-05-30 21:43:30,263 INFO o.a.j.JMeter: Creating summariser <summary>
+2026-05-30 21:43:30,277 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2026-05-30 21:43:30,278 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-05-30 21:43:30,278 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-05-30 21:43:30,283 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2026-05-30 21:43:30,283 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2026-05-30 21:43:30,351 INFO o.a.j.r.ClassFinder: Will scan jar /home/studs/s413122/apache-jmeter-5.6.3/lib/ext/jmeter-plugins-cmd-2.3.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.functions.Function], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2026-05-30 21:43:30,355 INFO o.a.j.r.ClassFinder: Will scan jar /home/studs/s413122/apache-jmeter-5.6.3/lib/ext/jmeter-plugins-manager-1.10.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.functions.Function], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2026-05-30 21:43:30,449 INFO o.a.j.r.ClassFinder: Will scan jar /home/studs/s413122/apache-jmeter-5.6.3/lib/ext/jmeter-plugins-cmn-jmeter-0.8.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.functions.Function], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2026-05-30 21:43:30,475 INFO o.a.j.r.ClassFinder: Will scan jar /home/studs/s413122/apache-jmeter-5.6.3/lib/ext/jmeter-plugins-graphs-vs-2.0.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.functions.Function], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2026-05-30 21:43:30,476 INFO o.a.j.r.ClassFinder: Will scan jar /home/studs/s413122/apache-jmeter-5.6.3/lib/ext/jmeter-plugins-graphs-basic-2.0.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.functions.Function], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2026-05-30 21:43:30,495 INFO o.a.j.JMeter: Running test (1780166610495)
+2026-05-30 21:43:30,512 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : Users
+2026-05-30 21:43:30,513 INFO o.a.j.e.StandardJMeterEngine: Starting 40 threads for group Users.
+2026-05-30 21:43:30,513 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-05-30 21:43:30,513 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=40 ramp-up=10 delayedStart=false
+2026-05-30 21:43:30,519 INFO o.a.j.t.JMeterThread: Thread started: Users 1-1
+2026-05-30 21:43:30,541 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2026-05-30 21:43:30,541 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2026-05-30 21:43:30,565 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = helios.cs.ifmo.ru
+2026-05-30 21:43:30,572 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 0
+2026-05-30 21:43:30,573 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2026-05-30 21:43:30,573 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
+2026-05-30 21:43:30,574 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2026-05-30 21:43:30,574 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2026-05-30 21:43:30,765 INFO o.a.j.t.JMeterThread: Thread started: Users 1-2
+2026-05-30 21:43:31,014 INFO o.a.j.t.JMeterThread: Thread started: Users 1-3
+2026-05-30 21:43:31,264 INFO o.a.j.t.JMeterThread: Thread started: Users 1-4
+2026-05-30 21:43:31,382 INFO o.a.j.r.Summariser: summary +      1 in 00:00:01 =    1.1/s Avg:   743 Min:   743 Max:   743 Err:     0 (0.00%) Active: 4 Started: 4 Finished: 0
+2026-05-30 21:43:33,426 INFO o.a.j.t.JMeterThread: Thread started: Users 1-6
+2026-05-30 21:43:33,426 INFO o.a.j.t.JMeterThread: Thread started: Users 1-5
+2026-05-30 21:43:33,426 INFO o.a.j.t.JMeterThread: Thread started: Users 1-9
+2026-05-30 21:43:33,426 INFO o.a.j.t.JMeterThread: Thread started: Users 1-8
+2026-05-30 21:43:33,426 INFO o.a.j.t.JMeterThread: Thread started: Users 1-12
+2026-05-30 21:43:33,426 INFO o.a.j.t.JMeterThread: Thread started: Users 1-10
+2026-05-30 21:43:33,426 INFO o.a.j.t.JMeterThread: Thread started: Users 1-7
+2026-05-30 21:43:33,426 INFO o.a.j.t.JMeterThread: Thread started: Users 1-11
+2026-05-30 21:43:33,515 INFO o.a.j.t.JMeterThread: Thread started: Users 1-13
+2026-05-30 21:43:33,766 INFO o.a.j.t.JMeterThread: Thread started: Users 1-14
+2026-05-30 21:43:34,015 INFO o.a.j.t.JMeterThread: Thread started: Users 1-15
+2026-05-30 21:43:34,264 INFO o.a.j.t.JMeterThread: Thread started: Users 1-16
+2026-05-30 21:43:34,514 INFO o.a.j.t.JMeterThread: Thread started: Users 1-17
+2026-05-30 21:43:34,764 INFO o.a.j.t.JMeterThread: Thread started: Users 1-18
+2026-05-30 21:43:35,013 INFO o.a.j.t.JMeterThread: Thread started: Users 1-19
+2026-05-30 21:43:35,264 INFO o.a.j.t.JMeterThread: Thread started: Users 1-20
+2026-05-30 21:43:35,513 INFO o.a.j.t.JMeterThread: Thread started: Users 1-21
+2026-05-30 21:43:35,764 INFO o.a.j.t.JMeterThread: Thread started: Users 1-22
+2026-05-30 21:43:36,013 INFO o.a.j.t.JMeterThread: Thread started: Users 1-23
+2026-05-30 21:43:36,264 INFO o.a.j.t.JMeterThread: Thread started: Users 1-24
+2026-05-30 21:43:36,513 INFO o.a.j.t.JMeterThread: Thread started: Users 1-25
+2026-05-30 21:43:36,764 INFO o.a.j.t.JMeterThread: Thread started: Users 1-26
+2026-05-30 21:43:37,013 INFO o.a.j.t.JMeterThread: Thread started: Users 1-27
+2026-05-30 21:43:37,264 INFO o.a.j.t.JMeterThread: Thread started: Users 1-28
+2026-05-30 21:43:37,514 INFO o.a.j.t.JMeterThread: Thread started: Users 1-29
+2026-05-30 21:43:37,764 INFO o.a.j.t.JMeterThread: Thread started: Users 1-30
+2026-05-30 21:43:38,014 INFO o.a.j.t.JMeterThread: Thread started: Users 1-31
+2026-05-30 21:43:38,263 INFO o.a.j.t.JMeterThread: Thread started: Users 1-32
+2026-05-30 21:43:38,514 INFO o.a.j.t.JMeterThread: Thread started: Users 1-33
+2026-05-30 21:43:38,763 INFO o.a.j.t.JMeterThread: Thread started: Users 1-34
+2026-05-30 21:43:39,014 INFO o.a.j.t.JMeterThread: Thread started: Users 1-35
+2026-05-30 21:43:39,264 INFO o.a.j.t.JMeterThread: Thread started: Users 1-36
+2026-05-30 21:43:39,514 INFO o.a.j.t.JMeterThread: Thread started: Users 1-37
+2026-05-30 21:43:39,763 INFO o.a.j.t.JMeterThread: Thread started: Users 1-38
+2026-05-30 21:43:40,014 INFO o.a.j.t.JMeterThread: Thread started: Users 1-39
+2026-05-30 21:43:40,264 INFO o.a.j.t.JMeterThread: Thread started: Users 1-40
+2026-05-30 21:44:00,027 INFO o.a.j.r.Summariser: summary +    402 in 00:00:29 =   14.0/s Avg:   855 Min:   706 Max:  2660 Err:     0 (0.00%) Active: 40 Started: 40 Finished: 0
+2026-05-30 21:44:00,028 INFO o.a.j.r.Summariser: summary =    403 in 00:00:30 =   13.6/s Avg:   855 Min:   706 Max:  2660 Err:     0 (0.00%)
+2026-05-30 21:44:30,042 INFO o.a.j.r.Summariser: summary +    448 in 00:00:30 =   14.9/s Avg:   878 Min:   878 Max:   881 Err:     0 (0.00%) Active: 40 Started: 40 Finished: 0
+2026-05-30 21:44:30,043 INFO o.a.j.r.Summariser: summary =    851 in 00:01:00 =   14.3/s Avg:   867 Min:   706 Max:  2660 Err:     0 (0.00%)
+2026-05-30 21:44:43,777 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-2
+2026-05-30 21:44:43,842 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-19
+2026-05-30 21:44:43,911 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-33
+2026-05-30 21:44:43,977 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-25
+2026-05-30 21:44:44,044 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-3
+2026-05-30 21:44:44,113 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-5
+2026-05-30 21:44:44,178 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-8
+2026-05-30 21:44:44,246 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-34
+2026-05-30 21:44:44,313 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-26
+2026-05-30 21:44:44,379 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-12
+2026-05-30 21:44:44,447 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-35
+2026-05-30 21:44:44,513 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-20
+2026-05-30 21:44:44,583 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-6
+2026-05-30 21:44:44,649 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-27
+2026-05-30 21:44:44,714 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-36
+2026-05-30 21:44:44,782 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-1
+2026-05-30 21:44:44,849 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-11
+2026-05-30 21:44:44,916 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-21
+2026-05-30 21:44:44,983 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-16
+2026-05-30 21:44:45,049 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-37
+2026-05-30 21:44:45,117 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-28
+2026-05-30 21:44:45,184 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-4
+2026-05-30 21:44:45,251 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-9
+2026-05-30 21:44:45,317 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-38
+2026-05-30 21:44:45,386 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-22
+2026-05-30 21:44:45,452 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-29
+2026-05-30 21:44:45,519 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-39
+2026-05-30 21:44:45,586 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-10
+2026-05-30 21:44:45,586 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-10
+2026-05-30 21:44:45,653 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-17
+2026-05-30 21:44:45,653 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-17
+2026-05-30 21:44:45,720 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-30
+2026-05-30 21:44:45,720 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-30
+2026-05-30 21:44:45,787 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-40
+2026-05-30 21:44:45,787 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-40
+2026-05-30 21:44:45,854 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-13
+2026-05-30 21:44:45,854 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-13
+2026-05-30 21:44:45,921 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-23
+2026-05-30 21:44:45,921 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-23
+2026-05-30 21:44:45,988 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-14
+2026-05-30 21:44:45,988 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-14
+2026-05-30 21:44:46,055 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-31
+2026-05-30 21:44:46,055 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-31
+2026-05-30 21:44:46,123 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-18
+2026-05-30 21:44:46,123 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-18
+2026-05-30 21:44:46,188 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-15
+2026-05-30 21:44:46,188 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-15
+2026-05-30 21:44:46,255 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-24
+2026-05-30 21:44:46,256 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-24
+2026-05-30 21:44:46,323 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-32
+2026-05-30 21:44:46,323 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-32
+2026-05-30 21:44:46,390 INFO o.a.j.t.JMeterThread: Stopping because end time detected by thread: Users 1-7
+2026-05-30 21:44:46,390 INFO o.a.j.t.JMeterThread: Thread finished: Users 1-7
+2026-05-30 21:44:46,390 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2026-05-30 21:44:46,391 INFO o.a.j.r.Summariser: summary +    244 in 00:00:16 =   14.9/s Avg:   878 Min:   878 Max:   886 Err:     0 (0.00%) Active: 0 Started: 40 Finished: 40
+2026-05-30 21:44:46,392 INFO o.a.j.r.Summariser: summary =   1095 in 00:01:16 =   14.4/s Avg:   870 Min:   706 Max:  2660 Err:     0 (0.00%)
