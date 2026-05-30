@@ -1,0 +1,98 @@
+@startuml
+title Архитектура приложения видео-платформы
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+
+actor "Пользователь" as User
+actor "Модератор" as Moderator
+
+node "Application Node 1\nSpring Boot\nport 8080\napp.node.id=node1" as Node1 {
+    component "REST Controllers" as N1Controllers
+    component "Business Services" as N1Services
+    component "StompMessageSender" as N1Stomp
+    component "PublicationTaskConsumer\n@JmsListener" as N1Consumer
+    component "Bitrix JCA Adapter" as N1Jca
+    component "Quartz Scheduler" as N1Quartz
+    component "Spring Batch\nVideo Cleanup Job" as N1Batch
+}
+
+node "Application Node 2\nSpring Boot\nport 8081\napp.node.id=node2" as Node2 {
+    component "REST Controllers" as N2Controllers
+    component "Business Services" as N2Services
+    component "StompMessageSender" as N2Stomp
+    component "PublicationTaskConsumer\n@JmsListener" as N2Consumer
+    component "Bitrix JCA Adapter" as N2Jca
+    component "Quartz Scheduler" as N2Quartz
+    component "Spring Batch\nVideo Cleanup Job" as N2Batch
+}
+
+queue "ActiveMQ Broker\nqueue: publication-tasks\nSTOMP 61613\nJMS/OpenWire 61616" as ActiveMQ
+database "PostgreSQL\napplication tables\nSpring Batch metadata" as PostgreSQL
+cloud "MinIO\nuploaded-videos\npublished-videos" as MinIO
+cloud "Bitrix24 EIS\nTasks REST API\nWebhooks" as Bitrix24
+
+User --> N1Controllers : HTTP REST / JWT
+User --> N2Controllers : HTTP REST / JWT
+Moderator --> Bitrix24 : обработка задач
+
+N1Controllers --> N1Services
+N2Controllers --> N2Services
+
+N1Services --> N1Stomp : задание публикации
+N2Services --> N2Stomp : задание публикации
+
+N1Stomp --> ActiveMQ : STOMP SEND\n/queue/publication-tasks
+N2Stomp --> ActiveMQ : STOMP SEND\n/queue/publication-tasks
+
+ActiveMQ --> N1Consumer : JMS message\ncompeting consumer
+ActiveMQ --> N2Consumer : JMS message\ncompeting consumer
+
+N1Consumer --> N1Services : обработка публикации
+N2Consumer --> N2Services : обработка публикации
+
+N1Consumer --> N1Jca : создать задачу Bitrix24
+N2Consumer --> N2Jca : создать задачу Bitrix24
+N1Services --> N1Jca : задачи монетизации
+N2Services --> N2Jca : задачи монетизации
+
+N1Jca --> Bitrix24 : HTTP REST через JCA\ncreateTask / getTaskStatus
+N2Jca --> Bitrix24 : HTTP REST через JCA\ncreateTask / getTaskStatus
+Bitrix24 --> N1Controllers : webhook\n/api/bitrix/webhook
+Bitrix24 --> N2Controllers : webhook\n/api/bitrix/webhook
+
+N1Services --> PostgreSQL : JDBC / JPA / JTA
+N2Services --> PostgreSQL : JDBC / JPA / JTA
+N1Consumer --> PostgreSQL : transactional update
+N2Consumer --> PostgreSQL : transactional update
+N1Batch --> PostgreSQL : read/delete UPLOADING
+N2Batch --> PostgreSQL : read/delete UPLOADING
+
+N1Services --> MinIO : S3 API\nupload / publish
+N2Services --> MinIO : S3 API\nupload / publish
+N1Batch --> MinIO : S3 API\ndelete garbage videos
+N2Batch --> MinIO : S3 API\ndelete garbage videos
+
+N1Quartz --> N1Batch : cron 0 0 2 * * ?
+N2Quartz --> N2Batch : cron 0 0 2 * * ?
+
+note right of ActiveMQ
+Очередь publication-tasks распределяет
+сообщения между двумя независимыми
+JMS-потребителями.
+end note
+
+note bottom of Bitrix24
+Bitrix24 является внешней EIS.
+Доступ к нему инкапсулирован
+в JCA-слое приложения.
+end note
+
+note bottom of PostgreSQL
+Spring Batch создает служебные таблицы
+для хранения job/step execution metadata.
+end note
+
+@enduml
