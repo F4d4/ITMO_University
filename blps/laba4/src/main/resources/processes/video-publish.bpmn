@@ -15,8 +15,19 @@
     </startEvent>
 
     <userTask id="configurePublication" name="Настроить параметры публикации"
-              camunda:assignee="${uploaderId}"
-              camunda:formKey="embedded:app:forms/video-publish.html">
+              camunda:assignee="${uploaderId}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="audienceType" label="Возрастная аудитория" type="enum" defaultValue="ALL_AGES">
+            <camunda:value id="ALL_AGES" name="Для всех возрастов"/>
+            <camunda:value id="ADULTS_ONLY" name="Только для взрослых"/>
+          </camunda:formField>
+          <camunda:formField id="accessType" label="Тип доступа" type="enum" defaultValue="PUBLIC">
+            <camunda:value id="PUBLIC" name="Публичный"/>
+            <camunda:value id="PRIVATE" name="Приватный"/>
+          </camunda:formField>
+        </camunda:formData>
+      </extensionElements>
       <incoming>flow_start_to_configure</incoming>
       <outgoing>flow_configure_to_pending</outgoing>
     </userTask>
@@ -40,8 +51,13 @@
     </exclusiveGateway>
 
     <userTask id="reviewByModerator" name="Ручная проверка модератором"
-              camunda:candidateGroups="moderator"
-              camunda:formKey="embedded:app:forms/moderation-video.html">
+              camunda:candidateGroups="moderator">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="moderatorApproved" label="Одобрить публикацию?" type="boolean" defaultValue="true"/>
+          <camunda:formField id="rejectionReason" label="Причина отклонения" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>flow_needs_manual_review</incoming>
       <outgoing>flow_review_to_gateway</outgoing>
     </userTask>

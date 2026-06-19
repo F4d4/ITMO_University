@@ -43,8 +43,22 @@
     </serviceTask>
 
     <userTask id="fillVideoInfo" name="Заполнить информацию о видео"
-              camunda:assignee="${uploaderId}"
-              camunda:formKey="embedded:app:forms/video-info.html">
+              camunda:assignee="${uploaderId}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="title" label="Название видео" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="description" label="Описание видео" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="tags" label="Теги (через запятую)" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>flow_create_to_task</incoming>
       <incoming>flow_desc_invalid_retry</incoming>
       <outgoing>flow_task_to_validate_desc</outgoing>

@@ -9,8 +9,21 @@
              id="AuthLoginDefs">
   <process id="auth-login-process" name="[POST] Авторизация пользователя" isExecutable="true">
 
-    <startEvent id="start" name="Начало авторизации"
-                camunda:formKey="embedded:app:forms/login-form.html">
+    <startEvent id="start" name="Начало авторизации">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="username" label="Имя пользователя" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="password" label="Пароль" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </extensionElements>
       <outgoing>sf1</outgoing>
     </startEvent>
 
@@ -21,8 +34,13 @@
     </serviceTask>
 
     <userTask id="showLoginResult" name="Результат авторизации"
-              camunda:formKey="embedded:app:forms/auth-result.html"
               camunda:assignee="admin">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="authResultMessage" label="Результат" type="string"/>
+          <camunda:formField id="jwtToken" label="JWT-токен" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf2</incoming>
       <outgoing>sf3</outgoing>
     </userTask>

@@ -20,8 +20,12 @@
     </serviceTask>
 
     <userTask id="showVideoDetail" name="Просмотр видео"
-              camunda:formKey="embedded:app:forms/video-detail.html"
               camunda:assignee="${assignee}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="videoJson" label="Видео (JSON)" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf_loaded</incoming>
       <outgoing>sf_end</outgoing>
     </userTask>

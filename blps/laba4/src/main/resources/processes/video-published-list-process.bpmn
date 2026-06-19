@@ -21,8 +21,13 @@
     </serviceTask>
 
     <userTask id="showPublishedList" name="Опубликованные видео"
-              camunda:formKey="embedded:app:forms/published-videos-list.html"
               camunda:assignee="${assignee}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="publishedListJson" label="Опубликованные видео (JSON)" type="string"/>
+          <camunda:formField id="refresh" label="Обновить список?" type="boolean" defaultValue="false"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf_loaded</incoming>
       <outgoing>sf_to_gw</outgoing>
     </userTask>

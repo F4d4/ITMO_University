@@ -21,8 +21,13 @@
     </serviceTask>
 
     <userTask id="showModerationQueue" name="Очередь модерации видео"
-              camunda:formKey="embedded:app:forms/pending-videos-list.html"
               camunda:candidateGroups="moderator">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="pendingVideosJson" label="Видео на модерации (JSON)" type="string"/>
+          <camunda:formField id="refresh" label="Обновить очередь?" type="boolean" defaultValue="false"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf_loaded</incoming>
       <outgoing>sf_to_gw</outgoing>
     </userTask>

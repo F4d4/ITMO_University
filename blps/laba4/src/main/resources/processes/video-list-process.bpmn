@@ -21,8 +21,13 @@
     </serviceTask>
 
     <userTask id="showVideoList" name="Мои видео"
-              camunda:formKey="embedded:app:forms/video-list.html"
               camunda:assignee="${assignee}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="videoListJson" label="Мои видео (JSON)" type="string"/>
+          <camunda:formField id="refresh" label="Обновить список?" type="boolean" defaultValue="false"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf_loaded</incoming>
       <outgoing>sf_to_gw</outgoing>
     </userTask>

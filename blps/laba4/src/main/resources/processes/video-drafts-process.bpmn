@@ -21,8 +21,13 @@
     </serviceTask>
 
     <userTask id="showDraftList" name="Мои черновики"
-              camunda:formKey="embedded:app:forms/drafts-list.html"
               camunda:assignee="${assignee}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="draftListJson" label="Мои черновики (JSON)" type="string"/>
+          <camunda:formField id="refresh" label="Обновить список?" type="boolean" defaultValue="false"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf_loaded</incoming>
       <outgoing>sf_to_gw</outgoing>
     </userTask>

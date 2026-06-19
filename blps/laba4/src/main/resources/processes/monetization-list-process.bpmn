@@ -21,8 +21,13 @@
     </serviceTask>
 
     <userTask id="showMonetizationList" name="Мои монетизации"
-              camunda:formKey="embedded:app:forms/monetization-list.html"
               camunda:assignee="${assignee}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="monetizationListJson" label="Мои монетизации (JSON)" type="string"/>
+          <camunda:formField id="refresh" label="Обновить список?" type="boolean" defaultValue="false"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf_loaded</incoming>
       <outgoing>sf_to_gw</outgoing>
     </userTask>

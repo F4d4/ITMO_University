@@ -20,8 +20,12 @@
     </serviceTask>
 
     <userTask id="showMonetizationDetail" name="Просмотр монетизации"
-              camunda:formKey="embedded:app:forms/monetization-detail.html"
               camunda:assignee="${assignee}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="monetizationJson" label="Монетизация (JSON)" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf_loaded</incoming>
       <outgoing>sf_end</outgoing>
     </userTask>

@@ -9,8 +9,30 @@
              id="AuthRegisterDefs">
   <process id="auth-register-process" name="[POST] Регистрация пользователя" isExecutable="true">
 
-    <startEvent id="start" name="Начало регистрации"
-                camunda:formKey="embedded:app:forms/register-form.html">
+    <startEvent id="start" name="Начало регистрации">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="username" label="Имя пользователя" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="email" label="Email" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="password" label="Пароль" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="role" label="Роль" type="enum" defaultValue="USER">
+            <camunda:value id="USER" name="Пользователь"/>
+            <camunda:value id="MODERATOR" name="Модератор"/>
+          </camunda:formField>
+        </camunda:formData>
+      </extensionElements>
       <outgoing>sf1</outgoing>
     </startEvent>
 
@@ -21,8 +43,13 @@
     </serviceTask>
 
     <userTask id="showAuthResult" name="Результат регистрации"
-              camunda:formKey="embedded:app:forms/auth-result.html"
               camunda:assignee="admin">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="authResultMessage" label="Результат" type="string"/>
+          <camunda:formField id="jwtToken" label="JWT-токен" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf2</incoming>
       <outgoing>sf3</outgoing>
     </userTask>

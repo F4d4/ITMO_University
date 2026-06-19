@@ -20,8 +20,12 @@
     </serviceTask>
 
     <userTask id="showUserDetail" name="Просмотр пользователя"
-              camunda:formKey="embedded:app:forms/user-detail.html"
               camunda:assignee="${assignee}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="userJson" label="Пользователь (JSON)" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>sf_loaded</incoming>
       <outgoing>sf_end</outgoing>
     </userTask>

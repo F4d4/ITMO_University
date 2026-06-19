@@ -21,8 +21,23 @@
     </serviceTask>
 
     <userTask id="selectMethodType" name="Выбрать и настроить способ"
-              camunda:assignee="${uploaderId}"
-              camunda:formKey="embedded:app:forms/monetization-method.html">
+              camunda:assignee="${uploaderId}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="methodType" label="Тип способа" type="enum" defaultValue="AD">
+            <camunda:value id="AD" name="Реклама"/>
+            <camunda:value id="SUBSCRIPTION" name="Подписка"/>
+          </camunda:formField>
+          <camunda:formField id="adType" label="Тип рекламы (для рекламы)" type="enum" defaultValue="PRE_ROLL">
+            <camunda:value id="PRE_ROLL" name="Перед роликом"/>
+            <camunda:value id="MID_ROLL" name="В середине ролика"/>
+            <camunda:value id="POST_ROLL" name="После ролика"/>
+          </camunda:formField>
+          <camunda:formField id="adName" label="Название рекламы (для рекламы)" type="string"/>
+          <camunda:formField id="subscriptionPrice" label="Цена подписки (для подписки)" type="string"/>
+          <camunda:formField id="methodTags" label="Теги (через запятую)" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>flow_check_to_task</incoming>
       <outgoing>flow_task_to_type_gateway</outgoing>
     </userTask>
@@ -56,8 +71,13 @@
     </serviceTask>
 
     <userTask id="reviewAdMethod" name="Проверить рекламный способ"
-              camunda:candidateGroups="moderator"
-              camunda:formKey="embedded:app:forms/moderation-ad.html">
+              camunda:candidateGroups="moderator">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="adApproved" label="Одобрить рекламный способ?" type="boolean" defaultValue="true"/>
+          <camunda:formField id="adRejectionReason" label="Причина отклонения" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>flow_save_ad_to_review</incoming>
       <outgoing>flow_review_to_decision</outgoing>
     </userTask>

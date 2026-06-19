@@ -31,8 +31,17 @@
     </endEvent>
 
     <userTask id="selectStrategy" name="Выбрать стратегию монетизации"
-              camunda:assignee="${uploaderId}"
-              camunda:formKey="embedded:app:forms/monetization-request.html">
+              camunda:assignee="${uploaderId}">
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="strategy" label="Стратегия монетизации" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="configuration" label="Конфигурация (описание)" type="string"/>
+        </camunda:formData>
+      </extensionElements>
       <incoming>flow_eligible</incoming>
       <outgoing>flow_strategy_to_save</outgoing>
     </userTask>
