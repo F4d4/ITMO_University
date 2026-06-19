@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-deployment-structure>
     <deployment>
+        <exclude-subsystems>
+            <subsystem name="weld"/>
+            <subsystem name="batch-jberet"/>
+        </exclude-subsystems>
         <exclusions>
             <module name="org.hibernate.main"/>
             <module name="org.hibernate.envers.main"/>
@@ -11,6 +15,10 @@
             <module name="com.fasterxml.jackson.core.jackson-core"/>
             <module name="com.fasterxml.jackson.core.jackson-databind"/>
             <module name="com.fasterxml.jackson.core.jackson-annotations"/>
+            <module name="org.slf4j"/>
+            <module name="org.slf4j.impl"/>
+            <module name="org.slf4j.ext"/>
+            <module name="org.jboss.logging.jul-to-slf4j-stub"/>
         </exclusions>
         <dependencies>
             <module name="jdk.unsupported"/>
