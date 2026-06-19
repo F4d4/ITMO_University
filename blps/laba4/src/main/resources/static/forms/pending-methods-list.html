@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Очередь модерации методов</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #ffe0b2; }
+    .form-group { margin-top: 15px; }
+    label { font-weight: bold; }
+    select { padding: 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h3>Очередь модерации методов монетизации</h3>
+  <div id="pendingTable">
+    <p>Загрузка...</p>
+  </div>
+
+  <div class="form-group">
+    <label>Действие:</label><br/>
+    <select cam-variable-name="refresh" cam-variable-type="Boolean">
+      <option value="false">Закрыть</option>
+      <option value="true">Обновить очередь</option>
+    </select>
+  </div>
+
+  <script>
+    var dataRaw = document.querySelector('[cam-variable-name="pendingMethodsJson"]');
+    if (dataRaw && dataRaw.value) {
+      try {
+        var methods = JSON.parse(dataRaw.value);
+        var html = '<table><tr><th>ID</th><th>Тип</th><th>Название рекламы</th><th>Статус</th></tr>';
+        methods.forEach(function(m) {
+          html += '<tr><td>' + m.id + '</td><td>' + (m.methodType || '-') + '</td><td>' + (m.adName || '-') + '</td><td>' + m.status + '</td></tr>';
+        });
+        html += '</table><p>На модерации: ' + methods.length + '</p>';
+        document.getElementById('pendingTable').innerHTML = html;
+      } catch(e) {}
+    }
+  </script>
+  <input type="hidden" cam-variable-name="pendingMethodsJson" cam-variable-type="String"/>
+</body>
+</html>

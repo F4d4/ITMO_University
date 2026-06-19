@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Монетизация</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .field { margin-bottom: 10px; }
+    label { font-weight: bold; display: block; }
+    .value { padding: 6px; background: #f9f9f9; border: 1px solid #eee; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h3>Информация о монетизации</h3>
+  <div id="monetizationDetail">
+    <p>Загрузка...</p>
+  </div>
+
+  <script>
+    var dataRaw = document.querySelector('[cam-variable-name="monetizationJson"]');
+    if (dataRaw && dataRaw.value) {
+      try {
+        var m = JSON.parse(dataRaw.value);
+        var html = '';
+        html += '<div class="field"><label>ID</label><div class="value">' + m.id + '</div></div>';
+        html += '<div class="field"><label>Видео ID</label><div class="value">' + (m.videoId || '-') + '</div></div>';
+        html += '<div class="field"><label>Стратегия</label><div class="value">' + (m.strategy || '-') + '</div></div>';
+        html += '<div class="field"><label>Статус</label><div class="value">' + m.status + '</div></div>';
+        html += '<div class="field"><label>Конфигурация</label><div class="value">' + (m.configuration || '-') + '</div></div>';
+        html += '<div class="field"><label>Создано</label><div class="value">' + (m.createdAt || '') + '</div></div>';
+        document.getElementById('monetizationDetail').innerHTML = html;
+      } catch(e) {}
+    }
+  </script>
+  <input type="hidden" cam-variable-name="monetizationJson" cam-variable-type="String"/>
+</body>
+</html>

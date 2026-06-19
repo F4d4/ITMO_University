@@ -1,0 +1,43 @@
+<form name="moderationVideoForm" role="form">
+  <div class="alert alert-warning">
+    <strong>Manual Review Required</strong><br/>
+    The video description did not pass automatic moderation. Please review it manually.
+  </div>
+
+  <div class="form-group">
+    <label>Video ID</label>
+    <p class="form-control-static">
+      <span cam-variable-name="videoId" cam-variable-type="Long"></span>
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Decision <span class="text-danger">*</span></label>
+    <div class="radio">
+      <label>
+        <input type="radio"
+               cam-variable-name="moderatorApproved"
+               cam-variable-type="Boolean"
+               value="true"/> Approve Publication
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio"
+               cam-variable-name="moderatorApproved"
+               cam-variable-type="Boolean"
+               value="false"/> Reject Publication
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="rejectionReason">Rejection Reason (if rejecting)</label>
+    <textarea id="rejectionReason"
+              class="form-control"
+              cam-variable-name="rejectionReason"
+              cam-variable-type="String"
+              rows="3"
+              placeholder="Enter reason for rejection..."></textarea>
+  </div>
+</form>

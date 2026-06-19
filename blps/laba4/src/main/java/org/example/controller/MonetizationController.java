@@ -1,104 +1,134 @@
 package org.example.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.dto.request.MonetizationMethodRequest;
-import org.example.dto.request.MonetizationRequest;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 import org.example.dto.response.ApiResponse;
-import org.example.dto.response.MonetizationMethodResponse;
-import org.example.dto.response.MonetizationResponse;
 import org.example.security.SecurityUtils;
-import org.example.service.MonetizationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/monetization")
 @RequiredArgsConstructor
 public class MonetizationController {
 
-    private final MonetizationService monetizationService;
     private final SecurityUtils securityUtils;
+    private final RuntimeService runtimeService;
+    private final TaskService taskService;
 
-    // ─── BPMN 3: Запрос на монетизацию ───────────────────────────────────────────
-
-    /**
-     * BPMN 3: Запрос на монетизацию видео.
-     * userId берётся из JWT токена.
-     * Тело запроса: videoId, strategy, configuration.
-     */
     @PostMapping("/request")
-    public ResponseEntity<ApiResponse<MonetizationResponse>> requestMonetization(
-            @Valid @RequestBody MonetizationRequest request) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> requestMonetization(
+            @RequestParam Long videoId) {
+
         Long userId = securityUtils.getCurrentUserId();
-        MonetizationResponse monetization = monetizationService.requestMonetization(userId, request);
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("videoId", videoId);
+        variables.put("userId", userId);
+        variables.put("uploaderId", String.valueOf(userId));
+        variables.put("assignee", String.valueOf(userId));
+
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("monetization-request-process", variables);
+
+        Task task = taskService.createTaskQuery()
+                .processInstanceId(instance.getId())
+                .singleResult();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processInstanceId", instance.getId());
+        if (task != null) {
+            result.put("taskId", task.getId());
+            result.put("taskName", task.getName());
+        } else {
+            result.put("message", "Monetization request processed.");
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.ok(
-                        "Монетизация одобрена. Уведомление об одобрении отправлено.",
-                        monetization
-                ));
+                .body(ApiResponse.ok("Запрос на монетизацию создан. Выберите стратегию в Camunda Tasklist.", result));
     }
 
-    // ─── BPMN 4: Добавление способа монетизации ──────────────────────────────────
+    @PostMapping("/{monetizationId}/start-method")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> startAddMethod(
+            @PathVariable Long monetizationId) {
 
-    /**
-     * BPMN 4: Добавление способа монетизации (USER).
-     * Сохраняется со статусом PENDING_REVIEW — ждёт проверки модератора.
-     */
-    @PostMapping("/{monetizationId}/methods")
-    public ResponseEntity<ApiResponse<MonetizationMethodResponse>> addMonetizationMethod(
-            @PathVariable Long monetizationId,
-            @Valid @RequestBody MonetizationMethodRequest request) {
-        MonetizationMethodResponse method = monetizationService.addMonetizationMethod(monetizationId, request);
-        String message = method.getStatus() == org.example.entity.MethodStatus.APPROVED
-                ? "Подписка автоматически одобрена системой."
-                : "Реклама отправлена на проверку модератору.";
+        Long userId = securityUtils.getCurrentUserId();
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("monetizationId", monetizationId);
+        variables.put("userId", userId);
+        variables.put("uploaderId", String.valueOf(userId));
+        variables.put("assignee", String.valueOf(userId));
+
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("monetization-method-process", variables);
+
+        Task task = taskService.createTaskQuery()
+                .processInstanceId(instance.getId())
+                .singleResult();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processInstanceId", instance.getId());
+        if (task != null) {
+            result.put("taskId", task.getId());
+            result.put("taskName", task.getName());
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.ok(message, method));
+                .body(ApiResponse.ok("Процесс добавления способа монетизации запущен.", result));
     }
 
-    // ─── Вспомогательные эндпоинты ────────────────────────────────────────────────
-
-    /**
-     * Получить монетизацию по ID
-     */
     @GetMapping("/{monetizationId}")
-    public ResponseEntity<ApiResponse<MonetizationResponse>> getMonetizationById(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getMonetizationById(
             @PathVariable Long monetizationId) {
-        MonetizationResponse monetization = monetizationService.getMonetizationById(monetizationId);
-        return ResponseEntity.ok(ApiResponse.ok("Монетизация найдена", monetization));
-    }
 
-    /**
-     * Получить все монетизации для конкретного видео
-     */
-    @GetMapping("/video/{videoId}")
-    public ResponseEntity<ApiResponse<List<MonetizationResponse>>> getMonetizationsByVideo(
-            @PathVariable Long videoId) {
-        List<MonetizationResponse> list = monetizationService.getMonetizationsByVideo(videoId);
-        return ResponseEntity.ok(ApiResponse.ok("Монетизации для видео", list));
-    }
-
-    /**
-     * Получить все монетизации текущего пользователя (userId из JWT)
-     */
-    @GetMapping("/my")
-    public ResponseEntity<ApiResponse<List<MonetizationResponse>>> getMyMonetizations() {
         Long userId = securityUtils.getCurrentUserId();
-        List<MonetizationResponse> list = monetizationService.getMonetizationsByUser(userId);
-        return ResponseEntity.ok(ApiResponse.ok("Монетизации пользователя", list));
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("monetizationId", monetizationId);
+        variables.put("userId", userId);
+        variables.put("assignee", String.valueOf(userId));
+
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("monetization-get-process", variables);
+
+        String monetizationJson = (String) runtimeService.getVariable(instance.getId(), "monetizationJson");
+        Task task = taskService.createTaskQuery().processInstanceId(instance.getId()).singleResult();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processInstanceId", instance.getId());
+        result.put("monetizationJson", monetizationJson);
+        if (task != null) {
+            result.put("taskId", task.getId());
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Монетизация найдена", result));
     }
 
-    /**
-     * Получить все способы монетизации для конкретной монетизации
-     */
-    @GetMapping("/{monetizationId}/methods")
-    public ResponseEntity<ApiResponse<List<MonetizationMethodResponse>>> getMethodsByMonetization(
-            @PathVariable Long monetizationId) {
-        List<MonetizationMethodResponse> methods = monetizationService.getMethodsByMonetization(monetizationId);
-        return ResponseEntity.ok(ApiResponse.ok("Способы монетизации", methods));
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getMyMonetizations() {
+        Long userId = securityUtils.getCurrentUserId();
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("userId", userId);
+        variables.put("assignee", String.valueOf(userId));
+
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("monetization-list-process", variables);
+
+        String monetizationListJson = (String) runtimeService.getVariable(instance.getId(), "monetizationListJson");
+        Task task = taskService.createTaskQuery().processInstanceId(instance.getId()).singleResult();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processInstanceId", instance.getId());
+        result.put("monetizationListJson", monetizationListJson);
+        if (task != null) {
+            result.put("taskId", task.getId());
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Монетизации пользователя", result));
     }
 }

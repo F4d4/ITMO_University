@@ -13,12 +13,29 @@ import java.util.List;
 @Service
 public class ValidationService {
 
-    private static final long MAX_VIDEO_SIZE_BYTES = 100L * 1024 * 1024; // 100 МБ
-    private static final int MAX_DESCRIPTION_LENGTH = 150;
+    public static final long MAX_VIDEO_SIZE_BYTES = 100L * 1024 * 1024; // 100 МБ
+    public static final int MAX_DESCRIPTION_LENGTH = 150;
 
     private static final List<String> FORBIDDEN_WORDS = Arrays.asList(
             "терроризм", "наркотики", "убийство", "ограбление", "шантаж", "насилие"
     );
+
+    public boolean isVideoFileMetaValid(String fileName, Long fileSize) {
+        if (fileSize == null || fileSize >= MAX_VIDEO_SIZE_BYTES) return false;
+        return fileName != null && fileName.toLowerCase().endsWith(".mp4");
+    }
+
+    public boolean isDescriptionClean(String description) {
+        if (description == null || description.isBlank()) return true;
+        String lower = description.toLowerCase();
+        return FORBIDDEN_WORDS.stream().noneMatch(lower::contains);
+    }
+
+    public boolean isAdNameClean(String adName) {
+        if (adName == null || adName.isBlank()) return false;
+        String lower = adName.toLowerCase();
+        return FORBIDDEN_WORDS.stream().noneMatch(lower::contains);
+    }
 
     /**
      * BPMN 1: Валидация видеофайла.

@@ -45,6 +45,9 @@ public class Monetization {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "process_instance_id")
+    private String processInstanceId;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

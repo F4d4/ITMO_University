@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure>
+    <deployment>
+        <exclusions>
+            <module name="org.hibernate.main"/>
+            <module name="org.hibernate.envers.main"/>
+            <module name="org.hibernate.validator.main"/>
+            <module name="org.jboss.as.jpa.main"/>
+            <module name="org.jboss.as.jpa.hibernate"/>
+            <module name="javax.persistence.api"/>
+            <module name="com.fasterxml.jackson.core.jackson-core"/>
+            <module name="com.fasterxml.jackson.core.jackson-databind"/>
+            <module name="com.fasterxml.jackson.core.jackson-annotations"/>
+        </exclusions>
+        <dependencies>
+            <module name="jdk.unsupported"/>
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>

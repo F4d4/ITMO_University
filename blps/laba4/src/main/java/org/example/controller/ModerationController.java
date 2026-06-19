@@ -1,16 +1,18 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 import org.example.dto.response.ApiResponse;
-import org.example.dto.response.MonetizationMethodResponse;
-import org.example.dto.response.VideoResponse;
-import org.example.service.MonetizationService;
-import org.example.service.VideoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/moderation")
@@ -18,83 +20,148 @@ import java.util.List;
 @PreAuthorize("hasRole('MODERATOR')")
 public class ModerationController {
 
-    private final VideoService videoService;
-    private final MonetizationService monetizationService;
+    private final TaskService taskService;
+    private final RuntimeService runtimeService;
 
-    // ─── BPMN 2: Модерация видео ──────────────────────────────────────────────────
-
-    /**
-     * BPMN 2 (MODERATOR): Получить список видео, ожидающих публикации.
-     */
     @GetMapping("/videos/pending")
-    public ResponseEntity<ApiResponse<List<VideoResponse>>> getPendingVideos() {
-        List<VideoResponse> videos = videoService.getPendingPublicationVideos();
-        return ResponseEntity.ok(ApiResponse.ok("Видео на проверке", videos));
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getPendingVideos() {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("assignee", "admin");
+
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("moderation-pending-videos-process", variables);
+
+        String pendingJson = (String) runtimeService.getVariable(instance.getId(), "pendingVideosJson");
+        Task task = taskService.createTaskQuery().processInstanceId(instance.getId()).singleResult();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processInstanceId", instance.getId());
+        result.put("pendingVideosJson", pendingJson);
+        if (task != null) {
+            result.put("taskId", task.getId());
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Видео на проверке", result));
     }
 
-    /**
-     * BPMN 2 (MODERATOR): Одобрить публикацию видео.
-     * Программная JTA-транзакция (Narayana):
-     *   - Изменить статус видео на PUBLISHED
-     *   - Сохранить параметры публикации
-     *   - Добавить запись в БД опубликованных видео
-     */
     @PostMapping("/videos/{videoId}/approve")
-    public ResponseEntity<ApiResponse<VideoResponse>> approveVideoPublication(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> approveVideoPublication(
             @PathVariable Long videoId) {
-        VideoResponse video = videoService.approvePublication(videoId);
-        return ResponseEntity.ok(ApiResponse.ok(
-                "Публикация видео одобрена. Видео опубликовано.", video));
+
+        List<Task> tasks = taskService.createTaskQuery()
+                .processVariableValueEquals("videoId", videoId)
+                .taskDefinitionKey("reviewByModerator")
+                .list();
+
+        Map<String, Object> result = new HashMap<>();
+        if (!tasks.isEmpty()) {
+            Task task = tasks.get(0);
+            Map<String, Object> vars = new HashMap<>();
+            vars.put("moderatorApproved", true);
+            vars.put("rejectionReason", "");
+            taskService.complete(task.getId(), vars);
+            result.put("taskId", task.getId());
+            result.put("message", "Publication approved via Camunda process");
+        } else {
+            result.put("message", "No active moderation task found for videoId=" + videoId);
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Публикация одобрена", result));
     }
 
-    /**
-     * BPMN 2 (MODERATOR): Отклонить публикацию видео.
-     * Уведомление об отказе отправляется пользователю.
-     */
     @PostMapping("/videos/{videoId}/reject")
-    public ResponseEntity<ApiResponse<VideoResponse>> rejectVideoPublication(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> rejectVideoPublication(
             @PathVariable Long videoId,
             @RequestParam(defaultValue = "Не соответствует правилам платформы") String reason) {
-        VideoResponse video = videoService.rejectPublication(videoId, reason);
-        return ResponseEntity.ok(ApiResponse.ok(
-                "Публикация видео отклонена. Причина: " + reason, video));
+
+        List<Task> tasks = taskService.createTaskQuery()
+                .processVariableValueEquals("videoId", videoId)
+                .taskDefinitionKey("reviewByModerator")
+                .list();
+
+        Map<String, Object> result = new HashMap<>();
+        if (!tasks.isEmpty()) {
+            Task task = tasks.get(0);
+            Map<String, Object> vars = new HashMap<>();
+            vars.put("moderatorApproved", false);
+            vars.put("rejectionReason", reason);
+            taskService.complete(task.getId(), vars);
+            result.put("taskId", task.getId());
+            result.put("message", "Publication rejected via Camunda process");
+        } else {
+            result.put("message", "No active moderation task found for videoId=" + videoId);
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Публикация отклонена. Причина: " + reason, result));
     }
 
-    // ─── BPMN 4: Модерация способов монетизации ───────────────────────────────────
-
-    /**
-     * BPMN 4 (MODERATOR): Получить список способов монетизации, ожидающих проверки.
-     */
     @GetMapping("/monetization-methods/pending")
-    public ResponseEntity<ApiResponse<List<MonetizationMethodResponse>>> getPendingMethods() {
-        List<MonetizationMethodResponse> methods = monetizationService.getPendingMethods();
-        return ResponseEntity.ok(ApiResponse.ok("Способы монетизации на проверке", methods));
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getPendingMethods() {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("assignee", "admin");
+
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("moderation-pending-methods-process", variables);
+
+        String pendingJson = (String) runtimeService.getVariable(instance.getId(), "pendingMethodsJson");
+        Task task = taskService.createTaskQuery().processInstanceId(instance.getId()).singleResult();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processInstanceId", instance.getId());
+        result.put("pendingMethodsJson", pendingJson);
+        if (task != null) {
+            result.put("taskId", task.getId());
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Способы монетизации на проверке", result));
     }
 
-    /**
-     * BPMN 4 (MODERATOR): Одобрить способ монетизации.
-     * Программная JTA-транзакция (Narayana):
-     *   - Сохранить способы монетизации (статус → APPROVED)
-     *   - Создать теги
-     *   - Добавить запись в БД монетизаций
-     */
     @PostMapping("/monetization-methods/{methodId}/approve")
-    public ResponseEntity<ApiResponse<MonetizationMethodResponse>> approveMonetizationMethod(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> approveMonetizationMethod(
             @PathVariable Long methodId) {
-        MonetizationMethodResponse method = monetizationService.approveMonetizationMethod(methodId);
-        return ResponseEntity.ok(ApiResponse.ok(
-                "Способ монетизации одобрен.", method));
+
+        List<Task> tasks = taskService.createTaskQuery()
+                .processVariableValueEquals("methodId", methodId)
+                .taskDefinitionKey("reviewAdMethod")
+                .list();
+
+        Map<String, Object> result = new HashMap<>();
+        if (!tasks.isEmpty()) {
+            Task task = tasks.get(0);
+            Map<String, Object> vars = new HashMap<>();
+            vars.put("adApproved", true);
+            vars.put("adRejectionReason", "");
+            taskService.complete(task.getId(), vars);
+            result.put("taskId", task.getId());
+            result.put("message", "Method approved via Camunda process");
+        } else {
+            result.put("message", "No active moderation task found for methodId=" + methodId);
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Способ монетизации одобрен", result));
     }
 
-    /**
-     * BPMN 4 (MODERATOR): Отклонить способ монетизации.
-     */
     @PostMapping("/monetization-methods/{methodId}/reject")
-    public ResponseEntity<ApiResponse<MonetizationMethodResponse>> rejectMonetizationMethod(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> rejectMonetizationMethod(
             @PathVariable Long methodId,
             @RequestParam(defaultValue = "Не соответствует правилам рекламы") String reason) {
-        MonetizationMethodResponse method = monetizationService.rejectMonetizationMethod(methodId, reason);
-        return ResponseEntity.ok(ApiResponse.ok(
-                "Способ монетизации отклонён. Причина: " + reason, method));
+
+        List<Task> tasks = taskService.createTaskQuery()
+                .processVariableValueEquals("methodId", methodId)
+                .taskDefinitionKey("reviewAdMethod")
+                .list();
+
+        Map<String, Object> result = new HashMap<>();
+        if (!tasks.isEmpty()) {
+            Task task = tasks.get(0);
+            Map<String, Object> vars = new HashMap<>();
+            vars.put("adApproved", false);
+            vars.put("adRejectionReason", reason);
+            taskService.complete(task.getId(), vars);
+            result.put("taskId", task.getId());
+            result.put("message", "Method rejected via Camunda process");
+        } else {
+            result.put("message", "No active moderation task found for methodId=" + methodId);
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Способ монетизации отклонён. Причина: " + reason, result));
     }
 }

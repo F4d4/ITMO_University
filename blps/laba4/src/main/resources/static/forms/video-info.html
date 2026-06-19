@@ -1,0 +1,39 @@
+<form name="videoInfoForm" role="form">
+  <div class="form-group">
+    <label for="titleField">Video Title <span class="text-danger">*</span></label>
+    <input type="text"
+           id="titleField"
+           class="form-control"
+           cam-variable-name="title"
+           cam-variable-type="String"
+           required
+           placeholder="Enter video title"/>
+  </div>
+
+  <div class="form-group">
+    <label for="descriptionField">Description (max 150 characters) <span class="text-danger">*</span></label>
+    <textarea id="descriptionField"
+              class="form-control"
+              cam-variable-name="description"
+              cam-variable-type="String"
+              rows="4"
+              maxlength="150"
+              required
+              placeholder="Enter video description"></textarea>
+    <small class="text-muted">Max 150 characters. Forbidden: terrorism, drugs, violence, etc.</small>
+  </div>
+
+  <div class="form-group">
+    <label for="tagsField">Tags</label>
+    <input type="text"
+           id="tagsField"
+           class="form-control"
+           cam-variable-name="tags"
+           cam-variable-type="String"
+           placeholder="Enter tags separated by comma"/>
+  </div>
+
+  <div class="alert alert-warning" ng-show="descriptionError">
+    <strong>Invalid description:</strong> Please remove forbidden words and try again.
+  </div>
+</form>

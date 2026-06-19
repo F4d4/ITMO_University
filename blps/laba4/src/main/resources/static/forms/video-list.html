@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Мои видео</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .form-group { margin-top: 15px; }
+    label { font-weight: bold; }
+    select { padding: 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h3>Мои видео</h3>
+  <div id="videoTable">
+    <p>Загрузка...</p>
+  </div>
+
+  <div class="form-group">
+    <label>Действие:</label><br/>
+    <select cam-variable-name="refresh" cam-variable-type="Boolean">
+      <option value="false">Закрыть</option>
+      <option value="true">Обновить список</option>
+    </select>
+  </div>
+
+  <script>
+    var dataRaw = document.querySelector('[cam-variable-name="videoListJson"]');
+    if (dataRaw && dataRaw.value) {
+      try {
+        var videos = JSON.parse(dataRaw.value);
+        var html = '<table><tr><th>ID</th><th>Название</th><th>Статус</th><th>Создано</th></tr>';
+        videos.forEach(function(v) {
+          html += '<tr><td>' + v.id + '</td><td>' + (v.title || '-') + '</td><td>' + v.status + '</td><td>' + (v.createdAt || '') + '</td></tr>';
+        });
+        html += '</table><p>Всего: ' + videos.length + '</p>';
+        document.getElementById('videoTable').innerHTML = html;
+      } catch(e) {}
+    }
+  </script>
+  <input type="hidden" cam-variable-name="videoListJson" cam-variable-type="String"/>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             id="MonetizationMethodDefinitions">
+
+  <process id="monetization-method-process" name="Monetization Method Process" isExecutable="true">
+
+    <startEvent id="startMethod" name="Add Method Requested">
+      <outgoing>flow_start_to_check</outgoing>
+    </startEvent>
+
+    <serviceTask id="checkMonetizationApproved" name="Check Monetization is Approved"
+                 camunda:delegateExpression="${checkMonetizationApprovedDelegate}">
+      <incoming>flow_start_to_check</incoming>
+      <outgoing>flow_check_to_task</outgoing>
+    </serviceTask>
+
+    <userTask id="selectMethodType" name="Select and Configure Method"
+              camunda:assignee="${uploaderId}"
+              camunda:formKey="embedded:app:forms/monetization-method.html">
+      <incoming>flow_check_to_task</incoming>
+      <outgoing>flow_task_to_type_gateway</outgoing>
+    </userTask>
+
+    <exclusiveGateway id="methodTypeGateway" name="Method Type?">
+      <incoming>flow_task_to_type_gateway</incoming>
+      <outgoing>flow_is_ad</outgoing>
+      <outgoing>flow_is_subscription</outgoing>
+    </exclusiveGateway>
+
+    <serviceTask id="autoModerateAd" name="Auto Moderate Ad Name"
+                 camunda:delegateExpression="${autoModerateAdDelegate}">
+      <incoming>flow_is_ad</incoming>
+      <outgoing>flow_moderate_to_clean_gateway</outgoing>
+    </serviceTask>
+
+    <exclusiveGateway id="adNameCleanGateway" name="Ad Name Clean?">
+      <incoming>flow_moderate_to_clean_gateway</incoming>
+      <outgoing>flow_ad_name_clean</outgoing>
+      <outgoing>flow_ad_name_forbidden</outgoing>
+    </exclusiveGateway>
+
+    <endEvent id="methodRejectedForbidden" name="Method Rejected - Forbidden Words">
+      <incoming>flow_ad_name_forbidden</incoming>
+    </endEvent>
+
+    <serviceTask id="saveAdPendingReview" name="Save AD Method: PENDING_REVIEW"
+                 camunda:delegateExpression="${saveAdPendingReviewDelegate}">
+      <incoming>flow_ad_name_clean</incoming>
+      <outgoing>flow_save_ad_to_review</outgoing>
+    </serviceTask>
+
+    <userTask id="reviewAdMethod" name="Review AD Method"
+              camunda:candidateGroups="moderator"
+              camunda:formKey="embedded:app:forms/moderation-ad.html">
+      <incoming>flow_save_ad_to_review</incoming>
+      <outgoing>flow_review_to_decision</outgoing>
+    </userTask>
+
+    <exclusiveGateway id="adDecisionGateway" name="Ad Approved?">
+      <incoming>flow_review_to_decision</incoming>
+      <outgoing>flow_ad_approved</outgoing>
+      <outgoing>flow_ad_rejected</outgoing>
+    </exclusiveGateway>
+
+    <subProcess id="approveAdSubProcess" name="Approve AD Method">
+      <incoming>flow_ad_approved</incoming>
+      <outgoing>flow_ad_subprocess_to_end</outgoing>
+
+      <startEvent id="approveAdStart">
+        <outgoing>flow_approve_to_tags</outgoing>
+      </startEvent>
+
+      <serviceTask id="saveAdTags" name="Save Tags"
+                   camunda:delegateExpression="${saveAdTagsDelegate}">
+        <incoming>flow_approve_to_tags</incoming>
+        <outgoing>flow_tags_to_approve</outgoing>
+      </serviceTask>
+
+      <serviceTask id="approveAdMethod" name="Approve AD Method (JTA)"
+                   camunda:delegateExpression="${approveAdMethodDelegate}">
+        <incoming>flow_tags_to_approve</incoming>
+        <outgoing>flow_approve_to_db</outgoing>
+      </serviceTask>
+
+      <serviceTask id="addAdToDb" name="Add AD Record to DB"
+                   camunda:delegateExpression="${addAdToDbDelegate}">
+        <incoming>flow_approve_to_db</incoming>
+        <outgoing>flow_db_to_approve_end</outgoing>
+      </serviceTask>
+
+      <endEvent id="approveAdEnd">
+        <incoming>flow_db_to_approve_end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="flow_approve_to_tags" sourceRef="approveAdStart" targetRef="saveAdTags"/>
+      <sequenceFlow id="flow_tags_to_approve" sourceRef="saveAdTags" targetRef="approveAdMethod"/>
+      <sequenceFlow id="flow_approve_to_db" sourceRef="approveAdMethod" targetRef="addAdToDb"/>
+      <sequenceFlow id="flow_db_to_approve_end" sourceRef="addAdToDb" targetRef="approveAdEnd"/>
+    </subProcess>
+
+    <serviceTask id="rejectAdMethod" name="Reject AD Method"
+                 camunda:delegateExpression="${rejectAdMethodDelegate}">
+      <incoming>flow_ad_rejected</incoming>
+      <outgoing>flow_reject_ad_to_end</outgoing>
+    </serviceTask>
+
+    <serviceTask id="saveSubscriptionMethod" name="Save Subscription Method (Auto-Approved)"
+                 camunda:delegateExpression="${saveSubscriptionMethodDelegate}">
+      <incoming>flow_is_subscription</incoming>
+      <outgoing>flow_subscription_to_end</outgoing>
+    </serviceTask>
+
+    <endEvent id="methodApproved" name="Method Approved">
+      <incoming>flow_ad_subprocess_to_end</incoming>
+      <incoming>flow_subscription_to_end</incoming>
+    </endEvent>
+
+    <endEvent id="methodRejected" name="Method Rejected">
+      <incoming>flow_reject_ad_to_end</incoming>
+    </endEvent>
+
+    <sequenceFlow id="flow_start_to_check" sourceRef="startMethod" targetRef="checkMonetizationApproved"/>
+    <sequenceFlow id="flow_check_to_task" sourceRef="checkMonetizationApproved" targetRef="selectMethodType"/>
+    <sequenceFlow id="flow_task_to_type_gateway" sourceRef="selectMethodType" targetRef="methodTypeGateway"/>
+    <sequenceFlow id="flow_is_ad" name="AD" sourceRef="methodTypeGateway" targetRef="autoModerateAd">
+      <conditionExpression xsi:type="tFormalExpression">${methodType == 'AD'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_is_subscription" name="SUBSCRIPTION" sourceRef="methodTypeGateway" targetRef="saveSubscriptionMethod">
+      <conditionExpression xsi:type="tFormalExpression">${methodType == 'SUBSCRIPTION'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_moderate_to_clean_gateway" sourceRef="autoModerateAd" targetRef="adNameCleanGateway"/>
+    <sequenceFlow id="flow_ad_name_clean" name="Clean" sourceRef="adNameCleanGateway" targetRef="saveAdPendingReview">
+      <conditionExpression xsi:type="tFormalExpression">${adNameClean == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_ad_name_forbidden" name="Forbidden Words" sourceRef="adNameCleanGateway" targetRef="methodRejectedForbidden">
+      <conditionExpression xsi:type="tFormalExpression">${adNameClean == false}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_save_ad_to_review" sourceRef="saveAdPendingReview" targetRef="reviewAdMethod"/>
+    <sequenceFlow id="flow_review_to_decision" sourceRef="reviewAdMethod" targetRef="adDecisionGateway"/>
+    <sequenceFlow id="flow_ad_approved" name="Approved" sourceRef="adDecisionGateway" targetRef="approveAdSubProcess">
+      <conditionExpression xsi:type="tFormalExpression">${adApproved == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_ad_rejected" name="Rejected" sourceRef="adDecisionGateway" targetRef="rejectAdMethod">
+      <conditionExpression xsi:type="tFormalExpression">${adApproved == false}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_ad_subprocess_to_end" sourceRef="approveAdSubProcess" targetRef="methodApproved"/>
+    <sequenceFlow id="flow_reject_ad_to_end" sourceRef="rejectAdMethod" targetRef="methodRejected"/>
+    <sequenceFlow id="flow_subscription_to_end" sourceRef="saveSubscriptionMethod" targetRef="methodApproved"/>
+
+  </process>
+</definitions>

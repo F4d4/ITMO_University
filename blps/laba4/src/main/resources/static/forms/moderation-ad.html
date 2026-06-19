@@ -1,0 +1,57 @@
+<form name="moderationAdForm" role="form">
+  <div class="alert alert-info">
+    <strong>AD Review</strong><br/>
+    Please review the advertisement method below.
+  </div>
+
+  <div class="form-group">
+    <label>Method ID</label>
+    <p class="form-control-static">
+      <span cam-variable-name="methodId" cam-variable-type="Long"></span>
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Ad Name</label>
+    <p class="form-control-static">
+      <span cam-variable-name="adName" cam-variable-type="String"></span>
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Ad Type</label>
+    <p class="form-control-static">
+      <span cam-variable-name="adType" cam-variable-type="String"></span>
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Decision <span class="text-danger">*</span></label>
+    <div class="radio">
+      <label>
+        <input type="radio"
+               cam-variable-name="adApproved"
+               cam-variable-type="Boolean"
+               value="true"/> Approve Advertisement
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio"
+               cam-variable-name="adApproved"
+               cam-variable-type="Boolean"
+               value="false"/> Reject Advertisement
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="adRejectionReason">Rejection Reason (if rejecting)</label>
+    <textarea id="adRejectionReason"
+              class="form-control"
+              cam-variable-name="adRejectionReason"
+              cam-variable-type="String"
+              rows="3"
+              placeholder="Enter reason for rejection..."></textarea>
+  </div>
+</form>

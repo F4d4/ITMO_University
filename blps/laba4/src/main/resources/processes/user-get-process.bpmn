@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             id="UserGetDefs">
+  <process id="user-get-process" name="[GET] Пользователь по ID" isExecutable="true">
+
+    <startEvent id="start" name="Начало">
+      <outgoing>sf_start</outgoing>
+    </startEvent>
+
+    <serviceTask id="loadUser" name="Загрузить пользователя"
+                 camunda:delegateExpression="${loadUserByIdDelegate}">
+      <incoming>sf_start</incoming>
+      <outgoing>sf_loaded</outgoing>
+    </serviceTask>
+
+    <userTask id="showUserDetail" name="Просмотр пользователя"
+              camunda:formKey="embedded:app:forms/user-detail.html"
+              camunda:assignee="${assignee}">
+      <incoming>sf_loaded</incoming>
+      <outgoing>sf_end</outgoing>
+    </userTask>
+
+    <endEvent id="end" name="Просмотр завершён">
+      <incoming>sf_end</incoming>
+    </endEvent>
+
+    <sequenceFlow id="sf_start" sourceRef="start" targetRef="loadUser"/>
+    <sequenceFlow id="sf_loaded" sourceRef="loadUser" targetRef="showUserDetail"/>
+    <sequenceFlow id="sf_end" sourceRef="showUserDetail" targetRef="end"/>
+
+  </process>
+</definitions>

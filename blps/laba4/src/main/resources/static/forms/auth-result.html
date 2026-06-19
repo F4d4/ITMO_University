@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Результат</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .token-box { background: #f0f8f0; border: 1px solid #4caf50; padding: 15px; border-radius: 4px; word-break: break-all; }
+    .info { margin-bottom: 10px; }
+    label { font-weight: bold; }
+    textarea { width: 100%; height: 80px; box-sizing: border-box; font-family: monospace; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h3>Результат аутентификации</h3>
+  <div class="info">
+    <label>Сообщение:</label>
+    <p cam-variable-name="authResultMessage" cam-variable-type="String"></p>
+  </div>
+  <div class="token-box">
+    <label>JWT Токен (скопируйте для использования в API):</label>
+    <textarea cam-variable-name="jwtToken" cam-variable-type="String" readonly></textarea>
+  </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             id="VideoPublishedListDefs">
+  <process id="video-published-list-process" name="[GET] Опубликованные видео" isExecutable="true">
+
+    <startEvent id="start" name="Начало">
+      <outgoing>sf_start</outgoing>
+    </startEvent>
+
+    <serviceTask id="loadPublished" name="Загрузить опубликованные видео"
+                 camunda:delegateExpression="${loadPublishedVideosDelegate}">
+      <incoming>sf_start</incoming>
+      <incoming>sf_refresh</incoming>
+      <outgoing>sf_loaded</outgoing>
+    </serviceTask>
+
+    <userTask id="showPublishedList" name="Опубликованные видео"
+              camunda:formKey="embedded:app:forms/published-videos-list.html"
+              camunda:assignee="${assignee}">
+      <incoming>sf_loaded</incoming>
+      <outgoing>sf_to_gw</outgoing>
+    </userTask>
+
+    <exclusiveGateway id="refreshGw" name="Обновить?" default="sf_close">
+      <incoming>sf_to_gw</incoming>
+      <outgoing>sf_refresh</outgoing>
+      <outgoing>sf_close</outgoing>
+    </exclusiveGateway>
+
+    <endEvent id="end" name="Просмотр завершён">
+      <incoming>sf_close</incoming>
+    </endEvent>
+
+    <sequenceFlow id="sf_start" sourceRef="start" targetRef="loadPublished"/>
+    <sequenceFlow id="sf_loaded" sourceRef="loadPublished" targetRef="showPublishedList"/>
+    <sequenceFlow id="sf_to_gw" sourceRef="showPublishedList" targetRef="refreshGw"/>
+    <sequenceFlow id="sf_refresh" name="Обновить" sourceRef="refreshGw" targetRef="loadPublished">
+      <conditionExpression xsi:type="tFormalExpression">${refresh == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sf_close" name="Закрыть" sourceRef="refreshGw" targetRef="end"/>
+
+  </process>
+</definitions>

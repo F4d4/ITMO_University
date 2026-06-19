@@ -1,48 +1,68 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Task;
 import org.example.dto.response.ApiResponse;
-import org.example.dto.response.UserResponse;
-import org.example.service.UserService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.example.security.SecurityUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final SecurityUtils securityUtils;
+    private final RuntimeService runtimeService;
+    private final TaskService taskService;
 
-    /**
-     * Получить пользователя по ID
-     */
     @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable Long userId) {
-        UserResponse user = userService.getUserById(userId);
-        return ResponseEntity.ok(ApiResponse.ok("Пользователь найден", user));
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getUserById(@PathVariable Long userId) {
+        Long requesterId = securityUtils.getCurrentUserId();
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("targetUserId", userId);
+        variables.put("requesterId", requesterId);
+        variables.put("assignee", String.valueOf(requesterId));
+
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("user-get-process", variables);
+
+        String userJson = (String) runtimeService.getVariable(instance.getId(), "userJson");
+        Task task = taskService.createTaskQuery().processInstanceId(instance.getId()).singleResult();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processInstanceId", instance.getId());
+        result.put("userJson", userJson);
+        if (task != null) {
+            result.put("taskId", task.getId());
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Пользователь найден", result));
     }
 
-    /**
-     * Получить список всех пользователей с пагинацией (только MODERATOR)
-     */
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<UserResponse>>> getAllUsers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getAllUsers() {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("assignee", "admin");
 
-        Sort sort = sortDir.equalsIgnoreCase("desc")
-                ? Sort.by(sortBy).descending()
-                : Sort.by(sortBy).ascending();
-        Pageable pageable = PageRequest.of(page, size, sort);
+        ProcessInstance instance = runtimeService.startProcessInstanceByKey("user-list-process", variables);
 
-        Page<UserResponse> users = userService.getAllUsers(pageable);
-        return ResponseEntity.ok(ApiResponse.ok("Список пользователей", users));
+        String userListJson = (String) runtimeService.getVariable(instance.getId(), "userListJson");
+        Task task = taskService.createTaskQuery().processInstanceId(instance.getId()).singleResult();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processInstanceId", instance.getId());
+        result.put("userListJson", userListJson);
+        if (task != null) {
+            result.put("taskId", task.getId());
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok("Список пользователей", result));
     }
 }

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             id="VideoPublishDefinitions">
+
+  <process id="video-publish-process" name="Video Publication Process" isExecutable="true">
+
+    <startEvent id="startPublish" name="Publish Requested">
+      <outgoing>flow_start_to_configure</outgoing>
+    </startEvent>
+
+    <userTask id="configurePublication" name="Configure Publication Settings"
+              camunda:assignee="${uploaderId}"
+              camunda:formKey="embedded:app:forms/video-publish.html">
+      <incoming>flow_start_to_configure</incoming>
+      <outgoing>flow_configure_to_pending</outgoing>
+    </userTask>
+
+    <serviceTask id="setPendingStatus" name="Set Status: PENDING_PUBLICATION"
+                 camunda:delegateExpression="${setPendingPublicationDelegate}">
+      <incoming>flow_configure_to_pending</incoming>
+      <outgoing>flow_pending_to_moderate</outgoing>
+    </serviceTask>
+
+    <serviceTask id="autoModerateDescription" name="Auto Moderate Description"
+                 camunda:delegateExpression="${autoModeratePublishDelegate}">
+      <incoming>flow_pending_to_moderate</incoming>
+      <outgoing>flow_moderate_to_gateway</outgoing>
+    </serviceTask>
+
+    <exclusiveGateway id="autoApprovedGateway" name="Auto Approved?">
+      <incoming>flow_moderate_to_gateway</incoming>
+      <outgoing>flow_auto_approved</outgoing>
+      <outgoing>flow_needs_manual_review</outgoing>
+    </exclusiveGateway>
+
+    <userTask id="reviewByModerator" name="Manual Review by Moderator"
+              camunda:candidateGroups="moderator"
+              camunda:formKey="embedded:app:forms/moderation-video.html">
+      <incoming>flow_needs_manual_review</incoming>
+      <outgoing>flow_review_to_gateway</outgoing>
+    </userTask>
+
+    <exclusiveGateway id="moderatorDecisionGateway" name="Moderator Decision">
+      <incoming>flow_review_to_gateway</incoming>
+      <outgoing>flow_moderator_approved</outgoing>
+      <outgoing>flow_moderator_rejected</outgoing>
+    </exclusiveGateway>
+
+    <subProcess id="publishSubProcess" name="Publish Video">
+      <incoming>flow_auto_approved</incoming>
+      <incoming>flow_moderator_approved</incoming>
+      <outgoing>flow_subprocess_to_published</outgoing>
+
+      <startEvent id="publishStart">
+        <outgoing>flow_ps_to_change_status</outgoing>
+      </startEvent>
+
+      <serviceTask id="changeStatusPublished" name="Change Status to PUBLISHED"
+                   camunda:delegateExpression="${changeVideoStatusPublishedDelegate}">
+        <incoming>flow_ps_to_change_status</incoming>
+        <outgoing>flow_ps_to_save_params</outgoing>
+      </serviceTask>
+
+      <serviceTask id="savePublishParams" name="Save Publication Parameters"
+                   camunda:delegateExpression="${savePublicationParamsDelegate}">
+        <incoming>flow_ps_to_save_params</incoming>
+        <outgoing>flow_ps_to_copy_file</outgoing>
+      </serviceTask>
+
+      <serviceTask id="copyToPublished" name="Copy File to Published Bucket"
+                   camunda:delegateExpression="${publishVideoFileDelegate}">
+        <incoming>flow_ps_to_copy_file</incoming>
+        <outgoing>flow_ps_to_end</outgoing>
+      </serviceTask>
+
+      <endEvent id="publishSubEnd">
+        <incoming>flow_ps_to_end</incoming>
+      </endEvent>
+
+      <sequenceFlow id="flow_ps_to_change_status" sourceRef="publishStart" targetRef="changeStatusPublished"/>
+      <sequenceFlow id="flow_ps_to_save_params" sourceRef="changeStatusPublished" targetRef="savePublishParams"/>
+      <sequenceFlow id="flow_ps_to_copy_file" sourceRef="savePublishParams" targetRef="copyToPublished"/>
+      <sequenceFlow id="flow_ps_to_end" sourceRef="copyToPublished" targetRef="publishSubEnd"/>
+    </subProcess>
+
+    <serviceTask id="rejectPublication" name="Reject Publication"
+                 camunda:delegateExpression="${rejectPublicationDelegate}">
+      <incoming>flow_moderator_rejected</incoming>
+      <outgoing>flow_reject_to_end</outgoing>
+    </serviceTask>
+
+    <endEvent id="videoPublished" name="Video Published">
+      <incoming>flow_subprocess_to_published</incoming>
+    </endEvent>
+
+    <endEvent id="publicationRejected" name="Publication Rejected">
+      <incoming>flow_reject_to_end</incoming>
+    </endEvent>
+
+    <sequenceFlow id="flow_start_to_configure" sourceRef="startPublish" targetRef="configurePublication"/>
+    <sequenceFlow id="flow_configure_to_pending" sourceRef="configurePublication" targetRef="setPendingStatus"/>
+    <sequenceFlow id="flow_pending_to_moderate" sourceRef="setPendingStatus" targetRef="autoModerateDescription"/>
+    <sequenceFlow id="flow_moderate_to_gateway" sourceRef="autoModerateDescription" targetRef="autoApprovedGateway"/>
+    <sequenceFlow id="flow_auto_approved" name="Auto Approved" sourceRef="autoApprovedGateway" targetRef="publishSubProcess">
+      <conditionExpression xsi:type="tFormalExpression">${autoApproved == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_needs_manual_review" name="Needs Review" sourceRef="autoApprovedGateway" targetRef="reviewByModerator">
+      <conditionExpression xsi:type="tFormalExpression">${autoApproved == false}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_review_to_gateway" sourceRef="reviewByModerator" targetRef="moderatorDecisionGateway"/>
+    <sequenceFlow id="flow_moderator_approved" name="Approved" sourceRef="moderatorDecisionGateway" targetRef="publishSubProcess">
+      <conditionExpression xsi:type="tFormalExpression">${moderatorApproved == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_moderator_rejected" name="Rejected" sourceRef="moderatorDecisionGateway" targetRef="rejectPublication">
+      <conditionExpression xsi:type="tFormalExpression">${moderatorApproved == false}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_subprocess_to_published" sourceRef="publishSubProcess" targetRef="videoPublished"/>
+    <sequenceFlow id="flow_reject_to_end" sourceRef="rejectPublication" targetRef="publicationRejected"/>
+
+  </process>
+</definitions>

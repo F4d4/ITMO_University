@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             id="AuthRegisterDefs">
+  <process id="auth-register-process" name="[POST] Регистрация пользователя" isExecutable="true">
+
+    <startEvent id="start" name="Начало регистрации"
+                camunda:formKey="embedded:app:forms/register-form.html">
+      <outgoing>sf1</outgoing>
+    </startEvent>
+
+    <serviceTask id="registerUser" name="Зарегистрировать пользователя"
+                 camunda:delegateExpression="${registerUserDelegate}">
+      <incoming>sf1</incoming>
+      <outgoing>sf2</outgoing>
+    </serviceTask>
+
+    <userTask id="showAuthResult" name="Результат регистрации"
+              camunda:formKey="embedded:app:forms/auth-result.html"
+              camunda:assignee="admin">
+      <incoming>sf2</incoming>
+      <outgoing>sf3</outgoing>
+    </userTask>
+
+    <endEvent id="end" name="Зарегистрирован">
+      <incoming>sf3</incoming>
+    </endEvent>
+
+    <sequenceFlow id="sf1" sourceRef="start" targetRef="registerUser"/>
+    <sequenceFlow id="sf2" sourceRef="registerUser" targetRef="showAuthResult"/>
+    <sequenceFlow id="sf3" sourceRef="showAuthResult" targetRef="end"/>
+
+  </process>
+</definitions>

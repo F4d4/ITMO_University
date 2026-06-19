@@ -61,6 +61,9 @@ public class Video {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "process_instance_id")
+    private String processInstanceId;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

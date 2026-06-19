@@ -1,0 +1,32 @@
+<form name="videoPublishForm" role="form">
+  <div class="form-group">
+    <label for="audienceType">Audience Type <span class="text-danger">*</span></label>
+    <select id="audienceType"
+            class="form-control"
+            cam-variable-name="audienceType"
+            cam-variable-type="String"
+            required>
+      <option value="">-- Select Audience --</option>
+      <option value="ALL_AGES">All Ages</option>
+      <option value="ADULTS_ONLY">Adults Only (18+)</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="accessType">Access Type <span class="text-danger">*</span></label>
+    <select id="accessType"
+            class="form-control"
+            cam-variable-name="accessType"
+            cam-variable-type="String"
+            required>
+      <option value="">-- Select Access --</option>
+      <option value="PUBLIC">Public</option>
+      <option value="PRIVATE">Private</option>
+    </select>
+  </div>
+
+  <div class="alert alert-info">
+    <strong>Note:</strong> After submission, the video description will be automatically checked.
+    If it contains forbidden content, a moderator will review it manually.
+  </div>
+</form>

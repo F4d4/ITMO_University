@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             targetNamespace="http://bpmn.io/schema/bpmn"
+             id="VideoUploadDefinitions">
+
+  <process id="video-upload-process" name="Video Upload Process" isExecutable="true">
+
+    <startEvent id="startUpload" name="Upload Requested">
+      <outgoing>flow_start_to_validate</outgoing>
+    </startEvent>
+
+    <serviceTask id="validateFile" name="Validate Video File"
+                 camunda:delegateExpression="${validateVideoFileDelegate}">
+      <incoming>flow_start_to_validate</incoming>
+      <outgoing>flow_validate_to_gateway</outgoing>
+    </serviceTask>
+
+    <exclusiveGateway id="fileValidGateway" name="File Valid?">
+      <incoming>flow_validate_to_gateway</incoming>
+      <outgoing>flow_file_valid</outgoing>
+      <outgoing>flow_file_invalid</outgoing>
+    </exclusiveGateway>
+
+    <serviceTask id="cleanupInvalidFile" name="Cleanup Invalid File"
+                 camunda:delegateExpression="${cleanupInvalidFileDelegate}">
+      <incoming>flow_file_invalid</incoming>
+      <outgoing>flow_cleanup_to_error</outgoing>
+    </serviceTask>
+
+    <endEvent id="fileValidationError" name="File Validation Error">
+      <incoming>flow_cleanup_to_error</incoming>
+    </endEvent>
+
+    <serviceTask id="createVideoRecord" name="Create Video Record"
+                 camunda:delegateExpression="${createVideoRecordDelegate}">
+      <incoming>flow_file_valid</incoming>
+      <outgoing>flow_create_to_task</outgoing>
+    </serviceTask>
+
+    <userTask id="fillVideoInfo" name="Fill Video Information"
+              camunda:assignee="${uploaderId}"
+              camunda:formKey="embedded:app:forms/video-info.html">
+      <incoming>flow_create_to_task</incoming>
+      <incoming>flow_desc_invalid_retry</incoming>
+      <outgoing>flow_task_to_validate_desc</outgoing>
+    </userTask>
+
+    <serviceTask id="validateDescription" name="Validate Video Description"
+                 camunda:delegateExpression="${validateDescriptionDelegate}">
+      <incoming>flow_task_to_validate_desc</incoming>
+      <outgoing>flow_desc_to_gateway</outgoing>
+    </serviceTask>
+
+    <exclusiveGateway id="descValidGateway" name="Description Valid?">
+      <incoming>flow_desc_to_gateway</incoming>
+      <outgoing>flow_desc_valid</outgoing>
+      <outgoing>flow_desc_invalid_retry</outgoing>
+    </exclusiveGateway>
+
+    <serviceTask id="saveAsDraft" name="Save Video as Draft"
+                 camunda:delegateExpression="${saveVideoAsDraftDelegate}">
+      <incoming>flow_desc_valid</incoming>
+      <outgoing>flow_draft_to_end</outgoing>
+    </serviceTask>
+
+    <endEvent id="uploadSuccess" name="Video Saved as Draft">
+      <incoming>flow_draft_to_end</incoming>
+    </endEvent>
+
+    <sequenceFlow id="flow_start_to_validate" sourceRef="startUpload" targetRef="validateFile"/>
+    <sequenceFlow id="flow_validate_to_gateway" sourceRef="validateFile" targetRef="fileValidGateway"/>
+    <sequenceFlow id="flow_file_valid" name="Valid" sourceRef="fileValidGateway" targetRef="createVideoRecord">
+      <conditionExpression xsi:type="tFormalExpression">${fileValid == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_file_invalid" name="Invalid" sourceRef="fileValidGateway" targetRef="cleanupInvalidFile">
+      <conditionExpression xsi:type="tFormalExpression">${fileValid == false}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_cleanup_to_error" sourceRef="cleanupInvalidFile" targetRef="fileValidationError"/>
+    <sequenceFlow id="flow_create_to_task" sourceRef="createVideoRecord" targetRef="fillVideoInfo"/>
+    <sequenceFlow id="flow_task_to_validate_desc" sourceRef="fillVideoInfo" targetRef="validateDescription"/>
+    <sequenceFlow id="flow_desc_to_gateway" sourceRef="validateDescription" targetRef="descValidGateway"/>
+    <sequenceFlow id="flow_desc_valid" name="Valid" sourceRef="descValidGateway" targetRef="saveAsDraft">
+      <conditionExpression xsi:type="tFormalExpression">${descriptionValid == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_desc_invalid_retry" name="Invalid - Retry" sourceRef="descValidGateway" targetRef="fillVideoInfo">
+      <conditionExpression xsi:type="tFormalExpression">${descriptionValid == false}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow_draft_to_end" sourceRef="saveAsDraft" targetRef="uploadSuccess"/>
+
+  </process>
+</definitions>

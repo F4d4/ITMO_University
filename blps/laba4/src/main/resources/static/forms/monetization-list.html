@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Мои монетизации</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .form-group { margin-top: 15px; }
+    label { font-weight: bold; }
+    select { padding: 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h3>Мои монетизации</h3>
+  <div id="monetizationTable">
+    <p>Загрузка...</p>
+  </div>
+
+  <div class="form-group">
+    <label>Действие:</label><br/>
+    <select cam-variable-name="refresh" cam-variable-type="Boolean">
+      <option value="false">Закрыть</option>
+      <option value="true">Обновить список</option>
+    </select>
+  </div>
+
+  <script>
+    var dataRaw = document.querySelector('[cam-variable-name="monetizationListJson"]');
+    if (dataRaw && dataRaw.value) {
+      try {
+        var list = JSON.parse(dataRaw.value);
+        var html = '<table><tr><th>ID</th><th>Видео ID</th><th>Стратегия</th><th>Статус</th></tr>';
+        list.forEach(function(m) {
+          html += '<tr><td>' + m.id + '</td><td>' + (m.videoId || '-') + '</td><td>' + (m.strategy || '-') + '</td><td>' + m.status + '</td></tr>';
+        });
+        html += '</table><p>Всего: ' + list.length + '</p>';
+        document.getElementById('monetizationTable').innerHTML = html;
+      } catch(e) {}
+    }
+  </script>
+  <input type="hidden" cam-variable-name="monetizationListJson" cam-variable-type="String"/>
+</body>
+</html>
