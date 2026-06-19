@@ -8,51 +8,51 @@
              targetNamespace="http://bpmn.io/schema/bpmn"
              id="VideoPublishDefinitions">
 
-  <process id="video-publish-process" name="Video Publication Process" isExecutable="true">
+  <process id="video-publish-process" name="Публикация видео" isExecutable="true">
 
-    <startEvent id="startPublish" name="Publish Requested">
+    <startEvent id="startPublish" name="Запрос на публикацию">
       <outgoing>flow_start_to_configure</outgoing>
     </startEvent>
 
-    <userTask id="configurePublication" name="Configure Publication Settings"
+    <userTask id="configurePublication" name="Настроить параметры публикации"
               camunda:assignee="${uploaderId}"
               camunda:formKey="embedded:app:forms/video-publish.html">
       <incoming>flow_start_to_configure</incoming>
       <outgoing>flow_configure_to_pending</outgoing>
     </userTask>
 
-    <serviceTask id="setPendingStatus" name="Set Status: PENDING_PUBLICATION"
+    <serviceTask id="setPendingStatus" name="Установить статус: ОЖИДАЕТ ПУБЛИКАЦИИ"
                  camunda:delegateExpression="${setPendingPublicationDelegate}">
       <incoming>flow_configure_to_pending</incoming>
       <outgoing>flow_pending_to_moderate</outgoing>
     </serviceTask>
 
-    <serviceTask id="autoModerateDescription" name="Auto Moderate Description"
+    <serviceTask id="autoModerateDescription" name="Автомодерация описания"
                  camunda:delegateExpression="${autoModeratePublishDelegate}">
       <incoming>flow_pending_to_moderate</incoming>
       <outgoing>flow_moderate_to_gateway</outgoing>
     </serviceTask>
 
-    <exclusiveGateway id="autoApprovedGateway" name="Auto Approved?">
+    <exclusiveGateway id="autoApprovedGateway" name="Автоодобрено?">
       <incoming>flow_moderate_to_gateway</incoming>
       <outgoing>flow_auto_approved</outgoing>
       <outgoing>flow_needs_manual_review</outgoing>
     </exclusiveGateway>
 
-    <userTask id="reviewByModerator" name="Manual Review by Moderator"
+    <userTask id="reviewByModerator" name="Ручная проверка модератором"
               camunda:candidateGroups="moderator"
               camunda:formKey="embedded:app:forms/moderation-video.html">
       <incoming>flow_needs_manual_review</incoming>
       <outgoing>flow_review_to_gateway</outgoing>
     </userTask>
 
-    <exclusiveGateway id="moderatorDecisionGateway" name="Moderator Decision">
+    <exclusiveGateway id="moderatorDecisionGateway" name="Решение модератора">
       <incoming>flow_review_to_gateway</incoming>
       <outgoing>flow_moderator_approved</outgoing>
       <outgoing>flow_moderator_rejected</outgoing>
     </exclusiveGateway>
 
-    <subProcess id="publishSubProcess" name="Publish Video">
+    <subProcess id="publishSubProcess" name="Публикация видео">
       <incoming>flow_auto_approved</incoming>
       <incoming>flow_moderator_approved</incoming>
       <outgoing>flow_subprocess_to_published</outgoing>
@@ -61,19 +61,19 @@
         <outgoing>flow_ps_to_change_status</outgoing>
       </startEvent>
 
-      <serviceTask id="changeStatusPublished" name="Change Status to PUBLISHED"
+      <serviceTask id="changeStatusPublished" name="Изменить статус на ОПУБЛИКОВАНО"
                    camunda:delegateExpression="${changeVideoStatusPublishedDelegate}">
         <incoming>flow_ps_to_change_status</incoming>
         <outgoing>flow_ps_to_save_params</outgoing>
       </serviceTask>
 
-      <serviceTask id="savePublishParams" name="Save Publication Parameters"
+      <serviceTask id="savePublishParams" name="Сохранить параметры публикации"
                    camunda:delegateExpression="${savePublicationParamsDelegate}">
         <incoming>flow_ps_to_save_params</incoming>
         <outgoing>flow_ps_to_copy_file</outgoing>
       </serviceTask>
 
-      <serviceTask id="copyToPublished" name="Copy File to Published Bucket"
+      <serviceTask id="copyToPublished" name="Копировать файл в опубликованные"
                    camunda:delegateExpression="${publishVideoFileDelegate}">
         <incoming>flow_ps_to_copy_file</incoming>
         <outgoing>flow_ps_to_end</outgoing>
@@ -89,17 +89,17 @@
       <sequenceFlow id="flow_ps_to_end" sourceRef="copyToPublished" targetRef="publishSubEnd"/>
     </subProcess>
 
-    <serviceTask id="rejectPublication" name="Reject Publication"
+    <serviceTask id="rejectPublication" name="Отклонить публикацию"
                  camunda:delegateExpression="${rejectPublicationDelegate}">
       <incoming>flow_moderator_rejected</incoming>
       <outgoing>flow_reject_to_end</outgoing>
     </serviceTask>
 
-    <endEvent id="videoPublished" name="Video Published">
+    <endEvent id="videoPublished" name="Видео опубликовано">
       <incoming>flow_subprocess_to_published</incoming>
     </endEvent>
 
-    <endEvent id="publicationRejected" name="Publication Rejected">
+    <endEvent id="publicationRejected" name="Публикация отклонена">
       <incoming>flow_reject_to_end</incoming>
     </endEvent>
 
@@ -107,17 +107,17 @@
     <sequenceFlow id="flow_configure_to_pending" sourceRef="configurePublication" targetRef="setPendingStatus"/>
     <sequenceFlow id="flow_pending_to_moderate" sourceRef="setPendingStatus" targetRef="autoModerateDescription"/>
     <sequenceFlow id="flow_moderate_to_gateway" sourceRef="autoModerateDescription" targetRef="autoApprovedGateway"/>
-    <sequenceFlow id="flow_auto_approved" name="Auto Approved" sourceRef="autoApprovedGateway" targetRef="publishSubProcess">
+    <sequenceFlow id="flow_auto_approved" name="Автоодобрено" sourceRef="autoApprovedGateway" targetRef="publishSubProcess">
       <conditionExpression xsi:type="tFormalExpression">${autoApproved == true}</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow_needs_manual_review" name="Needs Review" sourceRef="autoApprovedGateway" targetRef="reviewByModerator">
+    <sequenceFlow id="flow_needs_manual_review" name="Требует проверки" sourceRef="autoApprovedGateway" targetRef="reviewByModerator">
       <conditionExpression xsi:type="tFormalExpression">${autoApproved == false}</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow_review_to_gateway" sourceRef="reviewByModerator" targetRef="moderatorDecisionGateway"/>
-    <sequenceFlow id="flow_moderator_approved" name="Approved" sourceRef="moderatorDecisionGateway" targetRef="publishSubProcess">
+    <sequenceFlow id="flow_moderator_approved" name="Одобрено" sourceRef="moderatorDecisionGateway" targetRef="publishSubProcess">
       <conditionExpression xsi:type="tFormalExpression">${moderatorApproved == true}</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow_moderator_rejected" name="Rejected" sourceRef="moderatorDecisionGateway" targetRef="rejectPublication">
+    <sequenceFlow id="flow_moderator_rejected" name="Отклонено" sourceRef="moderatorDecisionGateway" targetRef="rejectPublication">
       <conditionExpression xsi:type="tFormalExpression">${moderatorApproved == false}</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow_subprocess_to_published" sourceRef="publishSubProcess" targetRef="videoPublished"/>

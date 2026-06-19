@@ -8,51 +8,51 @@
              targetNamespace="http://bpmn.io/schema/bpmn"
              id="MonetizationRequestDefinitions">
 
-  <process id="monetization-request-process" name="Monetization Request Process" isExecutable="true">
+  <process id="monetization-request-process" name="Запрос на монетизацию" isExecutable="true">
 
-    <startEvent id="startMonetization" name="Monetization Requested">
+    <startEvent id="startMonetization" name="Запрошена монетизация">
       <outgoing>flow_start_to_check</outgoing>
     </startEvent>
 
-    <serviceTask id="checkEligibility" name="Check Monetization Eligibility"
+    <serviceTask id="checkEligibility" name="Проверить право на монетизацию"
                  camunda:delegateExpression="${checkMonetizationEligibilityDelegate}">
       <incoming>flow_start_to_check</incoming>
       <outgoing>flow_check_to_gateway</outgoing>
     </serviceTask>
 
-    <exclusiveGateway id="eligibilityGateway" name="Eligible for Monetization?">
+    <exclusiveGateway id="eligibilityGateway" name="Подходит для монетизации?">
       <incoming>flow_check_to_gateway</incoming>
       <outgoing>flow_eligible</outgoing>
       <outgoing>flow_not_eligible</outgoing>
     </exclusiveGateway>
 
-    <endEvent id="monetizationRejected" name="Monetization Rejected - Not Eligible">
+    <endEvent id="monetizationRejected" name="Монетизация отклонена — не подходит">
       <incoming>flow_not_eligible</incoming>
     </endEvent>
 
-    <userTask id="selectStrategy" name="Select Monetization Strategy"
+    <userTask id="selectStrategy" name="Выбрать стратегию монетизации"
               camunda:assignee="${uploaderId}"
               camunda:formKey="embedded:app:forms/monetization-request.html">
       <incoming>flow_eligible</incoming>
       <outgoing>flow_strategy_to_save</outgoing>
     </userTask>
 
-    <serviceTask id="saveMonetization" name="Save Monetization Request"
+    <serviceTask id="saveMonetization" name="Сохранить заявку на монетизацию"
                  camunda:delegateExpression="${saveMonetizationDelegate}">
       <incoming>flow_strategy_to_save</incoming>
       <outgoing>flow_save_to_end</outgoing>
     </serviceTask>
 
-    <endEvent id="monetizationApproved" name="Monetization Approved">
+    <endEvent id="monetizationApproved" name="Монетизация одобрена">
       <incoming>flow_save_to_end</incoming>
     </endEvent>
 
     <sequenceFlow id="flow_start_to_check" sourceRef="startMonetization" targetRef="checkEligibility"/>
     <sequenceFlow id="flow_check_to_gateway" sourceRef="checkEligibility" targetRef="eligibilityGateway"/>
-    <sequenceFlow id="flow_eligible" name="Eligible" sourceRef="eligibilityGateway" targetRef="selectStrategy">
+    <sequenceFlow id="flow_eligible" name="Подходит" sourceRef="eligibilityGateway" targetRef="selectStrategy">
       <conditionExpression xsi:type="tFormalExpression">${eligible == true}</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow_not_eligible" name="Not Eligible" sourceRef="eligibilityGateway" targetRef="monetizationRejected">
+    <sequenceFlow id="flow_not_eligible" name="Не подходит" sourceRef="eligibilityGateway" targetRef="monetizationRejected">
       <conditionExpression xsi:type="tFormalExpression">${eligible == false}</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow_strategy_to_save" sourceRef="selectStrategy" targetRef="saveMonetization"/>
