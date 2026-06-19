@@ -2,6 +2,9 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
              targetNamespace="http://bpmn.io/schema/bpmn"
              id="MonetizationRequestDefinitions">
 
@@ -56,4 +59,54 @@
     <sequenceFlow id="flow_save_to_end" sourceRef="saveMonetization" targetRef="monetizationApproved"/>
 
   </process>
+
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="monetization-request-process">
+      <bpmndi:BPMNShape id="startMonetization_di" bpmnElement="startMonetization">
+        <omgdc:Bounds x="150" y="182" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="checkEligibility_di" bpmnElement="checkEligibility">
+        <omgdc:Bounds x="240" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="eligibilityGateway_di" bpmnElement="eligibilityGateway" isMarkerVisible="true">
+        <omgdc:Bounds x="400" y="175" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="selectStrategy_di" bpmnElement="selectStrategy">
+        <omgdc:Bounds x="510" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="saveMonetization_di" bpmnElement="saveMonetization">
+        <omgdc:Bounds x="670" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="monetizationApproved_di" bpmnElement="monetizationApproved">
+        <omgdc:Bounds x="830" y="182" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="monetizationRejected_di" bpmnElement="monetizationRejected">
+        <omgdc:Bounds x="407" y="320" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow_start_to_check_di" bpmnElement="flow_start_to_check">
+        <omgdi:waypoint x="186" y="200"/>
+        <omgdi:waypoint x="240" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_check_to_gateway_di" bpmnElement="flow_check_to_gateway">
+        <omgdi:waypoint x="340" y="200"/>
+        <omgdi:waypoint x="400" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_eligible_di" bpmnElement="flow_eligible">
+        <omgdi:waypoint x="450" y="200"/>
+        <omgdi:waypoint x="510" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_not_eligible_di" bpmnElement="flow_not_eligible">
+        <omgdi:waypoint x="425" y="225"/>
+        <omgdi:waypoint x="425" y="320"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_strategy_to_save_di" bpmnElement="flow_strategy_to_save">
+        <omgdi:waypoint x="610" y="200"/>
+        <omgdi:waypoint x="670" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_save_to_end_di" bpmnElement="flow_save_to_end">
+        <omgdi:waypoint x="770" y="200"/>
+        <omgdi:waypoint x="830" y="200"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
 </definitions>

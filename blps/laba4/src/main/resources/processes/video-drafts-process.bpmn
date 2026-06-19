@@ -2,6 +2,9 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
              targetNamespace="http://bpmn.io/schema/bpmn"
              id="VideoDraftsDefs">
   <process id="video-drafts-process" name="[GET] Мои черновики" isExecutable="true">
@@ -43,4 +46,46 @@
     <sequenceFlow id="sf_close" name="Закрыть" sourceRef="refreshGw" targetRef="end"/>
 
   </process>
+
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="video-drafts-process">
+      <bpmndi:BPMNShape id="start_di" bpmnElement="start">
+        <omgdc:Bounds x="160" y="102" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="loadDrafts_di" bpmnElement="loadDrafts">
+        <omgdc:Bounds x="250" y="80" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="showDraftList_di" bpmnElement="showDraftList">
+        <omgdc:Bounds x="410" y="80" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="refreshGw_di" bpmnElement="refreshGw" isMarkerVisible="true">
+        <omgdc:Bounds x="570" y="95" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="end_di" bpmnElement="end">
+        <omgdc:Bounds x="692" y="102" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="sf_start_di" bpmnElement="sf_start">
+        <omgdi:waypoint x="196" y="120"/>
+        <omgdi:waypoint x="250" y="120"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_loaded_di" bpmnElement="sf_loaded">
+        <omgdi:waypoint x="350" y="120"/>
+        <omgdi:waypoint x="410" y="120"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_to_gw_di" bpmnElement="sf_to_gw">
+        <omgdi:waypoint x="510" y="120"/>
+        <omgdi:waypoint x="570" y="120"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_close_di" bpmnElement="sf_close">
+        <omgdi:waypoint x="620" y="120"/>
+        <omgdi:waypoint x="692" y="120"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sf_refresh_di" bpmnElement="sf_refresh">
+        <omgdi:waypoint x="595" y="145"/>
+        <omgdi:waypoint x="595" y="210"/>
+        <omgdi:waypoint x="300" y="210"/>
+        <omgdi:waypoint x="300" y="160"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
 </definitions>

@@ -2,6 +2,9 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
              targetNamespace="http://bpmn.io/schema/bpmn"
              id="VideoPublishDefinitions">
 
@@ -121,4 +124,87 @@
     <sequenceFlow id="flow_reject_to_end" sourceRef="rejectPublication" targetRef="publicationRejected"/>
 
   </process>
+
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="video-publish-process">
+      <bpmndi:BPMNShape id="startPublish_di" bpmnElement="startPublish">
+        <omgdc:Bounds x="150" y="142" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="configurePublication_di" bpmnElement="configurePublication">
+        <omgdc:Bounds x="240" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="setPendingStatus_di" bpmnElement="setPendingStatus">
+        <omgdc:Bounds x="390" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="autoModerateDescription_di" bpmnElement="autoModerateDescription">
+        <omgdc:Bounds x="540" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="autoApprovedGateway_di" bpmnElement="autoApprovedGateway" isMarkerVisible="true">
+        <omgdc:Bounds x="695" y="135" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="publishSubProcess_di" bpmnElement="publishSubProcess" isExpanded="false">
+        <omgdc:Bounds x="900" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="videoPublished_di" bpmnElement="videoPublished">
+        <omgdc:Bounds x="1080" y="142" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reviewByModerator_di" bpmnElement="reviewByModerator">
+        <omgdc:Bounds x="670" y="260" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="moderatorDecisionGateway_di" bpmnElement="moderatorDecisionGateway" isMarkerVisible="true">
+        <omgdc:Bounds x="820" y="275" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="rejectPublication_di" bpmnElement="rejectPublication">
+        <omgdc:Bounds x="795" y="380" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="publicationRejected_di" bpmnElement="publicationRejected">
+        <omgdc:Bounds x="960" y="402" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow_start_to_configure_di" bpmnElement="flow_start_to_configure">
+        <omgdi:waypoint x="186" y="160"/>
+        <omgdi:waypoint x="240" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_configure_to_pending_di" bpmnElement="flow_configure_to_pending">
+        <omgdi:waypoint x="340" y="160"/>
+        <omgdi:waypoint x="390" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_pending_to_moderate_di" bpmnElement="flow_pending_to_moderate">
+        <omgdi:waypoint x="490" y="160"/>
+        <omgdi:waypoint x="540" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_moderate_to_gateway_di" bpmnElement="flow_moderate_to_gateway">
+        <omgdi:waypoint x="640" y="160"/>
+        <omgdi:waypoint x="695" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_auto_approved_di" bpmnElement="flow_auto_approved">
+        <omgdi:waypoint x="745" y="160"/>
+        <omgdi:waypoint x="900" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_needs_manual_review_di" bpmnElement="flow_needs_manual_review">
+        <omgdi:waypoint x="720" y="185"/>
+        <omgdi:waypoint x="720" y="260"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_review_to_gateway_di" bpmnElement="flow_review_to_gateway">
+        <omgdi:waypoint x="770" y="300"/>
+        <omgdi:waypoint x="820" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_moderator_approved_di" bpmnElement="flow_moderator_approved">
+        <omgdi:waypoint x="870" y="300"/>
+        <omgdi:waypoint x="950" y="300"/>
+        <omgdi:waypoint x="950" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_moderator_rejected_di" bpmnElement="flow_moderator_rejected">
+        <omgdi:waypoint x="845" y="325"/>
+        <omgdi:waypoint x="845" y="380"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_reject_to_end_di" bpmnElement="flow_reject_to_end">
+        <omgdi:waypoint x="895" y="420"/>
+        <omgdi:waypoint x="960" y="420"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_subprocess_to_published_di" bpmnElement="flow_subprocess_to_published">
+        <omgdi:waypoint x="1000" y="160"/>
+        <omgdi:waypoint x="1080" y="160"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
 </definitions>

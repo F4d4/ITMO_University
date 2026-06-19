@@ -2,6 +2,9 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
              targetNamespace="http://bpmn.io/schema/bpmn"
              id="VideoUploadDefinitions">
 
@@ -90,4 +93,88 @@
     <sequenceFlow id="flow_draft_to_end" sourceRef="saveAsDraft" targetRef="uploadSuccess"/>
 
   </process>
+
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="video-upload-process">
+      <bpmndi:BPMNShape id="startUpload_di" bpmnElement="startUpload">
+        <omgdc:Bounds x="150" y="182" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="validateFile_di" bpmnElement="validateFile">
+        <omgdc:Bounds x="240" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="fileValidGateway_di" bpmnElement="fileValidGateway" isMarkerVisible="true">
+        <omgdc:Bounds x="400" y="175" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="createVideoRecord_di" bpmnElement="createVideoRecord">
+        <omgdc:Bounds x="510" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="fillVideoInfo_di" bpmnElement="fillVideoInfo">
+        <omgdc:Bounds x="670" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="validateDescription_di" bpmnElement="validateDescription">
+        <omgdc:Bounds x="830" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="descValidGateway_di" bpmnElement="descValidGateway" isMarkerVisible="true">
+        <omgdc:Bounds x="990" y="175" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="saveAsDraft_di" bpmnElement="saveAsDraft">
+        <omgdc:Bounds x="1100" y="160" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="uploadSuccess_di" bpmnElement="uploadSuccess">
+        <omgdc:Bounds x="1260" y="182" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="cleanupInvalidFile_di" bpmnElement="cleanupInvalidFile">
+        <omgdc:Bounds x="375" y="300" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="fileValidationError_di" bpmnElement="fileValidationError">
+        <omgdc:Bounds x="560" y="322" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow_start_to_validate_di" bpmnElement="flow_start_to_validate">
+        <omgdi:waypoint x="186" y="200"/>
+        <omgdi:waypoint x="240" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_validate_to_gateway_di" bpmnElement="flow_validate_to_gateway">
+        <omgdi:waypoint x="340" y="200"/>
+        <omgdi:waypoint x="400" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_file_valid_di" bpmnElement="flow_file_valid">
+        <omgdi:waypoint x="450" y="200"/>
+        <omgdi:waypoint x="510" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_file_invalid_di" bpmnElement="flow_file_invalid">
+        <omgdi:waypoint x="425" y="225"/>
+        <omgdi:waypoint x="425" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_cleanup_to_error_di" bpmnElement="flow_cleanup_to_error">
+        <omgdi:waypoint x="475" y="340"/>
+        <omgdi:waypoint x="560" y="340"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_create_to_task_di" bpmnElement="flow_create_to_task">
+        <omgdi:waypoint x="610" y="200"/>
+        <omgdi:waypoint x="670" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_task_to_validate_desc_di" bpmnElement="flow_task_to_validate_desc">
+        <omgdi:waypoint x="770" y="200"/>
+        <omgdi:waypoint x="830" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_desc_to_gateway_di" bpmnElement="flow_desc_to_gateway">
+        <omgdi:waypoint x="930" y="200"/>
+        <omgdi:waypoint x="990" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_desc_valid_di" bpmnElement="flow_desc_valid">
+        <omgdi:waypoint x="1040" y="200"/>
+        <omgdi:waypoint x="1100" y="200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_desc_invalid_retry_di" bpmnElement="flow_desc_invalid_retry">
+        <omgdi:waypoint x="1015" y="175"/>
+        <omgdi:waypoint x="1015" y="110"/>
+        <omgdi:waypoint x="720" y="110"/>
+        <omgdi:waypoint x="720" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_draft_to_end_di" bpmnElement="flow_draft_to_end">
+        <omgdi:waypoint x="1200" y="200"/>
+        <omgdi:waypoint x="1260" y="200"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
 </definitions>

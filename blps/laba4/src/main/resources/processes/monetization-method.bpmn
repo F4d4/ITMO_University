@@ -2,6 +2,9 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
              targetNamespace="http://bpmn.io/schema/bpmn"
              id="MonetizationMethodDefinitions">
 
@@ -151,4 +154,115 @@
     <sequenceFlow id="flow_subscription_to_end" sourceRef="saveSubscriptionMethod" targetRef="methodApproved"/>
 
   </process>
+
+  <bpmndi:BPMNDiagram id="diagram">
+    <bpmndi:BPMNPlane id="plane" bpmnElement="monetization-method-process">
+      <bpmndi:BPMNShape id="startMethod_di" bpmnElement="startMethod">
+        <omgdc:Bounds x="140" y="142" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="checkMonetizationApproved_di" bpmnElement="checkMonetizationApproved">
+        <omgdc:Bounds x="230" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="selectMethodType_di" bpmnElement="selectMethodType">
+        <omgdc:Bounds x="380" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="methodTypeGateway_di" bpmnElement="methodTypeGateway" isMarkerVisible="true">
+        <omgdc:Bounds x="535" y="135" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="autoModerateAd_di" bpmnElement="autoModerateAd">
+        <omgdc:Bounds x="640" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="adNameCleanGateway_di" bpmnElement="adNameCleanGateway" isMarkerVisible="true">
+        <omgdc:Bounds x="795" y="135" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="saveAdPendingReview_di" bpmnElement="saveAdPendingReview">
+        <omgdc:Bounds x="900" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="reviewAdMethod_di" bpmnElement="reviewAdMethod">
+        <omgdc:Bounds x="1050" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="adDecisionGateway_di" bpmnElement="adDecisionGateway" isMarkerVisible="true">
+        <omgdc:Bounds x="1205" y="135" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="approveAdSubProcess_di" bpmnElement="approveAdSubProcess" isExpanded="false">
+        <omgdc:Bounds x="1310" y="120" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="methodApproved_di" bpmnElement="methodApproved">
+        <omgdc:Bounds x="1470" y="142" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="methodRejectedForbidden_di" bpmnElement="methodRejectedForbidden">
+        <omgdc:Bounds x="802" y="280" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="rejectAdMethod_di" bpmnElement="rejectAdMethod">
+        <omgdc:Bounds x="1180" y="260" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="methodRejected_di" bpmnElement="methodRejected">
+        <omgdc:Bounds x="1340" y="282" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="saveSubscriptionMethod_di" bpmnElement="saveSubscriptionMethod">
+        <omgdc:Bounds x="510" y="360" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="flow_start_to_check_di" bpmnElement="flow_start_to_check">
+        <omgdi:waypoint x="176" y="160"/>
+        <omgdi:waypoint x="230" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_check_to_task_di" bpmnElement="flow_check_to_task">
+        <omgdi:waypoint x="330" y="160"/>
+        <omgdi:waypoint x="380" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_task_to_type_gateway_di" bpmnElement="flow_task_to_type_gateway">
+        <omgdi:waypoint x="480" y="160"/>
+        <omgdi:waypoint x="535" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_is_ad_di" bpmnElement="flow_is_ad">
+        <omgdi:waypoint x="585" y="160"/>
+        <omgdi:waypoint x="640" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_is_subscription_di" bpmnElement="flow_is_subscription">
+        <omgdi:waypoint x="560" y="185"/>
+        <omgdi:waypoint x="560" y="360"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_moderate_to_clean_gateway_di" bpmnElement="flow_moderate_to_clean_gateway">
+        <omgdi:waypoint x="740" y="160"/>
+        <omgdi:waypoint x="795" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_ad_name_clean_di" bpmnElement="flow_ad_name_clean">
+        <omgdi:waypoint x="845" y="160"/>
+        <omgdi:waypoint x="900" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_ad_name_forbidden_di" bpmnElement="flow_ad_name_forbidden">
+        <omgdi:waypoint x="820" y="185"/>
+        <omgdi:waypoint x="820" y="280"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_save_ad_to_review_di" bpmnElement="flow_save_ad_to_review">
+        <omgdi:waypoint x="1000" y="160"/>
+        <omgdi:waypoint x="1050" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_review_to_decision_di" bpmnElement="flow_review_to_decision">
+        <omgdi:waypoint x="1150" y="160"/>
+        <omgdi:waypoint x="1205" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_ad_approved_di" bpmnElement="flow_ad_approved">
+        <omgdi:waypoint x="1255" y="160"/>
+        <omgdi:waypoint x="1310" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_ad_rejected_di" bpmnElement="flow_ad_rejected">
+        <omgdi:waypoint x="1230" y="185"/>
+        <omgdi:waypoint x="1230" y="260"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_ad_subprocess_to_end_di" bpmnElement="flow_ad_subprocess_to_end">
+        <omgdi:waypoint x="1410" y="160"/>
+        <omgdi:waypoint x="1470" y="160"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_reject_ad_to_end_di" bpmnElement="flow_reject_ad_to_end">
+        <omgdi:waypoint x="1280" y="300"/>
+        <omgdi:waypoint x="1340" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="flow_subscription_to_end_di" bpmnElement="flow_subscription_to_end">
+        <omgdi:waypoint x="610" y="400"/>
+        <omgdi:waypoint x="1488" y="400"/>
+        <omgdi:waypoint x="1488" y="178"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
 </definitions>

@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/videos/published").permitAll()
 
+                .requestMatchers("/camunda/**").permitAll()
                 .requestMatchers("/engine-rest/**").permitAll()
                 .requestMatchers("/app/**").permitAll()
                 .requestMatchers("/lib/**").permitAll()
