@@ -21,11 +21,15 @@ public class RegisterUserDelegate implements JavaDelegate {
         String username = (String) execution.getVariable("username");
         String email = (String) execution.getVariable("email");
         String password = (String) execution.getVariable("password");
+        String roleStr = (String) execution.getVariable("role");
 
         CreateUserRequest request = new CreateUserRequest();
         request.setUsername(username);
         request.setEmail(email);
         request.setPassword(password);
+        if (roleStr != null) {
+            request.setRole(org.example.entity.Role.valueOf(roleStr));
+        }
 
         AuthResponse response = authService.register(request);
 

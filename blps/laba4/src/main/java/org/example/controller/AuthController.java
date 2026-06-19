@@ -29,6 +29,7 @@ public class AuthController {
         variables.put("username", request.getUsername());
         variables.put("email", request.getEmail());
         variables.put("password", request.getPassword());
+        variables.put("role", request.getRole() != null ? request.getRole().name() : "USER");
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("auth-register-process", variables);
 
