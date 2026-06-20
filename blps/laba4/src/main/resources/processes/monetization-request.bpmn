@@ -11,6 +11,21 @@
   <process id="monetization-request-process" name="Запрос на монетизацию" isExecutable="true">
 
     <startEvent id="startMonetization" name="Запрошена монетизация">
+      <extensionElements>
+        <camunda:executionListener event="start" delegateExpression="${resolveJwtUserDelegate}"/>
+        <camunda:formData>
+          <camunda:formField id="jwtToken" label="JWT-токен" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="videoId" label="ID видео" type="long">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </extensionElements>
       <outgoing>flow_start_to_check</outgoing>
     </startEvent>
 

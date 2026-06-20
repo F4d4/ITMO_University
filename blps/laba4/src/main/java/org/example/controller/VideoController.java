@@ -33,13 +33,14 @@ public class VideoController {
             @RequestParam("file") MultipartFile file) {
 
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
         String objectName = "video_" + UUID.randomUUID() + ".mp4";
         minioService.uploadVideoFile(file, objectName);
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("userId", userId);
-        variables.put("uploaderId", String.valueOf(userId));
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("uploaderId", username);
+        variables.put("assignee", username);
         variables.put("minioKey", objectName);
         variables.put("fileSize", file.getSize());
         variables.put("fileName", file.getOriginalFilename() != null ? file.getOriginalFilename() : objectName);
@@ -66,12 +67,13 @@ public class VideoController {
     @PostMapping("/{videoId}/start-publish")
     public ResponseEntity<ApiResponse<Map<String, Object>>> startPublish(@PathVariable Long videoId) {
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("videoId", videoId);
         variables.put("userId", userId);
-        variables.put("uploaderId", String.valueOf(userId));
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("uploaderId", username);
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("video-publish-process", variables);
 
@@ -92,11 +94,12 @@ public class VideoController {
     @GetMapping("/{videoId}")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getVideoById(@PathVariable Long videoId) {
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("videoId", videoId);
         variables.put("userId", userId);
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("video-get-process", variables);
 
@@ -116,10 +119,11 @@ public class VideoController {
     @GetMapping
     public ResponseEntity<ApiResponse<Map<String, Object>>> getMyVideos() {
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("userId", userId);
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("video-list-process", variables);
 
@@ -139,10 +143,11 @@ public class VideoController {
     @GetMapping("/drafts")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getMyDrafts() {
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("userId", userId);
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("video-drafts-process", variables);
 

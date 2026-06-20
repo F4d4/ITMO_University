@@ -28,12 +28,13 @@ public class MonetizationController {
             @RequestParam Long videoId) {
 
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("videoId", videoId);
         variables.put("userId", userId);
-        variables.put("uploaderId", String.valueOf(userId));
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("uploaderId", username);
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("monetization-request-process", variables);
 
@@ -59,12 +60,13 @@ public class MonetizationController {
             @PathVariable Long monetizationId) {
 
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("monetizationId", monetizationId);
         variables.put("userId", userId);
-        variables.put("uploaderId", String.valueOf(userId));
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("uploaderId", username);
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("monetization-method-process", variables);
 
@@ -88,11 +90,12 @@ public class MonetizationController {
             @PathVariable Long monetizationId) {
 
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("monetizationId", monetizationId);
         variables.put("userId", userId);
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("monetization-get-process", variables);
 
@@ -112,10 +115,11 @@ public class MonetizationController {
     @GetMapping("/my")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getMyMonetizations() {
         Long userId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("userId", userId);
-        variables.put("assignee", String.valueOf(userId));
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("monetization-list-process", variables);
 

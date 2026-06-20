@@ -10,6 +10,16 @@
   <process id="moderation-pending-videos-process" name="[GET] Очередь модерации видео" isExecutable="true">
 
     <startEvent id="start" name="Получена заявка на модерацию">
+      <extensionElements>
+        <camunda:executionListener event="start" delegateExpression="${resolveJwtUserDelegate}"/>
+        <camunda:formData>
+          <camunda:formField id="jwtToken" label="JWT-токен" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </extensionElements>
       <outgoing>sf_start</outgoing>
     </startEvent>
 

@@ -30,13 +30,28 @@ public class MinioService {
      * @return имя объекта (key) в MinIO
      */
     public String uploadVideoFile(MultipartFile file, String objectName) {
-        ensureBucketExists(uploadedBucket);
         try (InputStream inputStream = file.getInputStream()) {
+            return uploadVideoFile(inputStream, file.getSize(), objectName);
+        } catch (Exception e) {
+            log.error("Ошибка загрузки файла в MinIO: {}", e.getMessage(), e);
+            throw new BusinessException("Ошибка загрузки файла: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Загружает файл из потока в бакет uploaded-videos.
+     * Используется при запуске процесса из Camunda Tasklist, где файл приходит
+     * как переменная процесса (FileValue), а не как MultipartFile.
+     * @return имя объекта (key) в MinIO
+     */
+    public String uploadVideoFile(InputStream inputStream, long size, String objectName) {
+        ensureBucketExists(uploadedBucket);
+        try {
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(uploadedBucket)
                             .object(objectName)
-                            .stream(inputStream, file.getSize(), -1)
+                            .stream(inputStream, size, -1)
                             .contentType("video/mp4")
                             .build()
             );

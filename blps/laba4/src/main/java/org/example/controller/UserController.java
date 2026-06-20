@@ -25,11 +25,12 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getUserById(@PathVariable Long userId) {
         Long requesterId = securityUtils.getCurrentUserId();
+        String username = securityUtils.getCurrentUser().getUsername();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("targetUserId", userId);
         variables.put("requesterId", requesterId);
-        variables.put("assignee", String.valueOf(requesterId));
+        variables.put("assignee", username);
 
         ProcessInstance instance = runtimeService.startProcessInstanceByKey("user-get-process", variables);
 

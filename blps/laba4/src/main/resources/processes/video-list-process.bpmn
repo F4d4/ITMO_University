@@ -10,6 +10,16 @@
   <process id="video-list-process" name="[GET] Мои видео" isExecutable="true">
 
     <startEvent id="start" name="Начало">
+      <extensionElements>
+        <camunda:executionListener event="start" delegateExpression="${resolveJwtUserDelegate}"/>
+        <camunda:formData>
+          <camunda:formField id="jwtToken" label="JWT-токен" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required"/>
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </extensionElements>
       <outgoing>sf_start</outgoing>
     </startEvent>
 

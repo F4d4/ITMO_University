@@ -11,6 +11,9 @@
   <process id="video-upload-process" name="Загрузка видео" isExecutable="true">
 
     <startEvent id="startUpload" name="Запрос на загрузку">
+      <extensionElements>
+        <camunda:executionListener event="start" delegateExpression="${resolveJwtUserDelegate}"/>
+      </extensionElements>
       <outgoing>flow_start_to_validate</outgoing>
     </startEvent>
 
