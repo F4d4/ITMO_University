@@ -1,0 +1,107 @@
+@startuml architecture
+title Архитектура приложения и точки интеграции BPM-движка (Camunda) с подсистемами
+
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+skinparam shadowing false
+skinparam rectangle {
+  BackgroundColor #FDFDFD
+  BorderColor #555555
+}
+' Точки интеграции BPM-движка выделены цветом
+skinparam arrow {
+  Color #333333
+}
+
+legend top right
+  <b>Точки интеграции BPM-движка</b>
+  == ИП-1 == REST → Camunda: запуск процессов и завершение задач
+  == ИП-2 == Service Task → Java-делегат (delegateExpression) → бизнес-логика
+  == ИП-3 == Execution Listener → JWT (идентификация пользователя в процессе)
+  == ИП-4 == Делегаты → объектное хранилище MinIO
+  == ИП-5 == Движок и делегаты → PostgreSQL (ACT_* + доменные таблицы)
+  == ИП-6 == Camunda 
+  == ИП-7 == Tasklist (сгенерированные формы) → User Task (UI)
+endlegend
+
+actor "Пользователь / Модератор" as User
+component "Insomnia\n(REST-клиент)" as Insomnia
+component "Браузер\n(Cockpit / Tasklist)" as Browser
+
+node "Сервер приложений WildFly 34" as WildFly {
+
+  package "Spring Boot WAR (embedded Camunda)" as App {
+
+    component "Слой безопасности\nSpringSecurity + JwtAuthenticationFilter\nJwtTokenProvider" as Security
+
+    component "REST-контроллеры\nAuth / Video / Monetization\nUser / Moderation" as Controllers
+
+    package "BPM-движок Camunda (embedded)" as Camunda #E8F2FF {
+      component "RuntimeService /\nTaskService /\nRepositoryService" as CamundaApi
+      component "16 BPMN-процессов\n(определения)" as Processes
+      component "Job Executor\n(async, таймеры)" as JobExec
+      component "Cockpit / Tasklist\n+ генератор форм" as Webapps
+    }
+
+    package "Слой интеграции (делегаты)" as Delegates #FFF3E0 {
+      component "JavaDelegate:\nupload / publish /\nmonetization / method / view" as JavaDelegates
+      component "ExecutionListener:\nResolveJwtUserDelegate" as JwtListener
+    }
+
+    package "Бизнес-сервисы" as Services {
+      component "AuthService / VideoService\nMonetizationService / UserService" as DomainServices
+      component "ValidationService" as Validation
+      component "MinioService" as MinioSvc
+    }
+
+    component "JPA-репозитории" as Repos
+  }
+
+  component "Narayana JTA\n(менеджер транзакций)" as JTA
+}
+
+database "PostgreSQL\n(studs)\nACT_* + домен" as Postgres
+cloud "MinIO\n(uploaded-/published-videos)" as MinIO
+
+' ---- Внешние взаимодействия ----
+User --> Insomnia
+User --> Browser
+Insomnia --> Security : HTTPS + JWT
+Browser --> Webapps : сессия Camunda
+
+' ---- ИП-1: REST -> Camunda ----
+Security --> Controllers
+Controllers --> CamundaApi : <b>ИП-1</b>\nstartProcessInstanceByKey()\nTaskService.complete()
+
+' ---- Движок использует определения и исполнитель ----
+CamundaApi --> Processes
+CamundaApi --> JobExec
+Webapps --> CamundaApi
+
+' ---- ИП-2: Service Task -> делегаты ----
+Processes --> JavaDelegates : <b>ИП-2</b>\ndelegateExpression
+JavaDelegates --> DomainServices
+JavaDelegates --> Validation
+
+' ---- ИП-3: Execution Listener -> JWT ----
+Processes --> JwtListener : <b>ИП-3</b>\nstart listener
+JwtListener --> Security : валидация токена\n(JwtTokenProvider)
+
+' ---- ИП-7: формы Tasklist -> User Task ----
+Webapps --> Processes : <b>ИП-7</b>\nгенерируемые формы\n(User Task)
+
+' ---- ИП-4: делегаты -> MinIO ----
+JavaDelegates --> MinioSvc
+MinioSvc --> MinIO : <b>ИП-4</b>\nputObject / copyObject
+
+' ---- ИП-5: персистентность ----
+DomainServices --> Repos
+Repos --> Postgres : <b>ИП-5</b>\nдоменные таблицы
+CamundaApi --> Postgres : <b>ИП-5</b>\nACT_* (состояние процессов)
+
+' ---- ИП-6: транзакции ----
+Camunda --> JTA : <b>ИП-6</b>\nучастие в XA-транзакции
+DomainServices --> JTA
+JTA --> Postgres : XA datasource
+
+@enduml
