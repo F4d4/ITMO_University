@@ -20,6 +20,21 @@ public class ValidationService {
             "терроризм", "наркотики", "убийство", "ограбление", "шантаж", "насилие"
     );
 
+    public static final List<String> ALLOWED_VIDEO_EXTENSIONS = List.of(".mp4");
+
+    public void validateVideoFileFormat(String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            throw new BusinessException("Видеофайл не прикреплён");
+        }
+        String lower = fileName.toLowerCase();
+        if (ALLOWED_VIDEO_EXTENSIONS.stream().noneMatch(lower::endsWith)) {
+            throw new BusinessException(
+                    "Недопустимый формат файла \"" + fileName + "\". Допускается только MP4",
+                    HttpStatus.UNPROCESSABLE_ENTITY
+            );
+        }
+    }
+
     public boolean isVideoFileMetaValid(String fileName, Long fileSize) {
         if (fileSize == null || fileSize >= MAX_VIDEO_SIZE_BYTES) return false;
         return fileName != null && fileName.toLowerCase().endsWith(".mp4");

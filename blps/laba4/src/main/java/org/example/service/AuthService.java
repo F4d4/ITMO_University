@@ -2,6 +2,8 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.IdentityService;
+import org.example.config.CamundaIdentityConfig;
 import org.example.dto.request.CreateUserRequest;
 import org.example.dto.request.LoginRequest;
 import org.example.dto.response.AuthResponse;
@@ -28,6 +30,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final IdentityService identityService;
 
     @Transactional
     public AuthResponse register(CreateUserRequest request) {
@@ -51,8 +54,36 @@ public class AuthService {
         user = userRepository.save(user);
         log.info("Зарегистрирован пользователь id={}, username={}", user.getId(), user.getUsername());
 
+        createCamundaUser(user, request.getPassword());
+
         String token = jwtTokenProvider.generateToken(user.getUsername(), user.getRole().name());
         return new AuthResponse(token, user.getId(), user.getUsername(), user.getRole());
+    }
+
+    private void createCamundaUser(User user, String rawPassword) {
+        String userId = user.getUsername();
+        String groupId = user.getRole() == Role.MODERATOR
+                ? CamundaIdentityConfig.GROUP_MODERATOR
+                : CamundaIdentityConfig.GROUP_USER;
+
+        if (identityService.createUserQuery().userId(userId).count() == 0) {
+            org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser(userId);
+            camundaUser.setFirstName(user.getUsername());
+            camundaUser.setLastName(user.getRole().name());
+            camundaUser.setEmail(user.getEmail());
+            camundaUser.setPassword(rawPassword);
+            identityService.saveUser(camundaUser);
+        }
+
+        boolean alreadyMember = identityService.createGroupQuery()
+                .groupMember(userId)
+                .groupId(groupId)
+                .count() > 0;
+        if (!alreadyMember) {
+            identityService.createMembership(userId, groupId);
+        }
+
+        log.info("Создан пользователь Camunda '{}' в группе '{}'", userId, groupId);
     }
 
     public AuthResponse login(LoginRequest request) {
