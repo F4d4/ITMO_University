@@ -15,7 +15,12 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -53,15 +58,30 @@ public class CamundaIdentityConfig {
             "monetization-method-process"
     );
 
+    /**
+     * Процессы, задачи которых раздаются через camunda:candidateGroups="moderator".
+     * Это общая очередь модерации без конкретного исполнителя, поэтому права на задачи
+     * выдаются группе явно.
+     */
+    private static final List<String> MODERATOR_QUEUE_PROCESSES = List.of(
+            "video-publish-process",
+            "monetization-method-process",
+            "moderation-pending-videos-process",
+            "moderation-pending-methods-process"
+    );
+
+    /**
+     * Права на PROCESS_DEFINITION действуют на все экземпляры процесса, поэтому
+     * READ_TASK/UPDATE_TASK/TASK_WORK сюда не входят: иначе каждый участник группы видел бы
+     * в Tasklist чужие задачи. Свои задачи видны по авторизации, которую движок создаёт
+     * на assignee при назначении.
+     */
     private static final Permission[] OWNER_PERMISSIONS = {
             Permissions.READ,
             Permissions.CREATE_INSTANCE,
             Permissions.READ_INSTANCE,
             Permissions.UPDATE_INSTANCE,
             Permissions.DELETE_INSTANCE,
-            Permissions.READ_TASK,
-            Permissions.UPDATE_TASK,
-            Permissions.TASK_WORK,
             Permissions.READ_HISTORY
     };
 
@@ -69,10 +89,13 @@ public class CamundaIdentityConfig {
             Permissions.READ,
             Permissions.READ_INSTANCE,
             Permissions.UPDATE_INSTANCE,
+            Permissions.READ_HISTORY
+    };
+
+    private static final Permission[] QUEUE_TASK_PERMISSIONS = {
             Permissions.READ_TASK,
             Permissions.UPDATE_TASK,
-            Permissions.TASK_WORK,
-            Permissions.READ_HISTORY
+            Permissions.TASK_WORK
     };
 
     private final IdentityService identityService;
@@ -127,36 +150,59 @@ public class CamundaIdentityConfig {
             grant(groupId, Resources.PROCESS_INSTANCE, "*", Permissions.CREATE);
         }
 
-        for (String processKey : USER_PROCESSES) {
-            grant(GROUP_USER, Resources.PROCESS_DEFINITION, processKey, OWNER_PERMISSIONS);
-        }
-        for (String processKey : MODERATOR_PROCESSES) {
-            grant(GROUP_MODERATOR, Resources.PROCESS_DEFINITION, processKey, OWNER_PERMISSIONS);
-        }
-        for (String processKey : MODERATOR_REVIEW_PROCESSES) {
-            grant(GROUP_MODERATOR, Resources.PROCESS_DEFINITION, processKey, REVIEWER_PERMISSIONS);
+        Map<String, Set<Permission>> userGrants = new LinkedHashMap<>();
+        collect(userGrants, USER_PROCESSES, OWNER_PERMISSIONS);
+
+        Map<String, Set<Permission>> moderatorGrants = new LinkedHashMap<>();
+        collect(moderatorGrants, MODERATOR_PROCESSES, OWNER_PERMISSIONS);
+        collect(moderatorGrants, MODERATOR_REVIEW_PROCESSES, REVIEWER_PERMISSIONS);
+        collect(moderatorGrants, MODERATOR_QUEUE_PROCESSES, QUEUE_TASK_PERMISSIONS);
+
+        userGrants.forEach((processKey, permissions) ->
+                grant(GROUP_USER, Resources.PROCESS_DEFINITION, processKey, permissions));
+        moderatorGrants.forEach((processKey, permissions) ->
+                grant(GROUP_MODERATOR, Resources.PROCESS_DEFINITION, processKey, permissions));
+    }
+
+    private void collect(Map<String, Set<Permission>> target, List<String> processKeys, Permission[] permissions) {
+        for (String processKey : processKeys) {
+            target.computeIfAbsent(processKey, key -> new LinkedHashSet<>()).addAll(List.of(permissions));
         }
     }
 
     private void grant(String groupId, Resource resource, String resourceId, Permission... permissions) {
-        boolean exists = authorizationService.createAuthorizationQuery()
+        grant(groupId, resource, resourceId, List.of(permissions));
+    }
+
+    /**
+     * Приводит грант к ровно заданному набору прав: существующая авторизация
+     * перезаписывается, иначе снятые в коде права остались бы в БД навсегда.
+     */
+    private void grant(String groupId, Resource resource, String resourceId, Collection<Permission> permissions) {
+        Permission[] granted = permissions.toArray(new Permission[0]);
+
+        List<Authorization> existing = authorizationService.createAuthorizationQuery()
+                .authorizationType(Authorization.AUTH_TYPE_GRANT)
                 .groupIdIn(groupId)
                 .resourceType(resource)
                 .resourceId(resourceId)
-                .count() > 0;
-        if (exists) {
+                .list();
+
+        if (existing.isEmpty()) {
+            Authorization authorization = authorizationService.createNewAuthorization(Authorization.AUTH_TYPE_GRANT);
+            authorization.setGroupId(groupId);
+            authorization.setResource(resource);
+            authorization.setResourceId(resourceId);
+            authorization.setPermissions(granted);
+            authorizationService.saveAuthorization(authorization);
+            log.info("Authorization granted: group='{}', resource='{}', resourceId='{}'",
+                    groupId, resource.resourceName(), resourceId);
             return;
         }
 
-        Authorization authorization = authorizationService.createNewAuthorization(Authorization.AUTH_TYPE_GRANT);
-        authorization.setGroupId(groupId);
-        authorization.setResource(resource);
-        authorization.setResourceId(resourceId);
-        for (Permission permission : permissions) {
-            authorization.addPermission(permission);
+        for (Authorization authorization : existing) {
+            authorization.setPermissions(granted);
+            authorizationService.saveAuthorization(authorization);
         }
-        authorizationService.saveAuthorization(authorization);
-        log.info("Authorization granted: group='{}', resource='{}', resourceId='{}'",
-                groupId, resource.resourceName(), resourceId);
     }
 }
