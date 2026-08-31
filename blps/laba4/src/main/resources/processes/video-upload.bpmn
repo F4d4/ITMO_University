@@ -31,7 +31,8 @@
     </exclusiveGateway>
 
     <userTask id="attachVideoFile" name="Прикрепить видеофайл"
-              camunda:assignee="${uploaderId}">
+              camunda:assignee="${uploaderId}"
+              camunda:formKey="embedded:/forms/attach-video.html">
       <extensionElements>
         <camunda:taskListener event="complete" delegateExpression="${validateFileFormatTaskListener}"/>
       </extensionElements>
