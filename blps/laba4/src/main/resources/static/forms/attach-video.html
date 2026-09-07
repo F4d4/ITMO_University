@@ -9,30 +9,32 @@
            cam-max-filesize="115343360" />
     <p id="videoFileError" class="text-danger" style="display: none;"></p>
   </div>
-</form>
 
-<script cam-script type="text/form-script">
-  // Tasklist base64-кодирует файл в браузере и падает с исключением, если файл
-  // больше cam-max-filesize; исключение бросается уже после того, как кнопка
-  // Complete перешла в состояние "выполняется", поэтому она зависает навсегда.
-  // Отсекаем слишком большие файлы сразу при выборе, до нажатия Complete.
-  var MAX_VIDEO_SIZE_BYTES = 100 * 1024 * 1024;
+  <!-- Скрипт обязан лежать внутри <form>: SDK собирает их селектором
+       $("script[cam-script]", formElement), то есть только среди потомков формы. -->
+  <script cam-script type="text/form-script">
+    // Tasklist base64-кодирует файл в браузере и падает с исключением, если файл
+    // больше cam-max-filesize; исключение бросается уже после того, как кнопка
+    // Complete перешла в состояние "выполняется", поэтому она зависает навсегда.
+    // Отсекаем слишком большие файлы сразу при выборе, до нажатия Complete.
+    var MAX_VIDEO_SIZE_BYTES = 100 * 1024 * 1024;
 
-  camForm.on('form-loaded', function () {
-    var input = document.getElementById('videoFile');
-    var error = document.getElementById('videoFileError');
+    camForm.on('form-loaded', function () {
+      var input = document.getElementById('videoFile');
+      var error = document.getElementById('videoFileError');
 
-    input.addEventListener('change', function () {
-      var file = input.files[0];
-      if (file && file.size >= MAX_VIDEO_SIZE_BYTES) {
-        input.value = '';
-        error.textContent = 'Файл "' + file.name + '" весит ' +
-          Math.round(file.size / (1024 * 1024)) + ' МБ. Максимум — 100 МБ.';
-        error.style.display = 'block';
-      } else {
-        error.textContent = '';
-        error.style.display = 'none';
-      }
+      input.addEventListener('change', function () {
+        var file = input.files[0];
+        if (file && file.size >= MAX_VIDEO_SIZE_BYTES) {
+          input.value = '';
+          error.textContent = 'Файл "' + file.name + '" весит ' +
+            Math.round(file.size / (1024 * 1024)) + ' МБ. Максимум — 100 МБ.';
+          error.style.display = 'block';
+        } else {
+          error.textContent = '';
+          error.style.display = 'none';
+        }
+      });
     });
-  });
-</script>
+  </script>
+</form>
