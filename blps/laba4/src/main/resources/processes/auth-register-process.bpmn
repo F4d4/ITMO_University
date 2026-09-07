@@ -20,6 +20,7 @@
           <camunda:formField id="email" label="Email" type="string">
             <camunda:validation>
               <camunda:constraint name="required"/>
+              <camunda:constraint name="validator" config="${emailFormFieldValidator}"/>
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="password" label="Пароль" type="string">
