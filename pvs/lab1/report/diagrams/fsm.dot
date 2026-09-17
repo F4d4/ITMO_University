@@ -1,0 +1,25 @@
+digraph fsm {
+    rankdir = LR;
+    bgcolor = "white";
+    node [shape=ellipse, style=filled, fillcolor="white", color="#333333",
+          fontname="Arial", fontsize=11];
+    edge [color="#333333", fontname="Arial", fontsize=9, arrowsize=0.7];
+    graph [fontname="Arial", fontsize=11, nodesep=0.5, ranksep=1.1];
+
+    start [shape=point, width=0.12];
+    IDLE    [label="ОЖИДАНИЕ\nбуфер пуст"];
+    INPUT   [label="ВВОД\nв буфере есть символы"];
+    SENDING [label="ПЕРЕДАЧА\nиграет зелёный"];
+
+    start -> IDLE;
+
+    IDLE  -> IDLE  [label="нажатие:\lзапомнить момент\l"];
+    IDLE  -> INPUT [label="отпускание:\lклассифицировать,\lзаписать в буфер,\lмигнуть цветом,\lзапустить тайм-аут\l"];
+
+    INPUT -> INPUT [label="нажатие:\lзапомнить момент,\lостановить тайм-аут\l"];
+    INPUT -> INPUT [label="отпускание:\lзаписать символ либо\lпоказать переполнение,\lперезапустить тайм-аут\l"];
+    INPUT -> SENDING [label="тайм-аут 2000 мс:\lпогасить двухцветный,\lначать передачу\l"];
+
+    SENDING -> SENDING [label="события кнопки\lотбрасываются\l"];
+    SENDING -> IDLE    [label="передача окончена:\lочистить буфер\lи очередь событий\l"];
+}

@@ -1,0 +1,4 @@
+third_party/
+fw/build/
+sim/build/
+*.tmp

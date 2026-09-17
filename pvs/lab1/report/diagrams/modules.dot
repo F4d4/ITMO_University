@@ -1,0 +1,78 @@
+digraph modules {
+    rankdir = TB;
+    bgcolor = "white";
+    node [shape=box, style="rounded,filled", fillcolor="white", color="#333333",
+          fontname="Arial", fontsize=11, margin="0.12,0.07"];
+    edge [color="#333333", arrowsize=0.7];
+    graph [fontname="Arial", fontsize=11, nodesep=0.3, ranksep=0.45];
+
+    subgraph cluster_app {
+        label = "Прикладной уровень: ни одного упоминания выводов и HAL";
+        style = "rounded"; color = "#888888"; fontsize = 10;
+        main       [label="main.c\nтактирование, запуск"];
+        app_main   [label="app_main.c\nтаблица процессов"];
+        morse_app  [label="morse_app.c\nавтомат варианта 3"];
+        morse_buf  [label="morse_buffer.c\nбуфер символов"];
+        morse_play [label="morse_player.c\nпередатчик"];
+    }
+
+    subgraph cluster_infra {
+        label = "Инфраструктура";
+        style = "rounded"; color = "#888888"; fontsize = 10;
+        sched   [label="sched.c\nкооперативный планировщик"];
+        swtimer [label="swtimer.c\nпрограммный таймер"];
+        systick [label="sys_tick_hal.c\nмиллисекундный счётчик"];
+    }
+
+    subgraph cluster_drv {
+        label = "Драйверы устройств: универсальные, неблокирующие";
+        style = "rounded"; color = "#888888"; fontsize = 10;
+        led    [label="led.c\nканалы и анимация"];
+        button [label="button.c\nантидребезг, очередь событий"];
+    }
+
+    subgraph cluster_board {
+        label = "Карта платы: единственное место с номерами выводов";
+        style = "rounded"; color = "#888888"; fontsize = 10;
+        board  [label="board.c / board_pins.h\nPC15, PD13, PD14, PD15"];
+    }
+
+    subgraph cluster_gpio {
+        label = "Абстракция GPIO: две взаимозаменяемые реализации";
+        style = "rounded"; color = "#888888"; fontsize = 10;
+        gpio_hw [label="gpio_hw.h"];
+        hal     [label="gpio_hw_hal.c\nповерх HAL"];
+        my      [label="gpio_hw_my.c\nповерх mygpio"];
+        mygpio  [label="mygpio.c\nсобственный регистровый драйвер"];
+    }
+
+    subgraph cluster_bus {
+        label = "Шина регистров";
+        style = "rounded"; color = "#888888"; fontsize = 10;
+        bus [label="gpio_bus.h\nобращение по адресу либо вызов функции"];
+        sim [label="gpio_sim.c\nмодель блока GPIO", style="rounded,filled,dashed", fillcolor="#f0f0f0"];
+    }
+
+    main       -> app_main;
+    app_main   -> sched;
+    app_main   -> morse_app;
+    app_main   -> led;
+    app_main   -> button;
+    morse_app  -> morse_buf;
+    morse_app  -> morse_play;
+    morse_app  -> led;
+    morse_app  -> button;
+    morse_play -> swtimer;
+    sched      -> systick;
+    swtimer    -> systick;
+    led        -> board;
+    button     -> board;
+    led        -> swtimer;
+    board      -> gpio_hw;
+    gpio_hw    -> hal;
+    gpio_hw    -> my;
+    my         -> mygpio;
+    mygpio     -> bus;
+    hal        -> bus  [style=dashed];
+    bus        -> sim  [style=dashed, label=" сборка\l симулятора", fontsize=9];
+}

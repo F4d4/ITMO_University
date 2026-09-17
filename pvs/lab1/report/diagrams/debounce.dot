@@ -1,0 +1,16 @@
+digraph debounce {
+    rankdir = LR;
+    bgcolor = "white";
+    node [shape=box, style="rounded,filled", fillcolor="white", color="#333333",
+          fontname="Arial", fontsize=11];
+    edge [color="#333333", fontname="Arial", fontsize=9, arrowsize=0.7];
+    graph [fontname="Arial", fontsize=11];
+
+    R [label="ОТПУЩЕНА"];
+    P [label="НАЖАТА"];
+
+    R -> R [label="контакт замкнут: счётчик +1 (до 25)\lконтакт разомкнут: счётчик −1 (до 0)\l"];
+    R -> P [label="счётчик ≥ 20\lсобытие «нажата»\l"];
+    P -> P [label="тот же счёт\l"];
+    P -> R [label="счётчик ≤ 5\lсобытие «отпущена»\l"];
+}

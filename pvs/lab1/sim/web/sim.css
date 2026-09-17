@@ -1,0 +1,101 @@
+:root {
+    --bg:        #f6f6f4;
+    --panel:     #ffffff;
+    --ink:       #16181d;
+    --muted:     #5c6270;
+    --line:      #d8dae0;
+    --accent:    #2f5fd0;
+    --green:     #29a745;
+    --yellow:    #d8a200;
+    --red:       #cf3a2e;
+    --grid:      #e8eaee;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.5 "Segoe UI", system-ui, sans-serif;
+}
+
+header {
+    padding: 16px 20px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+}
+
+header h1 { margin: 0 0 4px; font-size: 17px; font-weight: 650; }
+header p  { margin: 0; color: var(--muted); font-size: 13px; }
+
+.wrap {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 16px;
+    padding: 16px 20px 32px;
+    align-items: start;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.panel h2 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 650;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--muted);
+}
+
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+button {
+    font: inherit;
+    padding: 5px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+}
+button:hover  { border-color: var(--accent); color: var(--accent); }
+button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+input[type=range] { width: 100%; }
+
+.time {
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+    font-size: 15px;
+}
+
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th, td {
+    text-align: left;
+    padding: 3px 8px 3px 0;
+    border-bottom: 1px solid var(--grid);
+    white-space: nowrap;
+}
+th { color: var(--muted); font-weight: 600; }
+td.num, th.num { font-variant-numeric: tabular-nums; font-family: Consolas, monospace; }
+
+.scroll { max-height: 320px; overflow: auto; }
+.wide   { overflow-x: auto; }
+
+.log-row { cursor: pointer; }
+.log-row:hover td { background: #eef2fb; }
+
+.bits { font-family: Consolas, monospace; font-size: 12px; color: var(--muted); }
+
+.legend { color: var(--muted); font-size: 12.5px; margin-top: 8px; }
+
+svg { display: block; max-width: 100%; }
+
+.stand { background: #23262d; border-radius: 8px; padding: 12px; }

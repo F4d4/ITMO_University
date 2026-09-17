@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Симулятор GPIO STM32F427 — ПВС ЛР1</title>
+<link rel="stylesheet" href="sim.css">
+</head>
+<body>
+
+<header>
+  <h1>Программная модель блока GPIO STM32F427 — лабораторная работа 1, вариант 3 «Азбука Морзе»</h1>
+  <p>Данные получены прогоном модели вместе с исходными текстами программы для стенда SDK-1.1M.
+     Страница работает без веб-сервера: журналы подключены обычными тегами script.</p>
+</header>
+
+<div class="wrap">
+  <div>
+    <div class="panel">
+      <h2>Сценарий</h2>
+      <div class="controls" id="scenarios"></div>
+      <p class="legend" id="scenario-note"></p>
+    </div>
+
+    <div class="panel">
+      <h2>Проигрывание</h2>
+      <div class="controls">
+        <button id="play">Пуск</button>
+        <button id="step-back">&larr;</button>
+        <button id="step-fwd">&rarr;</button>
+        <button id="speed">×10</button>
+      </div>
+      <p class="time" id="clock">0.000 с</p>
+      <input type="range" id="cursor" min="0" max="1000" value="0">
+    </div>
+
+    <div class="panel">
+      <h2>Боковая панель стенда</h2>
+      <div class="stand">
+        <svg id="stand" viewBox="0 0 260 120" role="img"
+             aria-label="Кнопка и светодиоды боковой панели стенда"></svg>
+      </div>
+      <p class="legend">Двухцветный светодиод включён встречно-параллельно: цвет задаётся
+        направлением тока, поэтому оба цвета одновременно невозможны.</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <h2>Временная диаграмма</h2>
+      <div class="wide">
+        <svg id="timeline" viewBox="0 0 1000 220" role="img"
+             aria-label="Временная диаграмма сигналов на выводах"></svg>
+      </div>
+      <p class="legend">Щелчок по диаграмме переносит курсор. Уровень Z означает,
+        что вывод никем не управляется.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Регистры порта на момент курсора</h2>
+      <div class="wide">
+        <table id="registers"></table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Журнал обращений к регистрам</h2>
+      <div class="controls" style="margin-bottom:8px">
+        <button class="filter active" data-filter="all">Все</button>
+        <button class="filter" data-filter="W">Только записи</button>
+        <button class="filter" data-filter="app">События программы</button>
+      </div>
+      <div class="scroll wide">
+        <table id="log"></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="trace_morse.js"></script>
+<script src="trace_overflow.js"></script>
+<script src="trace_edge.js"></script>
+<script src="trace_glitch.js"></script>
+<script src="sim.js"></script>
+</body>
+</html>
