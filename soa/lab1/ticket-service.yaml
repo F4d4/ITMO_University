@@ -245,6 +245,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+              example:
+                timestamp: 21.09.2026 14:31:02
+                status: 404
+                error: Not Found
+                message: Билет с ценой 1500.5 не найден
+                path: /tickets/price/1500.5
         '409':
           $ref: '#/components/responses/Conflict'
         '500':
@@ -295,6 +301,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+              example:
+                timestamp: 21.09.2026 14:31:02
+                status: 404
+                error: Not Found
+                message: В коллекции нет билетов с непустым полем comment
+                path: /tickets/comment/min
         '500':
           $ref: '#/components/responses/InternalServerError'
         default:
@@ -670,6 +682,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 400
+            error: Bad Request
+            message: "Недопустимое имя поля в параметре sort: prise"
+            path: /tickets
 
     NotFound:
       description: Элемент коллекции с указанным идентификатором не найден
@@ -677,6 +695,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 404
+            error: Not Found
+            message: Билет с id = 42 не найден
+            path: /tickets/42
 
     UnprocessableEntity:
       description: |
@@ -686,6 +710,16 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 422
+            error: Unprocessable Entity
+            message: Нарушены ограничения целостности объекта Ticket
+            path: /tickets
+            violations:
+              - field: price
+                message: значение поля должно быть больше 0
+                rejectedValue: '-100.0'
 
     InternalServerError:
       description: Внутренняя ошибка сервиса
@@ -693,6 +727,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 500
+            error: Internal Server Error
+            message: Внутренняя ошибка сервиса
+            path: /tickets
 
     Conflict:
       description: |
@@ -703,6 +743,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 409
+            error: Conflict
+            message: Билет с id = 42 забронирован и не может быть удалён
+            path: /tickets/42
 
     UnsupportedMediaType:
       description: |
@@ -712,6 +758,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 415
+            error: Unsupported Media Type
+            message: Тело запроса должно передаваться в формате application/json
+            path: /tickets
 
     DefaultError:
       description: |
@@ -721,3 +773,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 503
+            error: Service Unavailable
+            message: Сервис временно недоступен
+            path: /tickets
