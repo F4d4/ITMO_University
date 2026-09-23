@@ -73,6 +73,8 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
     post:
       tags: [tickets]
@@ -107,10 +109,14 @@ paths:
                 $ref: '#/components/schemas/Ticket'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
   /tickets/{id}:
     parameters:
@@ -134,6 +140,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
     put:
       tags: [tickets]
@@ -143,6 +151,9 @@ paths:
         Полностью заменяет содержимое объекта `Ticket` с указанным идентификатором.
         Значения полей `id` и `creationDate` не изменяются: они сгенерированы
         автоматически при создании элемента.
+
+        Если за время обработки запроса билет был изменён или удалён другим запросом,
+        обновление отклоняется с кодом `409 Conflict`.
       requestBody:
         required: true
         description: Новое состояние билета
@@ -161,16 +172,26 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
     delete:
       tags: [tickets]
       operationId: deleteTicket
       summary: Удалить элемент коллекции
-      description: Удаляет объект `Ticket` с указанным идентификатором вместе со связанным объектом `Venue`.
+      description: |
+        Удаляет объект `Ticket` с указанным идентификатором вместе со связанным объектом `Venue`.
+
+        Забронированный билет (`personId != null`) удалить нельзя: возвращается
+        `409 Conflict`. Чтобы удалить такой билет, нужно сначала отменить бронирование.
       responses:
         '204':
           description: Элемент успешно удалён, тело ответа отсутствует
@@ -178,8 +199,12 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
   /tickets/price/{price}:
     delete:
@@ -191,6 +216,9 @@ paths:
         которого эквивалентно заданному. Если таких объектов несколько, удаляется
         любой из них; какой именно — не определено. Если подходящих объектов нет,
         возвращается `404 Not Found`.
+
+        Удаляется только свободный билет. Если все билеты с указанной ценой
+        забронированы (`personId != null`), возвращается `409 Conflict`.
       parameters:
         - name: price
           in: path
@@ -217,8 +245,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
   /tickets/price/average:
     get:
@@ -237,6 +269,8 @@ paths:
                 $ref: '#/components/schemas/AveragePrice'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
   /tickets/comment/min:
     get:
@@ -263,6 +297,8 @@ paths:
                 $ref: '#/components/schemas/Error'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
 components:
 
@@ -653,6 +689,34 @@ components:
 
     InternalServerError:
       description: Внутренняя ошибка сервиса
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Conflict:
+      description: |
+        Операция конфликтует с текущим состоянием ресурса: билет был изменён или удалён
+        параллельным запросом, либо билет забронирован (`personId != null`) и не может
+        быть удалён до отмены бронирования.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    UnsupportedMediaType:
+      description: |
+        Тело запроса передано в формате, отличном от `application/json`,
+        либо заголовок `Content-Type` не указан.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    DefaultError:
+      description: |
+        Любая иная ошибка, не описанная отдельным кодом ответа. Тело ответа
+        содержит описание ошибки в том же формате, что и остальные ответы сервиса.
       content:
         application/json:
           schema:

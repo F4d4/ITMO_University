@@ -91,12 +91,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-        '502':
-          $ref: '#/components/responses/BadGateway'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
   /booking/person/{person-id}/cancel:
     post:
@@ -135,10 +141,16 @@ paths:
                 $ref: '#/components/schemas/CancellationResult'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '502':
-          $ref: '#/components/responses/BadGateway'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '504':
+          $ref: '#/components/responses/GatewayTimeout'
+        default:
+          $ref: '#/components/responses/DefaultError'
 
 components:
 
@@ -361,6 +373,34 @@ components:
 
     InternalServerError:
       description: Внутренняя ошибка сервиса
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Conflict:
+      description: |
+        Операция конфликтует с текущим состоянием данных первого сервиса: билет был
+        изменён или удалён параллельным запросом, поэтому бронирование не может быть
+        выполнено или отменено.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    GatewayTimeout:
+      description: |
+        Первый веб-сервис (`Ticket Service`) не ответил за отведённое время,
+        поэтому результат операции неизвестен.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    DefaultError:
+      description: |
+        Любая иная ошибка, не описанная отдельным кодом ответа. Тело ответа
+        содержит описание ошибки в том же формате, что и остальные ответы сервиса.
       content:
         application/json:
           schema:
