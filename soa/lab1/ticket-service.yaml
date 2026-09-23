@@ -20,17 +20,6 @@ info:
     **Формат даты и времени.** Поле `creationDate` возвращается в человекочитаемом
     виде `dd.MM.yyyy HH:mm:ss` (например, `21.09.2026 14:30:15`), время — локальное
     время сервера.
-  contact:
-    name: Автор лабораторной работы
-    email: mihan201557@gmail.com
-  license:
-    name: Для учебных целей
-
-servers:
-  - url: http://localhost:8080/api/v1
-    description: Локальный запуск сервиса
-  - url: https://helios.cs.ifmo.ru:8080/api/v1
-    description: Развёртывание на сервере helios
 
 tags:
   - name: tickets
@@ -111,7 +100,7 @@ paths:
               description: URI созданного элемента коллекции
               schema:
                 type: string
-                example: /api/v1/tickets/42
+                example: /tickets/42
           content:
             application/json:
               schema:
@@ -628,7 +617,7 @@ components:
         path:
           type: string
           description: URI запроса, вызвавшего ошибку
-          example: /api/v1/tickets
+          example: /tickets
         violations:
           type: array
           description: Перечень нарушенных ограничений целостности

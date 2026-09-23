@@ -24,17 +24,6 @@ info:
     создаёт новый элемент (`POST /tickets`) и обновляет существующие
     (`PUT /tickets/{id}`). Если первый сервис недоступен или возвращает ошибку,
     `Booking Service` отвечает кодом `502 Bad Gateway`.
-  contact:
-    name: Автор лабораторной работы
-    email: mihan201557@gmail.com
-  license:
-    name: Для учебных целей
-
-servers:
-  - url: http://localhost:8081
-    description: Локальный запуск сервиса
-  - url: https://helios.cs.ifmo.ru:8081
-    description: Развёртывание на сервере helios
 
 tags:
   - name: booking
@@ -89,7 +78,7 @@ paths:
               description: URI созданного билета в коллекции первого сервиса
               schema:
                 type: string
-                example: /api/v1/tickets/43
+                example: /tickets/43
           content:
             application/json:
               schema:
