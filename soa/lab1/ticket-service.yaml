@@ -21,6 +21,10 @@ info:
     виде `dd.MM.yyyy HH:mm:ss` (например, `21.09.2026 14:30:15`), время — локальное
     время сервера.
 
+servers:
+  - url: /
+    description: Тот же адрес, с которого открыта документация
+
 tags:
   - name: tickets
     description: Базовые операции над коллекцией объектов `Ticket`
@@ -38,14 +42,17 @@ paths:
         Возвращает массив объектов `Ticket` с поддержкой фильтрации, сортировки
         и постраничного вывода. Все параметры выборки передаются в строке запроса.
 
-        **Фильтрация** задаётся повторяющимся параметром `filter` в формате
-        `имя_поля[операция]=значение`. Допускается произвольная комбинация полей;
-        несколько условий объединяются логическим «И».
-        Поддерживаемые операции: `eq` (равно), `ne` (не равно), `gt` (больше),
-        `gte` (больше или равно), `lt` (меньше), `lte` (меньше или равно),
-        `like` (подстрока, только для строковых полей).
+        **Фильтрация** задаётся отдельным параметром на каждое поле класса.
+        Параметры можно указывать в любом сочетании, условия объединяются
+        логическим «И». Имя параметра совпадает с именем поля; вложенные поля
+        записываются слитно (`venueName`, `coordinateX`).
 
-        Пример: `?filter=price[gte]=1000&filter=type[eq]=VIP&filter=venue.name[like]=Arena`
+        Для числовых полей и даты дополнительно доступны границы диапазона
+        с суффиксами `From` и `To` — обе границы включаются в выборку.
+        Для строковых полей доступен поиск подстроки с суффиксом `Contains`
+        (без учёта регистра).
+
+        Пример: `?type=VIP&priceFrom=1000&priceTo=5000&venueNameContains=arena`
 
         **Сортировка** задаётся параметром `sort` — списком имён полей через запятую.
         Префикс `-` означает сортировку по убыванию, отсутствие префикса — по возрастанию.
@@ -56,7 +63,28 @@ paths:
         **Постраничный вывод** задаётся параметрами `page` (порядковый номер страницы,
         нумерация с 1) и `size` (размер страницы).
       parameters:
-        - $ref: '#/components/parameters/FilterParam'
+        - $ref: '#/components/parameters/FilterId'
+        - $ref: '#/components/parameters/FilterName'
+        - $ref: '#/components/parameters/FilterNameContains'
+        - $ref: '#/components/parameters/FilterComment'
+        - $ref: '#/components/parameters/FilterCommentContains'
+        - $ref: '#/components/parameters/FilterType'
+        - $ref: '#/components/parameters/FilterPrice'
+        - $ref: '#/components/parameters/FilterPriceFrom'
+        - $ref: '#/components/parameters/FilterPriceTo'
+        - $ref: '#/components/parameters/FilterCreationDate'
+        - $ref: '#/components/parameters/FilterCreationDateFrom'
+        - $ref: '#/components/parameters/FilterCreationDateTo'
+        - $ref: '#/components/parameters/FilterCoordinateX'
+        - $ref: '#/components/parameters/FilterCoordinateY'
+        - $ref: '#/components/parameters/FilterVenueId'
+        - $ref: '#/components/parameters/FilterVenueName'
+        - $ref: '#/components/parameters/FilterVenueNameContains'
+        - $ref: '#/components/parameters/FilterVenueCapacity'
+        - $ref: '#/components/parameters/FilterVenueCapacityFrom'
+        - $ref: '#/components/parameters/FilterVenueCapacityTo'
+        - $ref: '#/components/parameters/FilterVenueType'
+        - $ref: '#/components/parameters/FilterPersonId'
         - $ref: '#/components/parameters/SortParam'
         - $ref: '#/components/parameters/PageParam'
         - $ref: '#/components/parameters/SizeParam'
@@ -73,6 +101,8 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -115,6 +145,8 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -140,6 +172,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -180,6 +214,8 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -203,6 +239,8 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -255,6 +293,8 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -275,6 +315,8 @@ paths:
                 $ref: '#/components/schemas/AveragePrice'
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -309,6 +351,8 @@ paths:
                 path: /tickets/comment/min
         '500':
           $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -327,35 +371,231 @@ components:
         minimum: 1
       example: 42
 
-    FilterParam:
-      name: filter
+    FilterId:
+      name: id
       in: query
       required: false
-      description: |
-        Условие фильтрации в формате `имя_поля[операция]=значение`.
-        Параметр может повторяться, условия объединяются по «И».
-
-        Допустимые имена полей: `id`, `name`, `coordinates.x`, `coordinates.y`,
-        `creationDate`, `price`, `comment`, `type`, `venue.id`, `venue.name`,
-        `venue.capacity`, `venue.type`, `personId`.
-
-        Допустимые операции: `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `like`.
-
-        Значение `creationDate` указывается в формате `dd.MM.yyyy HH:mm:ss`.
-      style: form
-      explode: true
+      description: Фильтр по полю `id` — точное значение
       schema:
-        type: array
-        items:
-          type: string
-          pattern: '^(id|name|coordinates\.x|coordinates\.y|creationDate|price|comment|type|venue\.id|venue\.name|venue\.capacity|venue\.type|personId)\[(eq|ne|gt|gte|lt|lte|like)\]=.*$'
-      examples:
-        byType:
-          summary: Только VIP-билеты
-          value: ['type[eq]=VIP']
-        combined:
-          summary: Комбинация полей
-          value: ['price[gte]=1000', 'venue.capacity[lt]=500', 'name[like]=Concert']
+        type: integer
+        format: int32
+        minimum: 1
+      example: 42
+
+    FilterName:
+      name: name
+      in: query
+      required: false
+      description: Фильтр по полю `name` — полное совпадение
+      schema:
+        type: string
+        minLength: 1
+      example: Concert of the Year
+
+    FilterNameContains:
+      name: nameContains
+      in: query
+      required: false
+      description: Фильтр по полю `name` — вхождение подстроки без учёта регистра
+      schema:
+        type: string
+        minLength: 1
+      example: concert
+
+    FilterComment:
+      name: comment
+      in: query
+      required: false
+      description: Фильтр по полю `comment` — полное совпадение
+      schema:
+        type: string
+      example: Front row seats
+
+    FilterCommentContains:
+      name: commentContains
+      in: query
+      required: false
+      description: Фильтр по полю `comment` — вхождение подстроки без учёта регистра
+      schema:
+        type: string
+      example: front
+
+    FilterType:
+      name: type
+      in: query
+      required: false
+      description: Фильтр по полю `type` — точное значение
+      schema:
+        $ref: '#/components/schemas/TicketType'
+
+    FilterPrice:
+      name: price
+      in: query
+      required: false
+      description: Фильтр по полю `price` — точное значение
+      schema:
+        type: number
+        format: float
+        minimum: 0
+        exclusiveMinimum: true
+      example: 1500.5
+
+    FilterPriceFrom:
+      name: priceFrom
+      in: query
+      required: false
+      description: Нижняя граница поля `price`, включительно
+      schema:
+        type: number
+        format: float
+        minimum: 0
+        exclusiveMinimum: true
+      example: 1000
+
+    FilterPriceTo:
+      name: priceTo
+      in: query
+      required: false
+      description: Верхняя граница поля `price`, включительно
+      schema:
+        type: number
+        format: float
+        minimum: 0
+        exclusiveMinimum: true
+      example: 5000
+
+    FilterCreationDate:
+      name: creationDate
+      in: query
+      required: false
+      description: Фильтр по полю `creationDate` — точное значение в формате `dd.MM.yyyy HH:mm:ss`
+      schema:
+        type: string
+        pattern: '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2}$'
+      example: 21.09.2026 14:30:15
+
+    FilterCreationDateFrom:
+      name: creationDateFrom
+      in: query
+      required: false
+      description: Нижняя граница поля `creationDate`, включительно
+      schema:
+        type: string
+        pattern: '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2}$'
+      example: 01.09.2026 00:00:00
+
+    FilterCreationDateTo:
+      name: creationDateTo
+      in: query
+      required: false
+      description: Верхняя граница поля `creationDate`, включительно
+      schema:
+        type: string
+        pattern: '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2}$'
+      example: 30.09.2026 23:59:59
+
+    FilterCoordinateX:
+      name: coordinateX
+      in: query
+      required: false
+      description: Фильтр по полю `coordinates.x` — точное значение
+      schema:
+        type: integer
+        format: int32
+      example: 15
+
+    FilterCoordinateY:
+      name: coordinateY
+      in: query
+      required: false
+      description: Фильтр по полю `coordinates.y` — точное значение
+      schema:
+        type: number
+        format: double
+      example: -42.75
+
+    FilterVenueId:
+      name: venueId
+      in: query
+      required: false
+      description: Фильтр по полю `venue.id` — точное значение
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+      example: 3
+
+    FilterVenueName:
+      name: venueName
+      in: query
+      required: false
+      description: Фильтр по полю `venue.name` — полное совпадение
+      schema:
+        type: string
+        minLength: 1
+      example: Ice Palace
+
+    FilterVenueNameContains:
+      name: venueNameContains
+      in: query
+      required: false
+      description: Фильтр по полю `venue.name` — вхождение подстроки без учёта регистра
+      schema:
+        type: string
+        minLength: 1
+      example: palace
+
+    FilterVenueCapacity:
+      name: venueCapacity
+      in: query
+      required: false
+      description: Фильтр по полю `venue.capacity` — точное значение
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+      example: 12000
+
+    FilterVenueCapacityFrom:
+      name: venueCapacityFrom
+      in: query
+      required: false
+      description: Нижняя граница поля `venue.capacity`, включительно
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+      example: 500
+
+    FilterVenueCapacityTo:
+      name: venueCapacityTo
+      in: query
+      required: false
+      description: Верхняя граница поля `venue.capacity`, включительно
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+      example: 20000
+
+    FilterVenueType:
+      name: venueType
+      in: query
+      required: false
+      description: Фильтр по полю `venue.type` — точное значение
+      schema:
+        $ref: '#/components/schemas/VenueType'
+
+    FilterPersonId:
+      name: personId
+      in: query
+      required: false
+      description: Фильтр по полю `personId` — точное значение; билеты без брони этим фильтром не возвращаются
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+      example: 7
 
     SortParam:
       name: sort
@@ -364,13 +604,16 @@ components:
       description: |
         Список полей сортировки через запятую. Префикс `-` — сортировка по убыванию,
         без префикса — по возрастанию. Поля применяются в порядке перечисления.
+        Имена полей те же, что и у параметров фильтрации: `id`, `name`, `coordinateX`,
+        `coordinateY`, `creationDate`, `price`, `comment`, `type`, `venueId`,
+        `venueName`, `venueCapacity`, `venueType`, `personId`.
       style: form
       explode: false
       schema:
         type: array
         items:
           type: string
-          pattern: '^-?(id|name|coordinates\.x|coordinates\.y|creationDate|price|comment|type|venue\.id|venue\.name|venue\.capacity|venue\.type|personId)$'
+          pattern: '^-?(id|name|coordinateX|coordinateY|creationDate|price|comment|type|venueId|venueName|venueCapacity|venueType|personId)$'
       example: ['-price', 'name']
 
     PageParam:
@@ -720,6 +963,21 @@ components:
               - field: price
                 message: значение поля должно быть больше 0
                 rejectedValue: '-100.0'
+
+    ServiceUnavailable:
+      description: |
+        Сервис временно недоступен: не развёрнута реализация операции,
+        идёт обслуживание или недоступно хранилище коллекции.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 503
+            error: Service Unavailable
+            message: Сервис временно недоступен
+            path: /tickets
 
     InternalServerError:
       description: Внутренняя ошибка сервиса

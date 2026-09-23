@@ -25,6 +25,10 @@ info:
     (`PUT /tickets/{id}`). Если первый сервис недоступен или возвращает ошибку,
     `Booking Service` отвечает кодом `502 Bad Gateway`.
 
+servers:
+  - url: /
+    description: Тот же адрес, с которого открыта документация
+
 tags:
   - name: booking
     description: Операции бронирования, реализуемые через вызовы API сервиса Ticket Service
@@ -107,6 +111,8 @@ paths:
           $ref: '#/components/responses/BadGateway'
         '504':
           $ref: '#/components/responses/GatewayTimeout'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -126,7 +132,7 @@ paths:
         `cancelledCount = 0` и пустой список `cancelledTicketIds`.
 
         Последовательность вызовов первого сервиса:
-        `GET /tickets?filter=personId[eq]={person-id}` → `PUT /tickets/{id}`
+        `GET /tickets?personId={person-id}` → `PUT /tickets/{id}`
         для каждого найденного билета.
       parameters:
         - name: person-id
@@ -155,6 +161,8 @@ paths:
           $ref: '#/components/responses/BadGateway'
         '504':
           $ref: '#/components/responses/GatewayTimeout'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
         default:
           $ref: '#/components/responses/DefaultError'
 
@@ -398,6 +406,21 @@ components:
             error: Bad Gateway
             message: Ticket Service вернул некорректный ответ
             path: /booking/sell/vip/42/7
+
+    ServiceUnavailable:
+      description: |
+        Сервис временно недоступен: не развёрнута реализация операции,
+        идёт обслуживание или недоступно хранилище коллекции.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 21.09.2026 14:31:02
+            status: 503
+            error: Service Unavailable
+            message: Сервис временно недоступен
+            path: /booking/person/7/cancel
 
     InternalServerError:
       description: Внутренняя ошибка сервиса
