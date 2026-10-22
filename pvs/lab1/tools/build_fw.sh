@@ -38,7 +38,6 @@ SOURCES="fw/lab1/Core/Src/main.c \
  fw/lab1/Core/Src/led.c \
  fw/lab1/Core/Src/button.c \
  fw/lab1/Core/Src/swtimer.c \
- fw/lab1/Core/Src/sched.c \
  fw/lab1/Core/Src/morse_buffer.c \
  fw/lab1/Core/Src/morse_player.c \
  fw/lab1/Core/Src/morse_app.c \

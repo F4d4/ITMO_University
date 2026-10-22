@@ -16,12 +16,12 @@ proc hw_debug {duration_ms} {
         set now [expr {[clock milliseconds] - $t0}]
         if {$now >= $duration_ms} break
 
-        set w1   [rd 0x200000e4]   ;# b_down, b_counter, s_count
-        set w2   [rd 0x200000a0]   ;# b_tail, b_head
-        set w3   [rd 0x20000130]   ;# b_state
+        set w1   [rd 0x200000bc]   ;# b_down, b_counter
+        set w2   [rd 0x20000078]   ;# b_tail, b_head
+        set w3   [rd 0x20000100]   ;# b_state
         set idr  [rd 0x40020810]
         set odr  [rd 0x40020C14]
-        set tick [rd 0x20000134]
+        set tick [rd 0x20000104]
 
         set down  [expr {$w1 & 0xff}]
         set cnt   [expr {($w1 >> 8) & 0xff}]

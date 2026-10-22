@@ -13,8 +13,8 @@ proc btn_check {duration_ms} {
 
         set idr  [rd 0x40020810]
         set odr  [rd 0x40020C14]
-        set tick [rd 0x20000134]
-        set w1   [rd 0x200000e4]
+        set tick [rd 0x20000104]
+        set w1   [rd 0x200000bc]
         set btn  [expr {($idr >> 15) & 1}]
         set cnt  [expr {($w1 >> 8) & 0xff}]
 
